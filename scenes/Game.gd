@@ -1,27 +1,26 @@
 extends Node2D
 
 const TILE_SIZE = 16
-
+const ANIM_SPEED = 5
 const CHUNK_DIMENSION = 20
-
 const FOREST_DEPTH = 2
-
 const MAX_BUILDING_DIMENSION = 8
 const MIN_BUILDING_DIMENSION = 5
 
 enum Tile { Wall, Unknown, Box, Grass, Forest, Opening }
 
-# Current Level ----------------------
+# Current Level ----------------------------------------------------------------
 
 var map = []
 var buildings = []
 
-# Node Refs --------------------------
+# Node Refs --------------------------------------------------------------------
 
 onready var tile_map = $TileMap
 onready var player = $Player
+onready var tween = $Player/Tween
 
-# Game State -------------------------
+# Game State -------------------------------------------------------------------
 
 var player_tile
 
@@ -31,37 +30,45 @@ func _ready():
 	randomize()
 	build_chunk()
 	
-# Input ------------------------------
+# Input ------------------------------------------------------------------------
 
 func _input(event):
+	
+	# Return if animating movement
+	if(tween.is_active()):
+		return
+	
+	# Return if it is not a press event
 	if !event.is_pressed():
 		return
 		
-	if event.is_action("Left"):
+	if event.is_action("ui_left"):
 		try_move(-1,0)
-	if event.is_action("Right"):
+	if event.is_action("ui_right"):
 		try_move(1,0)
-	if event.is_action("Up"):
+	if event.is_action("ui_up"):
 		try_move(0,-1)
-	if event.is_action("Left"):
+	if event.is_action("ui_down"):
 		try_move(0,1)
 
+# try to move to a tile
 func try_move(dx, dy):
 	var x = player_tile.x + dx
 	var y = player_tile.y + dy
 	
 	var tile_type = Tile.Wall
+	# Get the tile the player is moving to
 	if x >= 0 && x < CHUNK_DIMENSION && y >= 0 && y < CHUNK_DIMENSION:
 		tile_type = map[x][y]
 		
 	match tile_type:
 		Tile.Grass:
+			tween.interpolate_property($Player, "position", player_tile * TILE_SIZE, Vector2(x,y) * TILE_SIZE, 1.0/ANIM_SPEED, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+			tween.start()
 			player_tile = Vector2(x,y)
-			
-	update_visuals()
 		
 	
-# Chunk Generation -------------------
+# Chunk Generation -------------------------------------------------------------
 
 # Build a chunk
 func build_chunk():
@@ -85,10 +92,8 @@ func build_chunk():
 	# Place Player
 	var player_start_coords = int(round(CHUNK_DIMENSION/2))
 	player_tile = Vector2(player_start_coords,player_start_coords)
-	update_visuals()
-	
-func update_visuals():
 	player.position = player_tile * TILE_SIZE
+	
 	
 # Set a tile at (x,y) with tile type
 func set_tile(x, y, type):
