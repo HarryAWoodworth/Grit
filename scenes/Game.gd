@@ -13,17 +13,20 @@ enum Tile { Wall, Unknown, Box, Grass, Forest, Opening }
 
 var map = []
 var buildings = []
+var actor_map = []
 
 # Node Refs --------------------------------------------------------------------
 
 onready var tile_map = $TileMap
-onready var player = $Player
-onready var tween = $Player/Tween
+onready var player = $Actors/Player
+
+var Box = preload("res://actors/Box.tscn")
 
 # Game State -------------------------------------------------------------------
 
-var player_tile
+var anim_finished = true
 
+# Ready ------------------------------------------------------------------------
 
 func _ready():
 	OS.set_window_size(Vector2(1280, 720))
@@ -35,7 +38,7 @@ func _ready():
 func _input(event):
 	
 	# Return if animating movement
-	if(tween.is_active()):
+	if(!anim_finished):
 		return
 	
 	# Return if it is not a press event
@@ -43,31 +46,49 @@ func _input(event):
 		return
 		
 	if event.is_action("ui_left"):
-		try_move(-1,0)
+		move_actor(-1,0,player)
 	if event.is_action("ui_right"):
-		try_move(1,0)
+		move_actor(1,0,player)
 	if event.is_action("ui_up"):
-		try_move(0,-1)
+		move_actor(0,-1,player)
 	if event.is_action("ui_down"):
-		try_move(0,1)
+		move_actor(0,1,player)
 
-# try to move to a tile
-func try_move(dx, dy):
-	var x = player_tile.x + dx
-	var y = player_tile.y + dy
+# Move an actor node to a tile
+func move_actor(dx, dy, node):
+	var temp_x = node.curr_tile.x
+	var temp_y = node.curr_tile.y
+	var x = node.curr_tile.x + dx
+	var y = node.curr_tile.y + dy
 	
-	var tile_type = Tile.Wall
-	# Get the tile the player is moving to
+	var tile_type
+	var actor_type
+	# Get the tile/ actor on the tile the player is moving to
 	if x >= 0 && x < CHUNK_DIMENSION && y >= 0 && y < CHUNK_DIMENSION:
 		tile_type = map[x][y]
+		actor_type = actor_map[x][y]
+		
+	if actor_type != 0:
+		return
 		
 	match tile_type:
 		Tile.Grass:
-			tween.interpolate_property($Player, "position", player_tile * TILE_SIZE, Vector2(x,y) * TILE_SIZE, 1.0/ANIM_SPEED, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-			tween.start()
-			player_tile = Vector2(x,y)
+			# Set animating bool
+			anim_finished = false
+			# Start tween
+			node.tween.interpolate_property(node, "position", node.curr_tile * TILE_SIZE, Vector2(x,y) * TILE_SIZE, 1.0/ANIM_SPEED, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+			# Set bool that anim is finished using callback
+			node.tween.interpolate_callback(self, node.tween.get_runtime(), "set_anim_done")
+			# Start tween
+			node.tween.start()
+			# Update node's current tile
+			node.curr_tile = Vector2(x,y)
+			actor_map[temp_x][temp_y] = 0
+			actor_map[x][y] = node
 		
-	
+func set_anim_done():
+	anim_finished = true
+
 # Chunk Generation -------------------------------------------------------------
 
 # Build a chunk
@@ -75,11 +96,14 @@ func build_chunk():
 	# Start with a blank map
 	buildings.clear()
 	map.clear()
+	actor_map.clear()
 	
 	# Init the map with tiles
 	for x in range(CHUNK_DIMENSION):
 		map.append([])
+		actor_map.append([])
 		for y in range(CHUNK_DIMENSION):
+			actor_map[x].append(0)
 			# Set the chunk's outer edge to forest tiles
 			if x < FOREST_DEPTH or x > CHUNK_DIMENSION-(FOREST_DEPTH+1) or y < FOREST_DEPTH or y > CHUNK_DIMENSION-(FOREST_DEPTH+1):
 				map[x].append(Tile.Forest)
@@ -91,9 +115,16 @@ func build_chunk():
 	
 	# Place Player
 	var player_start_coords = int(round(CHUNK_DIMENSION/2))
-	player_tile = Vector2(player_start_coords,player_start_coords)
-	player.position = player_tile * TILE_SIZE
+	player.curr_tile = Vector2(player_start_coords,player_start_coords)
+	actor_map[player_start_coords][player_start_coords] = player
+	player.position = player.curr_tile * TILE_SIZE
 	
+	# Place Box
+	var box_x = 7
+	var box_y = 7
+	var box = Box.instance()
+	box.init(self,box_x,box_y)
+	add_child(box)
 	
 # Set a tile at (x,y) with tile type
 func set_tile(x, y, type):

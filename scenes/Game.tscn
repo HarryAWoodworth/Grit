@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scenes/Game.gd" type="Script" id=1]
 [ext_resource path="res://assets/player.png" type="Texture" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://assets/box.png" type="Texture" id=5]
 [ext_resource path="res://assets/opening.png" type="Texture" id=6]
 [ext_resource path="res://assets/forest.png" type="Texture" id=7]
+[ext_resource path="res://scenes/Actors.gd" type="Script" id=8]
+[ext_resource path="res://scenes/Player.gd" type="Script" id=9]
 
 [sub_resource type="TileSet" id=1]
 0/name = "wall.png 0"
@@ -88,12 +90,16 @@ tile_set = SubResource( 1 )
 cell_size = Vector2( 16, 16 )
 format = 1
 
-[node name="Player" type="Sprite" parent="."]
+[node name="Actors" type="Node2D" parent="."]
+script = ExtResource( 8 )
+
+[node name="Player" type="Sprite" parent="Actors"]
 position = Vector2( 240, 144 )
 texture = ExtResource( 2 )
-offset = Vector2( 8, 8 )
+centered = false
+script = ExtResource( 9 )
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
+[node name="Camera2D" type="Camera2D" parent="Actors/Player"]
 position = Vector2( 8, 8 )
 current = true
 drag_margin_left = 0.0
@@ -101,4 +107,4 @@ drag_margin_top = 0.0
 drag_margin_right = 0.0
 drag_margin_bottom = 0.0
 
-[node name="Tween" type="Tween" parent="Player"]
+[node name="Tween" type="Tween" parent="Actors/Player"]

@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/Box.gd" type="Script" id=1]
+[ext_resource path="res://assets/box.png" type="Texture" id=2]
+
+[node name="Box" type="Sprite"]
+position = Vector2( 208, 144 )
+texture = ExtResource( 2 )
+centered = false
+script = ExtResource( 1 )
+
+[node name="Tween" type="Tween" parent="."]
