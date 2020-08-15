@@ -25,6 +25,7 @@ var Box = preload("res://actors/Box.tscn")
 # Game State -------------------------------------------------------------------
 
 var anim_finished = true
+var actor_list = []
 
 # Ready ------------------------------------------------------------------------
 
@@ -47,12 +48,16 @@ func _input(event):
 		
 	if event.is_action("ui_left"):
 		move_actor(-1,0,player)
+		tick()
 	if event.is_action("ui_right"):
 		move_actor(1,0,player)
+		tick()
 	if event.is_action("ui_up"):
 		move_actor(0,-1,player)
+		tick()
 	if event.is_action("ui_down"):
 		move_actor(0,1,player)
+		tick()
 
 # Move an actor node to a tile
 func move_actor(dx, dy, node):
@@ -89,6 +94,12 @@ func move_actor(dx, dy, node):
 func set_anim_done():
 	anim_finished = true
 
+# Tick -------------------------------------------------------------------------
+
+func tick():
+	for actor in actor_list:
+		actor.tick()
+
 # Chunk Generation -------------------------------------------------------------
 
 # Build a chunk
@@ -118,6 +129,7 @@ func build_chunk():
 	player.curr_tile = Vector2(player_start_coords,player_start_coords)
 	actor_map[player_start_coords][player_start_coords] = player
 	player.position = player.curr_tile * TILE_SIZE
+	actor_list.append(player)
 	
 	# Place Box
 	var box_x = 7
@@ -125,6 +137,7 @@ func build_chunk():
 	var box = Box.instance()
 	box.init(self,box_x,box_y)
 	add_child(box)
+	actor_list.append(box)
 	
 # Set a tile at (x,y) with tile type
 func set_tile(x, y, type):
