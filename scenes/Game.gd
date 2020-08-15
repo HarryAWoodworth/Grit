@@ -2,7 +2,7 @@ extends Node2D
 
 const TILE_SIZE = 16
 const ANIM_SPEED = 5
-const CHUNK_DIMENSION = 20
+const CHUNK_DIMENSION = 15
 const FOREST_DEPTH = 2
 const MAX_BUILDING_DIMENSION = 8
 const MIN_BUILDING_DIMENSION = 5
@@ -147,3 +147,4 @@ func set_tile(x, y, type):
 ## TODO
 ## Generate stuff around the chunk
 ## Prevent generation in meadow area in center
+## Investigate why box spawning on player doesnt cause a problem

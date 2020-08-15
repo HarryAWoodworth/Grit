@@ -38,6 +38,7 @@ func on_click():
 func menu_choice(ID):
 	match ID:
 		1:
+			# Push the box
 			print("Pushed Box")
 			var diff_vec = player_distance()
 			var x = -1 * diff_vec.x
@@ -45,6 +46,7 @@ func menu_choice(ID):
 			get_parent().move_actor(x,y,self)
 			get_parent().tick()
 		2:
+			# Move the player and the box
 			print("Pulled Box")
 			var diff_vec = player_distance()
 			var x = diff_vec.x
@@ -55,3 +57,4 @@ func menu_choice(ID):
 		3:
 			print("Opened Box")
 	
+	## TODO: Change push and pull to Drag with seperate menu
