@@ -73,7 +73,7 @@ func move_actor(dx, dy, node):
 		tile_type = map[x][y]
 		actor_type = actor_map[x][y]
 		
-	if actor_type != 0:
+	if typeof(actor_type) != 2:
 		return
 		
 	match tile_type:

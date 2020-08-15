@@ -39,9 +39,18 @@ func menu_choice(ID):
 	match ID:
 		1:
 			print("Pushed Box")
+			var diff_vec = player_distance()
+			var x = -1 * diff_vec.x
+			var y = -1 * diff_vec.y
+			get_parent().move_actor(x,y,self)
 			get_parent().tick()
 		2:
 			print("Pulled Box")
+			var diff_vec = player_distance()
+			var x = diff_vec.x
+			var y = diff_vec.y
+			get_parent().move_actor(x,y,get_parent().player)
+			get_parent().move_actor(x,y,self)
 			get_parent().tick()
 		3:
 			print("Opened Box")
