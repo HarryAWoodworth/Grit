@@ -4,7 +4,6 @@
 [ext_resource path="res://assets/player.png" type="Texture" id=2]
 [ext_resource path="res://assets/wall.png" type="Texture" id=3]
 [ext_resource path="res://assets/grass.png" type="Texture" id=4]
-[ext_resource path="res://assets/box.png" type="Texture" id=5]
 [ext_resource path="res://assets/opening.png" type="Texture" id=6]
 [ext_resource path="res://assets/forest.png" type="Texture" id=7]
 [ext_resource path="res://scenes/Actors.gd" type="Script" id=8]
@@ -25,20 +24,6 @@
 0/shape_one_way_margin = 0.0
 0/shapes = [  ]
 0/z_index = 0
-2/name = "box.png 2"
-2/texture = ExtResource( 5 )
-2/tex_offset = Vector2( 0, 0 )
-2/modulate = Color( 1, 1, 1, 1 )
-2/region = Rect2( 0, 0, 32, 32 )
-2/tile_mode = 0
-2/occluder_offset = Vector2( 0, 0 )
-2/navigation_offset = Vector2( 0, 0 )
-2/shape_offset = Vector2( 0, 0 )
-2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-2/shape_one_way = false
-2/shape_one_way_margin = 0.0
-2/shapes = [  ]
-2/z_index = 0
 3/name = "grass1.png 3"
 3/texture = ExtResource( 4 )
 3/tex_offset = Vector2( 0, 0 )
@@ -82,6 +67,9 @@
 5/shapes = [  ]
 5/z_index = 0
 
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 8, 8 )
+
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -93,13 +81,16 @@ format = 1
 [node name="Actors" type="Node2D" parent="."]
 script = ExtResource( 8 )
 
-[node name="Player" type="Sprite" parent="Actors"]
-position = Vector2( 240, 144 )
-texture = ExtResource( 2 )
-centered = false
+[node name="Player" type="Area2D" parent="Actors"]
+gravity_vec = Vector2( 0, 0 )
+gravity = 0.0
 script = ExtResource( 9 )
 
-[node name="Camera2D" type="Camera2D" parent="Actors/Player"]
+[node name="Sprite" type="Sprite" parent="Actors/Player"]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Camera2D" type="Camera2D" parent="Actors/Player/Sprite"]
 position = Vector2( 8, 8 )
 current = true
 drag_margin_left = 0.0
@@ -107,4 +98,8 @@ drag_margin_top = 0.0
 drag_margin_right = 0.0
 drag_margin_bottom = 0.0
 
-[node name="Tween" type="Tween" parent="Actors/Player"]
+[node name="Tween" type="Tween" parent="Actors/Player/Sprite"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Actors/Player"]
+position = Vector2( 8, 8 )
+shape = SubResource( 2 )
