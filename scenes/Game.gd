@@ -2,7 +2,9 @@ extends Node2D
 
 const TILE_SIZE = 16
 const ANIM_SPEED = 5
-const CHUNK_DIMENSION = 15
+const CANT_MOVE_ANIM_DIST = 2
+const ANIM_SPEED_CANT = 4
+const CHUNK_DIMENSION = 16
 const FOREST_DEPTH = 2
 const MAX_BUILDING_DIMENSION = 8
 const MIN_BUILDING_DIMENSION = 5
@@ -72,8 +74,16 @@ func move_actor(dx, dy, node):
 	if x >= 0 && x < CHUNK_DIMENSION && y >= 0 && y < CHUNK_DIMENSION:
 		tile_type = map[x][y]
 		actor_type = actor_map[x][y]
+	else:
+		cant_move_anim(dx,dy,x,y,node)
+		return
 		
+	# If the actor_map contains an actor in the coords moving to,
+	# Do not allow movement. This is checked by seeing if the element
+	# in actor_map[x][y] is an int, since it is default filled with zeroes
 	if typeof(actor_type) != 2:
+		# Can't move anim
+		cant_move_anim(dx,dy,x,y,node)
 		return
 		
 	match tile_type:
@@ -90,6 +100,21 @@ func move_actor(dx, dy, node):
 			node.curr_tile = Vector2(x,y)
 			actor_map[temp_x][temp_y] = 0
 			actor_map[x][y] = node
+		Tile.Forest:
+			cant_move_anim(dx,dy,x,y,node)
+			
+# Animate the actor moving halfway into the tile and bouncing back
+func cant_move_anim(dx,dy,x,y,node):
+	anim_finished = false
+	var dest = Vector2(x,y) * TILE_SIZE
+	if dx != 0:
+		dest.x = dest.x - (dx * (TILE_SIZE / CANT_MOVE_ANIM_DIST))
+	if dy != 0:
+		dest.y = dest.y - (dy * (TILE_SIZE / CANT_MOVE_ANIM_DIST))
+	node.tween.interpolate_property(node, "position", node.curr_tile * TILE_SIZE, dest, 1.0/ANIM_SPEED_CANT, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	node.tween.interpolate_property(node, "position", dest, node.curr_tile * TILE_SIZE, 1.0/ANIM_SPEED_CANT, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT,node.tween.get_runtime())
+	node.tween.interpolate_callback(self, node.tween.get_runtime(), "set_anim_done")
+	node.tween.start()
 		
 func set_anim_done():
 	anim_finished = true
@@ -123,6 +148,10 @@ func build_chunk():
 			else:
 				map[x].append(Tile.Grass)
 				tile_map.set_cell(x, y, Tile.Grass)
+	
+	# Extra forest tile for testing
+	tile_map.set_cell(5, 5, Tile.Forest)
+	map[5][5] = Tile.Forest
 	
 	# Place Player
 	var player_start_coords = int(round(CHUNK_DIMENSION/2))
