@@ -124,7 +124,6 @@ func set_anim_done():
 # Tick -------------------------------------------------------------------------
 
 func tick():
-	print("Tick!")
 	for actor in actor_list:
 		actor.tick()
 

@@ -2,6 +2,7 @@ extends "res://scenes/Actors.gd"
 	
 onready var action_menu = $ActionMenu
 onready var drag_menu = $ActionMenu/DragMenu
+onready var tween = $Sprite/Tween
 
 var menu_open = false
 	
