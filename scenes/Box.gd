@@ -11,6 +11,7 @@ func init(game, x, y):
 	game.actor_map[x][y] = sprite_node
 	position = curr_tile * game.TILE_SIZE
 	
+	
 func tick():
 	# Hide menu on tick
 	if menu_open:
@@ -18,7 +19,7 @@ func tick():
 		drag_menu.hide()
 		menu_open = false
 	
-func _input_event(viewport, event, shape_idx):
+func _input_event(_viewport, event, _shape_idx):
 		# Check player is adjacent
 		if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
 			var diff_vec = player_distance()
@@ -38,10 +39,11 @@ func on_click():
 	drag_menu.add_item("Push", 3)
 	drag_menu.add_item("Pull", 4)
 	
-	action_menu.set_position(Vector2(10,10))
-	drag_menu.set_position(Vector2(20,20))
 	action_menu.connect("id_pressed", self, "action_choice")
 	drag_menu.connect("id_pressed", self, "drag_choice")
+	action_menu.set_position(Vector2(10,10))
+	drag_menu.set_position(Vector2(20,20))
+
 	menu_open = true
 	action_menu.show()
 	

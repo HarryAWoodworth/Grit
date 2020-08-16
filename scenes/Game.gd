@@ -3,7 +3,7 @@ extends Node2D
 const TILE_SIZE = 16
 const ANIM_SPEED = 5
 const CANT_MOVE_ANIM_DIST = 2
-const ANIM_SPEED_CANT = 4
+const ANIM_SPEED_CANT = 8
 const CHUNK_DIMENSION = 16
 const FOREST_DEPTH = 2
 const MAX_BUILDING_DIMENSION = 8
@@ -49,17 +49,17 @@ func _input(event):
 		return
 		
 	if event.is_action("ui_left"):
-		move_actor(-1,0,player)
-		tick()
+		if move_actor(-1,0,player):
+			tick()
 	if event.is_action("ui_right"):
-		move_actor(1,0,player)
-		tick()
+		if move_actor(1,0,player):
+			tick()
 	if event.is_action("ui_up"):
-		move_actor(0,-1,player)
-		tick()
+		if move_actor(0,-1,player):
+			tick()
 	if event.is_action("ui_down"):
-		move_actor(0,1,player)
-		tick()
+		if move_actor(0,1,player):
+			tick()
 
 # Move an actor node to a tile
 func move_actor(dx, dy, node):
@@ -76,7 +76,7 @@ func move_actor(dx, dy, node):
 		actor_type = actor_map[x][y]
 	else:
 		cant_move_anim(dx,dy,x,y,node)
-		return
+		return false
 		
 	# If the actor_map contains an actor in the coords moving to,
 	# Do not allow movement. This is checked by seeing if the element
@@ -84,7 +84,7 @@ func move_actor(dx, dy, node):
 	if typeof(actor_type) != 2:
 		# Can't move anim
 		cant_move_anim(dx,dy,x,y,node)
-		return
+		return false
 		
 	match tile_type:
 		Tile.Grass:
@@ -100,17 +100,19 @@ func move_actor(dx, dy, node):
 			node.curr_tile = Vector2(x,y)
 			actor_map[temp_x][temp_y] = 0
 			actor_map[x][y] = node
+			return true
 		Tile.Forest:
 			cant_move_anim(dx,dy,x,y,node)
+			return false
 			
 # Animate the actor moving halfway into the tile and bouncing back
 func cant_move_anim(dx,dy,x,y,node):
 	anim_finished = false
 	var dest = Vector2(x,y) * TILE_SIZE
 	if dx != 0:
-		dest.x = dest.x - (dx * (TILE_SIZE / CANT_MOVE_ANIM_DIST))
+		dest.x = dest.x - (dx * (float(TILE_SIZE) / float(CANT_MOVE_ANIM_DIST)))
 	if dy != 0:
-		dest.y = dest.y - (dy * (TILE_SIZE / CANT_MOVE_ANIM_DIST))
+		dest.y = dest.y - (dy * (float(TILE_SIZE) / float(CANT_MOVE_ANIM_DIST)))
 	node.tween.interpolate_property(node, "position", node.curr_tile * TILE_SIZE, dest, 1.0/ANIM_SPEED_CANT, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	node.tween.interpolate_property(node, "position", dest, node.curr_tile * TILE_SIZE, 1.0/ANIM_SPEED_CANT, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT,node.tween.get_runtime())
 	node.tween.interpolate_callback(self, node.tween.get_runtime(), "set_anim_done")
@@ -122,6 +124,7 @@ func set_anim_done():
 # Tick -------------------------------------------------------------------------
 
 func tick():
+	print("Tick!")
 	for actor in actor_list:
 		actor.tick()
 
@@ -154,7 +157,7 @@ func build_chunk():
 	map[5][5] = Tile.Forest
 	
 	# Place Player
-	var player_start_coords = int(round(CHUNK_DIMENSION/2))
+	var player_start_coords = round(CHUNK_DIMENSION/2.0)
 	player.curr_tile = Vector2(player_start_coords,player_start_coords)
 	actor_map[player_start_coords][player_start_coords] = player
 	player.position = player.curr_tile * TILE_SIZE
