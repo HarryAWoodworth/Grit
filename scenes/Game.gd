@@ -1,3 +1,11 @@
+## TODO
+# New Sprite for facing 4 directions, and 4 sprites for grabbing in each direction
+# Animation shaking head 'no' when command does nothing
+# Input hold down and direction for dragging object
+# Input button for opening
+# Hover over shows actor details
+# UI text log, Actor details
+
 extends Node2D
 
 const TILE_SIZE = 16
@@ -21,6 +29,15 @@ var actor_map = []
 
 onready var tile_map = $TileMap
 onready var player = $Actors/Player
+
+# var player_right = preload("res://bullet1.tex")
+# var player_left = preload("res://bullet2.tex")
+# var player_up = preload("res://bullet3.tex")
+# var player_down = preload("res://bullet3.tex")
+# var player_right_grab = preload("res://bullet1.tex")
+# var player_left_grab = preload("res://bullet2.tex")
+# var player_up_grab = preload("res://bullet3.tex")
+# var player_down_grab = preload("res://bullet3.tex")
 
 var Box = preload("res://actors/Box.tscn")
 
