@@ -1,10 +1,11 @@
 ## TODO
-# New Sprite for facing 4 directions, and 4 sprites for grabbing in each direction
-# Animation shaking head 'no' when command does nothing
-# Input hold down and direction for dragging object
+# Input hold down and direction for dragging object, change sprite
 # Input button for opening
 # Hover over shows actor details
 # UI text log, Actor details
+
+## Extra special TODO
+# Animation shaking head 'no' when command does nothing
 
 extends Node2D
 
@@ -46,28 +47,7 @@ func _ready():
 	
 # Input ------------------------------------------------------------------------
 
-func _input(event):
-	
-	# Return if animating movement
-	if(!anim_finished):
-		return
-	
-	# Return if it is not a press event
-	if !event.is_pressed():
-		return
-		
-	if event.is_action("ui_left"):
-		if move_actor(Vector2(-1,0),player):
-			tick()
-	if event.is_action("ui_right"):
-		if move_actor(Vector2(1,0),player):
-			tick()
-	if event.is_action("ui_up"):
-		if move_actor(Vector2(0,-1),player):
-			tick()
-	if event.is_action("ui_down"):
-		if move_actor(Vector2(0,1),player):
-			tick()
+
 
 # Move an actor node to a tile
 func move_actor(vector, node, turn=1):

@@ -13,15 +13,7 @@ func init(game, x, y):
 	game.actor_map[x][y] = sprite_node
 	position = curr_tile * game.TILE_SIZE
 	
-	
-func tick():
-	# Hide menu on tick
-	if menu_open:
-		action_menu.hide()
-		drag_menu.hide()
-		menu_open = false
-	
-func _input_event(_viewport, event, _shape_idx):
+func _input(event):
 		# Check player is adjacent
 		if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
 			var diff_vec = player_distance()
@@ -92,3 +84,11 @@ func drag_choice(ID):
 			get_parent().move_actor(vec,get_parent().player,0)
 			get_parent().move_actor(vec,self)
 			get_parent().tick()
+
+	
+func tick():
+	# Hide menu on tick
+	if menu_open:
+		action_menu.hide()
+		drag_menu.hide()
+		menu_open = false
