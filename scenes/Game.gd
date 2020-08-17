@@ -6,6 +6,7 @@
 
 ## Extra special TODO
 # Animation shaking head 'no' when command does nothing
+# Pathfinding double click auto move
 
 extends Node2D
 
@@ -20,12 +21,6 @@ const MIN_BUILDING_DIMENSION = 5
 
 enum Tile { Wall, Unknown, Box, Grass, Forest, Opening }
 
-# Current Level ----------------------------------------------------------------
-
-var map = []
-var buildings = []
-var actor_map = []
-
 # Node Refs --------------------------------------------------------------------
 
 onready var tile_map = $TileMap
@@ -37,6 +32,16 @@ var Box = preload("res://actors/Box.tscn")
 
 var anim_finished = true
 var actor_list = []
+var map = []
+var buildings = []
+var actor_map = []
+
+func get_actor_at(x,y):
+	if x < 0 or x > actor_map.size()-1 or y < 0 or y > actor_map[0].size()-1:
+		print("No actor there")
+		return 0
+	#print("actor_map[" + str(x) + "][" + str(y) + "]: " + str(actor_map[x][y]))
+	return actor_map[x][y]
 
 # Ready ------------------------------------------------------------------------
 
@@ -46,8 +51,6 @@ func _ready():
 	build_chunk()
 	
 # Input ------------------------------------------------------------------------
-
-
 
 # Move an actor node to a tile
 func move_actor(vector, node, turn=1):
@@ -67,7 +70,6 @@ func move_actor(vector, node, turn=1):
 			Vector2(0,1):
 				node.sprite.set_texture(node.down)
 				node.curr_tex = "down"
-		
 	
 	var dx = vector.x
 	var dy = vector.y
@@ -86,9 +88,7 @@ func move_actor(vector, node, turn=1):
 		cant_move_anim(dx,dy,x,y,node)
 		return false
 		
-	# If the actor_map contains an actor in the coords moving to,
-	# Do not allow movement. This is checked by seeing if the element
-	# in actor_map[x][y] is an int, since it is default filled with zeroes
+	# If the actor_map contains an actor in the coords moving to, do not allow movement.
 	if typeof(actor_type) != 2:
 		# Can't move anim
 		cant_move_anim(dx,dy,x,y,node)
@@ -166,9 +166,9 @@ func build_chunk():
 	# Place Player
 	var player_start_coords = round(CHUNK_DIMENSION/2.0)
 	player.curr_tile = Vector2(player_start_coords,player_start_coords)
-	actor_map[player_start_coords][player_start_coords] = player
 	player.position = player.curr_tile * TILE_SIZE
 	actor_list.append(player)
+	actor_map[player_start_coords][player_start_coords] = player
 	
 	# Place Box
 	var box_x = 7
@@ -177,6 +177,7 @@ func build_chunk():
 	box.init(self,box_x,box_y)
 	add_child(box)
 	actor_list.append(box)
+	actor_map[box_x][box_y] = box
 	
 # Set a tile at (x,y) with tile type
 func set_tile(x, y, type):

@@ -8,47 +8,47 @@ onready var sprite = $Sprite
 var menu_open = false
 	
 func init(game, x, y):
-	moveable = true
+	grabbable = true
 	curr_tile = Vector2(x,y)
 	game.actor_map[x][y] = sprite_node
 	position = curr_tile * game.TILE_SIZE
 	
-func _input(event):
-		# Check player is adjacent
-		if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
-			var diff_vec = player_distance()
-			print(diff_vec)
-			if (abs(diff_vec.x) == 1 and diff_vec.y == 0) or (abs(diff_vec.y) == 1 and diff_vec.x == 0):
-				on_click()
+#func _input(event):
+#		# Check player is adjacent
+#		if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
+#			var diff_vec = player_distance()
+#			print(diff_vec)
+#			if (abs(diff_vec.x) == 1 and diff_vec.y == 0) or (abs(diff_vec.y) == 1 and diff_vec.x == 0):
+#				on_click()
 			
-func on_click():
-	# print("Box clicked!")
-	action_menu.clear()
-	action_menu.add_item("Open", 1)
-	action_menu.add_submenu_item("Drag","DragMenu", 2)
+#func on_click():
+#	# print("Box clicked!")
+#	action_menu.clear()
+#	action_menu.add_item("Open", 1)
+#	action_menu.add_submenu_item("Drag","DragMenu", 2)
+#
+#	drag_menu.clear()
+#	drag_menu.add_item("Drag Right", 1)
+#	drag_menu.add_item("Drag Left", 2)
+#	drag_menu.add_item("Push", 3)
+#	drag_menu.add_item("Pull", 4)
+#
+#	action_menu.connect("id_pressed", self, "action_choice")
+#	drag_menu.connect("id_pressed", self, "drag_choice")
+#	action_menu.set_position(Vector2(10,10))
+#	drag_menu.set_position(Vector2(20,20))
+#
+#	menu_open = true
+#	action_menu.show()
 	
-	drag_menu.clear()
-	drag_menu.add_item("Drag Right", 1)
-	drag_menu.add_item("Drag Left", 2)
-	drag_menu.add_item("Push", 3)
-	drag_menu.add_item("Pull", 4)
+#func action_choice(ID):
+#	match ID:
+#		1:
+#			print("Opened Box")
 	
-	action_menu.connect("id_pressed", self, "action_choice")
-	drag_menu.connect("id_pressed", self, "drag_choice")
-	action_menu.set_position(Vector2(10,10))
-	drag_menu.set_position(Vector2(20,20))
-
-	menu_open = true
-	action_menu.show()
-	
-func action_choice(ID):
+func drag(ID):
 	match ID:
-		1:
-			print("Opened Box")
-	
-func drag_choice(ID):
-	match ID:
-		1:
+		"drag_right":
 			# Drag player and box right
 			var diff_vec = player_distance()
 			var x = -1 * diff_vec.y
@@ -58,7 +58,7 @@ func drag_choice(ID):
 			get_parent().move_actor(vec,self)
 			get_parent().tick()
 			
-		2:
+		"drag_left":
 			# Drag player and box left
 			var diff_vec = player_distance()
 			var x = diff_vec.y
@@ -67,15 +67,16 @@ func drag_choice(ID):
 			get_parent().move_actor(vec,get_parent().player,0)
 			get_parent().move_actor(vec,self)
 			get_parent().tick()
-		3: 
+		"push": 
 			# Push the box
 			var diff_vec = player_distance()
 			var x = -1 * diff_vec.x
 			var y = -1 * diff_vec.y
 			var vec = Vector2(x,y)
 			get_parent().move_actor(vec,self)
+			get_parent().move_actor(vec,get_parent().player,0)
 			get_parent().tick()
-		4:
+		"pull":
 			# Pull player and box
 			var diff_vec = player_distance()
 			var x = diff_vec.x
