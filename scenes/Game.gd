@@ -30,15 +30,6 @@ var actor_map = []
 onready var tile_map = $TileMap
 onready var player = $Actors/Player
 
-# var player_right = preload("res://bullet1.tex")
-# var player_left = preload("res://bullet2.tex")
-# var player_up = preload("res://bullet3.tex")
-# var player_down = preload("res://bullet3.tex")
-# var player_right_grab = preload("res://bullet1.tex")
-# var player_left_grab = preload("res://bullet2.tex")
-# var player_up_grab = preload("res://bullet3.tex")
-# var player_down_grab = preload("res://bullet3.tex")
-
 var Box = preload("res://actors/Box.tscn")
 
 # Game State -------------------------------------------------------------------
@@ -66,20 +57,40 @@ func _input(event):
 		return
 		
 	if event.is_action("ui_left"):
-		if move_actor(-1,0,player):
+		if move_actor(Vector2(-1,0),player):
 			tick()
 	if event.is_action("ui_right"):
-		if move_actor(1,0,player):
+		if move_actor(Vector2(1,0),player):
 			tick()
 	if event.is_action("ui_up"):
-		if move_actor(0,-1,player):
+		if move_actor(Vector2(0,-1),player):
 			tick()
 	if event.is_action("ui_down"):
-		if move_actor(0,1,player):
+		if move_actor(Vector2(0,1),player):
 			tick()
 
 # Move an actor node to a tile
-func move_actor(dx, dy, node):
+func move_actor(vector, node, turn=1):
+	
+	# Set texture
+	if turn == 1 and node.changeable_texture:
+		match vector:
+			Vector2(1,0):
+				node.sprite.set_texture(node.right)
+				node.curr_tex = "right"
+			Vector2(-1,0):
+				node.sprite.set_texture(node.left)
+				node.curr_tex = "left"
+			Vector2(0,-1):
+				node.sprite.set_texture(node.up)
+				node.curr_tex = "up"
+			Vector2(0,1):
+				node.sprite.set_texture(node.down)
+				node.curr_tex = "down"
+		
+	
+	var dx = vector.x
+	var dy = vector.y
 	var temp_x = node.curr_tile.x
 	var temp_y = node.curr_tile.y
 	var x = node.curr_tile.x + dx
@@ -191,6 +202,9 @@ func build_chunk():
 func set_tile(x, y, type):
 	map[x][y] = type
 	tile_map.set_cell(x, y, type)
+	
+func set_texture(texture, node):
+	node.sprite.set_texture(texture)
 
 ## TODO
 ## Generate stuff around the chunk

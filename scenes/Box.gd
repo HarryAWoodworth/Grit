@@ -3,6 +3,7 @@ extends "res://scenes/Actors.gd"
 onready var action_menu = $ActionMenu
 onready var drag_menu = $ActionMenu/DragMenu
 onready var tween = $Sprite/Tween
+onready var sprite = $Sprite
 
 var menu_open = false
 	
@@ -60,8 +61,9 @@ func drag_choice(ID):
 			var diff_vec = player_distance()
 			var x = -1 * diff_vec.y
 			var y = -1 * diff_vec.x
-			get_parent().move_actor(x,y,get_parent().player)
-			get_parent().move_actor(x,y,self)
+			var vec = Vector2(x,y)
+			get_parent().move_actor(vec,get_parent().player,0)
+			get_parent().move_actor(vec,self)
 			get_parent().tick()
 			
 		2:
@@ -69,21 +71,24 @@ func drag_choice(ID):
 			var diff_vec = player_distance()
 			var x = diff_vec.y
 			var y = diff_vec.x
-			get_parent().move_actor(x,y,get_parent().player)
-			get_parent().move_actor(x,y,self)
+			var vec = Vector2(x,y)
+			get_parent().move_actor(vec,get_parent().player,0)
+			get_parent().move_actor(vec,self)
 			get_parent().tick()
 		3: 
 			# Push the box
 			var diff_vec = player_distance()
 			var x = -1 * diff_vec.x
 			var y = -1 * diff_vec.y
-			get_parent().move_actor(x,y,self)
+			var vec = Vector2(x,y)
+			get_parent().move_actor(vec,self)
 			get_parent().tick()
 		4:
 			# Pull player and box
 			var diff_vec = player_distance()
 			var x = diff_vec.x
 			var y = diff_vec.y
-			get_parent().move_actor(x,y,get_parent().player)
-			get_parent().move_actor(x,y,self)
+			var vec = Vector2(x,y)
+			get_parent().move_actor(vec,get_parent().player,0)
+			get_parent().move_actor(vec,self)
 			get_parent().tick()

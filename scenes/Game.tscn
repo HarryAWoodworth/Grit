@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scenes/Game.gd" type="Script" id=1]
-[ext_resource path="res://assets/player.png" type="Texture" id=2]
+[ext_resource path="res://assets/player_sprite/player_down.png" type="Texture" id=2]
 [ext_resource path="res://assets/wall.png" type="Texture" id=3]
 [ext_resource path="res://assets/grass.png" type="Texture" id=4]
 [ext_resource path="res://assets/opening.png" type="Texture" id=6]
