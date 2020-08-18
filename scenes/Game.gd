@@ -4,6 +4,7 @@
 # Hover over shows actor details
 
 ## Extra special TODO
+# Colors in textlog
 # Animation shaking head 'no' when command does nothing
 # Pathfinding double click auto move
 
@@ -25,7 +26,8 @@ enum Tile { Wall, Unknown, Box, Grass, Forest, Opening }
 
 onready var tile_map = $TileMap
 onready var player = $Actors/Player
-onready var textlog = $CanvasLayer/RichTextLabel
+onready var textlog = $UI/TextLog
+onready var actor_info_container = $UI/ActorInfoContainer
 
 var Box = preload("res://actors/Box.tscn")
 
@@ -65,7 +67,11 @@ func can_move(dx, dy, node):
 	# Check that tile_type and actor_type are valid
 	var tile_type = map[x][y]
 	var actor_type = actor_map[x][y]
-	if typeof(actor_type) != 2 or arr_tile_no_move.has(tile_type):
+	if typeof(actor_type) != 2:
+		return false
+	if arr_tile_no_move.has(tile_type):
+		if tile_type == Tile.Forest:
+			logg("I'm not traversing those dark woods...")
 		return false
 	# Return true
 	return true
@@ -97,8 +103,6 @@ func move_actor(vector, node, turn=1):
 	var y = node.curr_tile.y + dy
 	
 	if can_move(dx, dy, node):
-		var tile_type = map[x][y]
-		var actor_type = actor_map[x][y]
 		# Set animating bool
 		anim_finished = false
 		# Start tween
@@ -140,12 +144,23 @@ func tick():
 	for actor in actor_list:
 		actor.tick()
 		
+		
+# UI ---------------------------------------------------------------------------
+
+# Log string to textlog
 func logg(string):
 	var strlen = textlog.text.length()
 	if strlen > MAX_TESTLOG_LENGTH:
-		textlog.text = textlog.text.substr(MAX_TESTLOG_LENGTH - (MAX_TESTLOG_LENGTH/10),strlen)
-		print("Textlog culled!")
+		textlog.text = textlog.text.substr(int(MAX_TESTLOG_LENGTH - (MAX_TESTLOG_LENGTH/10.0)),strlen)
 	textlog.text = textlog.text + "\n" + string
+
+# Display actor data
+func display_actor_data(actor):
+	actor_info_container.list_info(actor)
+	
+# CLear actor data
+func clear_actor_data():
+	actor_info_container.clear()
 
 # Chunk Generation -------------------------------------------------------------
 

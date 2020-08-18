@@ -4,6 +4,10 @@ var sprite_node
 var curr_tile
 var changeable_texture = false
 var grabbable = false
+
+# Info box stuff
+var title = "..."
+var description = "..."
 	
 # Get the distance between the player and this Actor as a Vector2
 func player_distance():

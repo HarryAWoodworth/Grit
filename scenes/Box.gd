@@ -9,6 +9,10 @@ func init(game, x, y):
 	game.actor_map[x][y] = sprite_node
 	position = curr_tile * game.TILE_SIZE
 	
+	# Info box stuff
+	title = "Blue Test Box"
+	description = "This techno blue see-through box doesn't belong in this post apocalyptic waste- oh wait, this is a test forest for development..."
+
 func drag(ID):
 	var game = get_parent()
 	match ID:
@@ -71,3 +75,10 @@ func drag(ID):
 
 func tick():
 	pass
+
+func _on_Box_mouse_entered():
+	get_parent().display_actor_data(self)
+
+
+func _on_Box_mouse_exited():
+	get_parent().clear_actor_data()
