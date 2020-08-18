@@ -1,7 +1,10 @@
 extends Area2D
 
+# Constants --------------------------------------------------------------------
 const DEFAULT_PLAYER_MAX_HEALTH = 50
+const DEFAULT_PLAYER_STARTING_LEVEL = 0
 
+# Player game info -------------------------------------------------------------
 var identifier = "player"
 var curr_tile
 var curr_tex = "down"
@@ -9,11 +12,13 @@ var changeable_texture = true
 onready var tween = $Sprite/Tween
 onready var sprite = $Sprite
 
-# Info
+# Player Info ------------------------------------------------------------------
 var title = "Thunder McDonald"
 var health = DEFAULT_PLAYER_MAX_HEALTH
 var weapon = "Big Ass Laser Gun"
+var level = DEFAULT_PLAYER_STARTING_LEVEL
 
+# Sprite preload ---------------------------------------------------------------
 var right = preload("res://assets/player_sprite/player_right.png")
 var left = preload("res://assets/player_sprite/player_left.png")
 var up = preload("res://assets/player_sprite/player_up.png")
@@ -23,17 +28,17 @@ var left_grab = preload("res://assets/player_sprite/player_left_grab.png")
 var up_grab = preload("res://assets/player_sprite/player_up_grab.png")
 var down_grab = preload("res://assets/player_sprite/player_down_grab.png")
 
-# Key Booleans
+# Key Booleans -----------------------------------------------------------------
 var grabbing = false
 var grabbed_actor
 
+# Input ------------------------------------------------------------------------
 func _input(event):
-	
 	# Record on click
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
 		on_click()
 		return
-		
+	# Get game parent node
 	var game = get_parent().get_parent()
 	# Return if animating movement
 	if(!game.anim_finished):
@@ -100,22 +105,19 @@ func _input(event):
 				"up":
 					sprite.set_texture(up)
 			
+# Get the actor the player is facing
 func get_actor_facing(game):
-	#print("Curr Tile: " + str(curr_tile))
 	match curr_tex:
 		"right":
-			#print("Getting actor at " + str(curr_tile.x + 1) + ", " + str(curr_tile.y))
 			return game.get_actor_at(curr_tile.x + 1, curr_tile.y)
 		"left":
-			#print("Getting actor at " + str(curr_tile.x - 1) + ", " + str(curr_tile.y))
 			return game.get_actor_at(curr_tile.x - 1, curr_tile.y)
 		"down":
-			#print("Getting actor at " + str(curr_tile.x) + ", " + str(curr_tile.y + 1))
 			return game.get_actor_at(curr_tile.x, curr_tile.y + 1)
 		"up":
-			#print("Getting actor at " + str(curr_tile.x) + ", " + str(curr_tile.y - 1))
 			return game.get_actor_at(curr_tile.x, curr_tile.y - 1)
 			
+# Game input -------------------------------------------------------------------
 func on_click():
 	pass
 	

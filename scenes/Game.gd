@@ -1,10 +1,32 @@
 ## TODO
-# Player Info UI
-# Fix sprite not displaying in actor info
+# More player info?
+# Fix dragging controls
 # Input button for opening
 
+## TODO to beta:
+# [2/3] Player character
+#	[X] Move
+#	[X] Drag
+#	[] Fight
+# [] Enemies 
+#	[] Move towards player
+# 	[] Fight
+#	[] Hover over info
+# [] Inventory system
+#	[] Drop Items
+#	[] Use Items
+#	[] Equip Items
+# [] Items
+#	[] Open furniture
+#	[] Drop from enemies
+# [] Bunker
+# [] Random world gen
+#	[] Buildings
+#	[] Items
+# [] Permadeath
 
 ## Extra special TODO
+# Better, sharper fonts
 # Colors in textlog
 # Animation shaking head 'no' when command does nothing
 # Pathfinding double click auto move
