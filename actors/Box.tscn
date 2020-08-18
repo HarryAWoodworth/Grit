@@ -20,11 +20,3 @@ centered = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 8, 8 )
 shape = SubResource( 1 )
-
-[node name="ActionMenu" type="PopupMenu" parent="."]
-margin_right = 20.0
-margin_bottom = 20.0
-
-[node name="DragMenu" type="PopupMenu" parent="ActionMenu"]
-margin_right = 20.0
-margin_bottom = 20.0
