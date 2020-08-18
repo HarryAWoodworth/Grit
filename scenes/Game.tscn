@@ -182,3 +182,8 @@ margin_bottom = 14.0
 align = 1
 valign = 1
 uppercase = true
+
+[node name="PlayerHealth" type="Label" parent="UI/PlayerInfo"]
+margin_top = 18.0
+margin_right = 299.0
+margin_bottom = 32.0

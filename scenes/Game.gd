@@ -29,6 +29,7 @@ onready var tile_map = $TileMap
 onready var player = $Actors/Player
 onready var textlog = $UI/TextLog
 onready var actor_info = $UI/ActorInfo
+onready var player_info = $UI/PlayerInfo
 
 var Box = preload("res://actors/Box.tscn")
 
@@ -201,6 +202,7 @@ func build_chunk():
 	player.position = player.curr_tile * TILE_SIZE
 	actor_list.append(player)
 	actor_map[player_start_coords][player_start_coords] = player
+	player_info.list_player_info(player)
 	
 	# Place Box
 	var box_x = 7

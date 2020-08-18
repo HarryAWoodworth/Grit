@@ -1,5 +1,7 @@
 extends Area2D
 
+const DEFAULT_PLAYER_MAX_HEALTH = 50
+
 var identifier = "player"
 var curr_tile
 var curr_tex = "down"
@@ -9,6 +11,7 @@ onready var sprite = $Sprite
 
 # Info
 var title = "Thunder McDonald"
+var health = DEFAULT_PLAYER_MAX_HEALTH
 
 var right = preload("res://assets/player_sprite/player_right.png")
 var left = preload("res://assets/player_sprite/player_left.png")
