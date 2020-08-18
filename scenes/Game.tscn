@@ -145,13 +145,16 @@ __meta__ = {
 }
 
 [node name="ActorSprite" type="TextureRect" parent="UI/ActorInfo"]
-margin_right = 299.0
+margin_right = 300.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 300, 60 )
 expand = true
+stretch_mode = 6
 
 [node name="ActorTitle" type="Label" parent="UI/ActorInfo"]
-margin_top = 4.0
-margin_right = 299.0
-margin_bottom = 18.0
+margin_top = 64.0
+margin_right = 300.0
+margin_bottom = 78.0
 custom_styles/normal = SubResource( 4 )
 align = 1
 valign = 1
@@ -159,11 +162,23 @@ autowrap = true
 uppercase = true
 
 [node name="ActorDescription" type="Label" parent="UI/ActorInfo"]
-margin_top = 22.0
-margin_right = 299.0
-margin_bottom = 36.0
+margin_top = 82.0
+margin_right = 300.0
+margin_bottom = 96.0
 custom_styles/normal = SubResource( 5 )
 autowrap = true
+
+[node name="ColorRect" type="ColorRect" parent="UI"]
+show_behind_parent = true
+margin_left = 480.0
+margin_top = 10.0
+margin_right = 780.0
+margin_bottom = 320.0
+rect_scale = Vector2( 0.5, 0.5 )
+color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="PlayerInfo" type="VBoxContainer" parent="UI"]
 margin_left = 480.0
@@ -177,13 +192,30 @@ __meta__ = {
 }
 
 [node name="PlayerName" type="Label" parent="UI/PlayerInfo"]
-margin_right = 299.0
+margin_right = 300.0
 margin_bottom = 14.0
 align = 1
 valign = 1
 uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerWeapon" type="Label" parent="UI/PlayerInfo"]
+margin_top = 18.0
+margin_right = 300.0
+margin_bottom = 32.0
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="PlayerHealth" type="Label" parent="UI/PlayerInfo"]
-margin_top = 18.0
-margin_right = 299.0
-margin_bottom = 32.0
+margin_top = 36.0
+margin_right = 300.0
+margin_bottom = 50.0
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -12,6 +12,7 @@ onready var sprite = $Sprite
 # Info
 var title = "Thunder McDonald"
 var health = DEFAULT_PLAYER_MAX_HEALTH
+var weapon = "Big Ass Laser Gun"
 
 var right = preload("res://assets/player_sprite/player_right.png")
 var left = preload("res://assets/player_sprite/player_left.png")
