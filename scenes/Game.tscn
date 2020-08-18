@@ -107,8 +107,11 @@ shape = SubResource( 2 )
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer"]
-margin_right = 300.0
-margin_bottom = 200.0
+anchor_right = 1.0
+margin_left = 10.0
+margin_top = 300.0
+margin_right = -330.0
+margin_bottom = 400.0
 rect_scale = Vector2( 0.5, 0.5 )
 scroll_active = false
 scroll_following = true
