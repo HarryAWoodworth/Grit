@@ -16,15 +16,20 @@ var health
 var effect_arr
 var status_arr
 
+# Game ref
+var game
+
 # Init the enemy
-func init(game, x, y,
+func init(game_ref, x, y,
 new_title=DEFAULT_ENEMY_TITLE,
 new_description=DEFAULT_ENEMY_DESCRIPTION,
 new_health=DEFAULT_ENEMY_HEALTH,
 new_status_arr=DEFAULT_ENEMY_STATUSES,
-new_effect_arr=DEFAULT_ENEMY_EFFECTS):
+new_effect_arr=DEFAULT_ENEMY_EFFECTS,
+can_change_texture=false):
 	
 	# Set position in game world
+	game = game_ref
 	curr_tile = Vector2(x,y)
 	game.actor_map[x][y] = sprite_node
 	position = curr_tile * game.TILE_SIZE
@@ -35,7 +40,20 @@ new_effect_arr=DEFAULT_ENEMY_EFFECTS):
 	health = new_health
 	status_arr = new_status_arr
 	effect_arr = new_effect_arr
+	changeable_texture = can_change_texture
 	
+# Tick -------------------------------------------------------------------------
+
+func tick():
+	if game.player.curr_tile.x > curr_tile.x and game.can_move(1,0,self):
+		game.move_actor(Vector2(1,0),self)
+	elif game.player.curr_tile.y > curr_tile.y and game.can_move(0,1,self):
+		game.move_actor(Vector2(0,1),self)
+	elif game.player.curr_tile.x < curr_tile.x and game.can_move(-1,0,self):
+		game.move_actor(Vector2(-1,0),self)
+	elif game.player.curr_tile.y < curr_tile.y and game.can_move(0,-1,self):
+		game.move_actor(Vector2(0,-1),self)
+		
 # Data setters -----------------------------------------------------------------
 	
 # Set a new sprite

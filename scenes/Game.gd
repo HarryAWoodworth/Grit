@@ -53,7 +53,10 @@ onready var textlog = $UI/TextLog
 onready var actor_info = $UI/ActorInfo
 onready var player_info = $UI/PlayerInfo
 
+# Entity Preloads --------------------------------------------------------------
+
 var Box = preload("res://actors/Box.tscn")
+var Enemy = preload("res://actors/Enemy.tscn")
 
 # Game State -------------------------------------------------------------------
 
@@ -234,6 +237,15 @@ func build_chunk():
 	add_child(box)
 	actor_list.append(box)
 	actor_map[box_x][box_y] = box
+	
+	# Place Enemy
+	var e_x = 10
+	var e_y = 4
+	var enemy = Enemy.instance()
+	enemy.init(self,e_x,e_y)
+	add_child(enemy)
+	actor_list.append(enemy)
+	actor_map[e_x][e_y] = enemy
 	
 # Set a tile at (x,y) with tile type
 func set_tile(x, y, type):
