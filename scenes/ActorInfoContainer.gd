@@ -6,7 +6,7 @@ onready var actor_description = $ActorDescription
 
 func _ready():
 	actor_title.hide()
-	actor_description.hide()
+	actor_description.hide()w
 
 # Set the info based on the actor node
 func list_info(actor):

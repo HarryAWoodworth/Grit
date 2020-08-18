@@ -1,7 +1,8 @@
 ## TODO
-# UI text log string threshold reduction for performance
+# Player Info UI
+# Fix sprite not displaying in actor info
 # Input button for opening
-# Hover over shows actor details
+
 
 ## Extra special TODO
 # Colors in textlog
@@ -27,7 +28,7 @@ enum Tile { Wall, Unknown, Box, Grass, Forest, Opening }
 onready var tile_map = $TileMap
 onready var player = $Actors/Player
 onready var textlog = $UI/TextLog
-onready var actor_info_container = $UI/ActorInfoContainer
+onready var actor_info = $UI/ActorInfo
 
 var Box = preload("res://actors/Box.tscn")
 
@@ -60,7 +61,7 @@ func can_move(dx, dy, node):
 	var x = node.curr_tile.x + dx
 	var y = node.curr_tile.y + dy
 	# Tiles actors cannot move into
-	var arr_tile_no_move = [Tile.Forest]
+	var arr_tile_no_move = [Tile.Forest, Tile.Wall]
 	# Check x and y are in map
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
 		return false
@@ -156,11 +157,11 @@ func logg(string):
 
 # Display actor data
 func display_actor_data(actor):
-	actor_info_container.list_info(actor)
+	actor_info.list_info(actor)
 	
 # CLear actor data
 func clear_actor_data():
-	actor_info_container.clear()
+	actor_info.clear()
 
 # Chunk Generation -------------------------------------------------------------
 
@@ -186,9 +187,13 @@ func build_chunk():
 				map[x].append(Tile.Grass)
 				tile_map.set_cell(x, y, Tile.Grass)
 	
-	# Extra forest tile for testing
-	tile_map.set_cell(5, 5, Tile.Forest)
-	map[5][5] = Tile.Forest
+	# Extra walls for testing
+	tile_map.set_cell(5, 5, Tile.Wall)
+	map[5][5] = Tile.Wall
+	tile_map.set_cell(7, 5, Tile.Wall)
+	map[7][5] = Tile.Wall
+	tile_map.set_cell(6, 7, Tile.Wall)
+	map[6][7] = Tile.Wall
 	
 	# Place Player
 	var player_start_coords = round(CHUNK_DIMENSION/2.0)

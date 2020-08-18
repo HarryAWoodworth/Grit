@@ -7,6 +7,9 @@ var changeable_texture = true
 onready var tween = $Sprite/Tween
 onready var sprite = $Sprite
 
+# Info
+var title = "Thunder McDonald"
+
 var right = preload("res://assets/player_sprite/player_right.png")
 var left = preload("res://assets/player_sprite/player_left.png")
 var up = preload("res://assets/player_sprite/player_up.png")
@@ -19,7 +22,6 @@ var down_grab = preload("res://assets/player_sprite/player_down_grab.png")
 # Key Booleans
 var grabbing = false
 var grabbed_actor
-
 
 func _input(event):
 	

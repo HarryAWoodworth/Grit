@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scenes/Game.gd" type="Script" id=1]
 [ext_resource path="res://assets/player_sprite/player_down.png" type="Texture" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://assets/forest.png" type="Texture" id=7]
 [ext_resource path="res://scenes/Actors.gd" type="Script" id=8]
 [ext_resource path="res://scenes/Player.gd" type="Script" id=9]
+[ext_resource path="res://scenes/PlayerInfo.gd" type="Script" id=10]
 
 [sub_resource type="TileSet" id=1]
 0/name = "wall.png 0"
@@ -132,7 +133,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ActorInfoContainer" type="VBoxContainer" parent="UI"]
+[node name="ActorInfo" type="VBoxContainer" parent="UI"]
 margin_left = 480.0
 margin_top = 175.0
 margin_right = 780.0
@@ -143,11 +144,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ActorSprite" type="TextureRect" parent="UI/ActorInfoContainer"]
+[node name="ActorSprite" type="TextureRect" parent="UI/ActorInfo"]
 margin_right = 299.0
 expand = true
 
-[node name="ActorTitle" type="Label" parent="UI/ActorInfoContainer"]
+[node name="ActorTitle" type="Label" parent="UI/ActorInfo"]
 margin_top = 4.0
 margin_right = 299.0
 margin_bottom = 18.0
@@ -157,9 +158,27 @@ valign = 1
 autowrap = true
 uppercase = true
 
-[node name="ActorDescription" type="Label" parent="UI/ActorInfoContainer"]
+[node name="ActorDescription" type="Label" parent="UI/ActorInfo"]
 margin_top = 22.0
 margin_right = 299.0
 margin_bottom = 36.0
 custom_styles/normal = SubResource( 5 )
 autowrap = true
+
+[node name="PlayerInfo" type="VBoxContainer" parent="UI"]
+margin_left = 480.0
+margin_top = 10.0
+margin_right = 780.0
+margin_bottom = 320.0
+rect_scale = Vector2( 0.5, 0.5 )
+script = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerName" type="Label" parent="UI/PlayerInfo"]
+margin_right = 299.0
+margin_bottom = 14.0
+align = 1
+valign = 1
+uppercase = true
