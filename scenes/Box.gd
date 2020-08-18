@@ -23,7 +23,9 @@ func drag(ID):
 				game.move_actor(vec,self)
 				game.logg("The box was dragged right.")
 				game.tick()
-			
+			else:
+				game.cant_move_anim(x,y,self)
+				game.cant_move_anim(x,y,game.player)
 		"drag_left":
 			# Drag player and box left
 			var diff_vec = player_distance()
@@ -35,6 +37,9 @@ func drag(ID):
 				game.move_actor(vec,self)
 				game.logg("The box was dragged left.")
 				game.tick()
+			else:
+				game.cant_move_anim(x,y,self)
+				game.cant_move_anim(x,y,game.player)
 		"push": 
 			# Push the box
 			var diff_vec = player_distance()
@@ -46,6 +51,9 @@ func drag(ID):
 				game.move_actor(vec,game.player,0)
 				game.logg("The box was pushed.")
 				game.tick()
+			else:
+				game.cant_move_anim(x,y,self)
+				game.cant_move_anim(x,y,game.player)
 		"pull":
 			# Pull player and box
 			var diff_vec = player_distance()
@@ -57,7 +65,9 @@ func drag(ID):
 				game.move_actor(vec,self)
 				game.logg("The box was pulled.")
 				game.tick()
+			else:
+				game.cant_move_anim(x,y,self)
+				game.cant_move_anim(x,y,game.player)
 
-	
 func tick():
 	pass

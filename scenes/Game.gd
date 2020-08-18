@@ -113,10 +113,12 @@ func move_actor(vector, node, turn=1):
 		return true
 	
 	else: 
-		cant_move_anim(dx,dy,x,y,node)	
+		cant_move_anim(dx,dy,node)	
 			
 # Animate the actor moving halfway into the tile and bouncing back
-func cant_move_anim(dx,dy,x,y,node):
+func cant_move_anim(dx,dy,node):
+	var x = node.curr_tile.x + dx
+	var y = node.curr_tile.y + dy
 	anim_finished = false
 	var dest = Vector2(x,y) * TILE_SIZE
 	if dx != 0:
