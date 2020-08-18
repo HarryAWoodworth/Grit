@@ -53,6 +53,22 @@ func _ready():
 	
 # Input ------------------------------------------------------------------------
 
+func can_move(dx, dy, node):
+	var x = node.curr_tile.x + dx
+	var y = node.curr_tile.y + dy
+	# Tiles actors cannot move into
+	var arr_tile_no_move = [Tile.Forest]
+	# Check x and y are in map
+	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
+		return false
+	# Check that tile_type and actor_type are valid
+	var tile_type = map[x][y]
+	var actor_type = actor_map[x][y]
+	if typeof(actor_type) != 2 or arr_tile_no_move.has(tile_type):
+		return false
+	# Return true
+	return true
+
 # Move an actor node to a tile
 func move_actor(vector, node, turn=1):
 	
@@ -71,7 +87,7 @@ func move_actor(vector, node, turn=1):
 			Vector2(0,1):
 				node.sprite.set_texture(node.down)
 				node.curr_tex = "down"
-	
+				
 	var dx = vector.x
 	var dy = vector.y
 	var temp_x = node.curr_tile.x
@@ -79,40 +95,25 @@ func move_actor(vector, node, turn=1):
 	var x = node.curr_tile.x + dx
 	var y = node.curr_tile.y + dy
 	
-	var tile_type
-	var actor_type
-	# Get the tile/ actor on the tile the player is moving to
-	if x >= 0 && x < CHUNK_DIMENSION && y >= 0 && y < CHUNK_DIMENSION:
-		tile_type = map[x][y]
-		actor_type = actor_map[x][y]
-	else:
-		cant_move_anim(dx,dy,x,y,node)
-		return false
-		
-	# If the actor_map contains an actor in the coords moving to, do not allow movement.
-	if typeof(actor_type) != 2:
-		# Can't move anim
-		cant_move_anim(dx,dy,x,y,node)
-		return false
-		
-	match tile_type:
-		Tile.Grass:
-			# Set animating bool
-			anim_finished = false
-			# Start tween
-			node.tween.interpolate_property(node, "position", node.curr_tile * TILE_SIZE, Vector2(x,y) * TILE_SIZE, 1.0/ANIM_SPEED, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-			# Set bool that anim is finished using callback
-			node.tween.interpolate_callback(self, node.tween.get_runtime(), "set_anim_done")
-			# Start tween
-			node.tween.start()
-			# Update node's current tile
-			node.curr_tile = Vector2(x,y)
-			actor_map[temp_x][temp_y] = 0
-			actor_map[x][y] = node
-			return true
-		Tile.Forest:
-			cant_move_anim(dx,dy,x,y,node)
-			return false
+	if can_move(dx, dy, node):
+		var tile_type = map[x][y]
+		var actor_type = actor_map[x][y]
+		# Set animating bool
+		anim_finished = false
+		# Start tween
+		node.tween.interpolate_property(node, "position", node.curr_tile * TILE_SIZE, Vector2(x,y) * TILE_SIZE, 1.0/ANIM_SPEED, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+		# Set bool that anim is finished using callback
+		node.tween.interpolate_callback(self, node.tween.get_runtime(), "set_anim_done")
+		# Start tween
+		node.tween.start()
+		# Update node's current tile
+		node.curr_tile = Vector2(x,y)
+		actor_map[temp_x][temp_y] = 0
+		actor_map[x][y] = node
+		return true
+	
+	else: 
+		cant_move_anim(dx,dy,x,y,node)	
 			
 # Animate the actor moving halfway into the tile and bouncing back
 func cant_move_anim(dx,dy,x,y,node):
