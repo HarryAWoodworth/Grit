@@ -17,6 +17,7 @@ const CHUNK_DIMENSION = 16
 const FOREST_DEPTH = 2
 const MAX_BUILDING_DIMENSION = 8
 const MIN_BUILDING_DIMENSION = 5
+const MAX_TESTLOG_LENGTH = 10000
 
 enum Tile { Wall, Unknown, Box, Grass, Forest, Opening }
 
@@ -140,6 +141,10 @@ func tick():
 		actor.tick()
 		
 func logg(string):
+	var strlen = textlog.text.length()
+	if strlen > MAX_TESTLOG_LENGTH:
+		textlog.text = textlog.text.substr(MAX_TESTLOG_LENGTH - (MAX_TESTLOG_LENGTH/10),strlen)
+		print("Textlog culled!")
 	textlog.text = textlog.text + "\n" + string
 
 # Chunk Generation -------------------------------------------------------------
