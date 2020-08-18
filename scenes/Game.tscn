@@ -103,3 +103,14 @@ drag_margin_bottom = 0.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Actors/Player"]
 position = Vector2( 8, 8 )
 shape = SubResource( 2 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer"]
+margin_right = 200.0
+margin_bottom = 200.0
+rect_scale = Vector2( 0.5, 0.5 )
+scroll_following = true
+__meta__ = {
+"_edit_use_anchors_": false
+}

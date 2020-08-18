@@ -1,8 +1,7 @@
 ## TODO
-# Input hold down and direction for dragging object, change sprite
+# UI text log string threshold reduction for performance
 # Input button for opening
 # Hover over shows actor details
-# UI text log, Actor details
 
 ## Extra special TODO
 # Animation shaking head 'no' when command does nothing
@@ -25,6 +24,7 @@ enum Tile { Wall, Unknown, Box, Grass, Forest, Opening }
 
 onready var tile_map = $TileMap
 onready var player = $Actors/Player
+onready var textlog = $CanvasLayer/RichTextLabel
 
 var Box = preload("res://actors/Box.tscn")
 
@@ -48,6 +48,7 @@ func get_actor_at(x,y):
 func _ready():
 	OS.set_window_size(Vector2(1280, 720))
 	randomize()
+	textlog.text = "This is a test!"
 	build_chunk()
 	
 # Input ------------------------------------------------------------------------
@@ -134,6 +135,9 @@ func set_anim_done():
 func tick():
 	for actor in actor_list:
 		actor.tick()
+		
+func logg(string):
+	textlog.text = textlog.text + "\n" + string
 
 # Chunk Generation -------------------------------------------------------------
 
