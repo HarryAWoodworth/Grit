@@ -8,8 +8,8 @@
 #	[X] Move
 #	[X] Drag
 #	[] Fight
-# [] Enemies 
-#	[] Move towards player
+# [1/3] Enemies 
+#	[X] Move towards player
 # 	[] Fight
 #	[] Hover over info
 # [] Inventory system
@@ -83,7 +83,7 @@ func _ready():
 	
 # Input ------------------------------------------------------------------------
 
-func can_move(dx, dy, node):
+func can_move(dx, dy, node, check_for_another_actor=true):
 	var x = node.curr_tile.x + dx
 	var y = node.curr_tile.y + dy
 	# Tiles actors cannot move into
@@ -93,9 +93,10 @@ func can_move(dx, dy, node):
 		return false
 	# Check that tile_type and actor_type are valid
 	var tile_type = map[x][y]
-	var actor_type = actor_map[x][y]
-	if typeof(actor_type) != 2:
-		return false
+	if check_for_another_actor:
+		var actor_type = actor_map[x][y]
+		if typeof(actor_type) != 2:
+			return false
 	if arr_tile_no_move.has(tile_type):
 		if tile_type == Tile.Forest:
 			logg("I'm not traversing those dark woods...")
@@ -122,12 +123,21 @@ func move_actor(vector, node, turn=1):
 				node.sprite.set_texture(node.down)
 				node.curr_tex = "down"
 				
+	# Coords
 	var dx = vector.x
 	var dy = vector.y
 	var temp_x = node.curr_tile.x
 	var temp_y = node.curr_tile.y
 	var x = node.curr_tile.x + dx
 	var y = node.curr_tile.y + dy
+	
+	# Melee combat via running into enemy
+	var actor_adjacent = get_actor_at(x,y)
+	if typeof(actor_adjacent) != 2:
+		if actor_adjacent.identifier == "enemy":
+			exchange_combat_damage(node, actor_adjacent)
+			cant_move_anim(dx,dy,node)
+			return true
 	
 	if can_move(dx, dy, node):
 		# Set animating bool
@@ -171,6 +181,16 @@ func tick():
 	for actor in actor_list:
 		actor.tick()
 		
+func exchange_combat_damage(agressor, defender):
+	defender.take_dmg(agressor.dmg)
+	
+func remove_node(node):
+	# Remove from actor_list
+	actor_list.erase(node)
+	# Remove from actor_map
+	actor_map[node.curr_tile.x][node.curr_tile.y] = 0
+	# Remove child from parent
+	remove_child(node)
 		
 # UI ---------------------------------------------------------------------------
 
@@ -214,12 +234,37 @@ func build_chunk():
 				tile_map.set_cell(x, y, Tile.Grass)
 	
 	# Extra walls for testing
-	tile_map.set_cell(5, 5, Tile.Wall)
-	map[5][5] = Tile.Wall
-	tile_map.set_cell(7, 5, Tile.Wall)
-	map[7][5] = Tile.Wall
-	tile_map.set_cell(6, 7, Tile.Wall)
-	map[6][7] = Tile.Wall
+	tile_map.set_cell(2, 13, Tile.Wall)
+	map[2][13] = Tile.Wall
+	tile_map.set_cell(3, 13, Tile.Wall)
+	map[3][13] = Tile.Wall
+	tile_map.set_cell(4, 13, Tile.Wall)
+	map[4][13] = Tile.Wall
+	tile_map.set_cell(5, 13, Tile.Wall)
+	map[5][13] = Tile.Wall
+	tile_map.set_cell(6, 13, Tile.Wall)
+	map[6][13] = Tile.Wall
+	tile_map.set_cell(2, 12, Tile.Wall)
+	map[2][12] = Tile.Wall
+	tile_map.set_cell(2, 11, Tile.Wall)
+	map[2][11] = Tile.Wall
+	tile_map.set_cell(2, 10, Tile.Wall)
+	map[2][10] = Tile.Wall
+	tile_map.set_cell(2, 9, Tile.Wall)
+	map[2][9] = Tile.Wall
+	tile_map.set_cell(4, 9, Tile.Wall)
+	map[4][9] = Tile.Wall
+	tile_map.set_cell(5, 9, Tile.Wall)
+	map[5][9] = Tile.Wall
+	tile_map.set_cell(6, 9, Tile.Wall)
+	map[6][9] = Tile.Wall
+	tile_map.set_cell(6, 10, Tile.Wall)
+	map[6][10] = Tile.Wall
+	tile_map.set_cell(6, 11, Tile.Wall)
+	map[6][11] = Tile.Wall
+	tile_map.set_cell(6, 12, Tile.Wall)
+	map[6][12] = Tile.Wall
+	
 	
 	# Place Player
 	var player_start_coords = round(CHUNK_DIMENSION/2.0)
@@ -230,8 +275,8 @@ func build_chunk():
 	player_info.list_player_info(player)
 	
 	# Place Box
-	var box_x = 7
-	var box_y = 7
+	var box_x = 4
+	var box_y = 10
 	var box = Box.instance()
 	box.init(self,box_x,box_y)
 	add_child(box)
@@ -239,10 +284,10 @@ func build_chunk():
 	actor_map[box_x][box_y] = box
 	
 	# Place Enemy
-	var e_x = 10
-	var e_y = 4
+	var e_x = 13
+	var e_y = 2
 	var enemy = Enemy.instance()
-	enemy.init(self,e_x,e_y)
+	enemy.init(self,e_x,e_y,"Mutant Crab","A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...")
 	add_child(enemy)
 	actor_list.append(enemy)
 	actor_map[e_x][e_y] = enemy
@@ -254,8 +299,3 @@ func set_tile(x, y, type):
 	
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)
-
-## TODO
-## Generate stuff around the chunk
-## Prevent generation in meadow area in center
-## Investigate why box spawning on player doesnt cause a problem

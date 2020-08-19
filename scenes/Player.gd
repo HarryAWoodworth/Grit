@@ -3,6 +3,7 @@ extends Area2D
 # Constants --------------------------------------------------------------------
 const DEFAULT_PLAYER_MAX_HEALTH = 50
 const DEFAULT_PLAYER_STARTING_LEVEL = 0
+const DEFAULT_PLAYER_ARMOR = 0
 
 # Player game info -------------------------------------------------------------
 var identifier = "player"
@@ -17,6 +18,8 @@ var title = "Thunder McDonald"
 var health = DEFAULT_PLAYER_MAX_HEALTH
 var weapon = "Big Ass Laser Gun"
 var level = DEFAULT_PLAYER_STARTING_LEVEL
+var armor = DEFAULT_PLAYER_ARMOR
+var dmg = 4
 
 # Sprite preload ---------------------------------------------------------------
 var right = preload("res://assets/player_sprite/player_right.png")
@@ -78,7 +81,7 @@ func _input(event):
 		if !grabbing:
 			var actor_facing = get_actor_facing(game)
 			if typeof(actor_facing) == 2:
-				print("No grabbable object in front of you.")
+				get_parent().logg("No grabbable object in front of you.")
 				return
 			if actor_facing.grabbable:
 				grabbing = true
@@ -123,3 +126,15 @@ func on_click():
 	
 func tick():
 	pass
+	
+func take_dmg(num):
+	var game = get_parent()
+	var dmg_taken = (num - armor)
+	health = health - dmg_taken
+	game.logg("Player has taken " + dmg_taken + " dmg. Health is now " + health)
+	game.player_info.update_health(health)
+	if health <= 0:
+		die()
+		
+func die():
+	get_parent().remove_node(self)
