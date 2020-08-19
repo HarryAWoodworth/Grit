@@ -55,25 +55,57 @@ func _input(event):
 			if game.move_actor(Vector2(-1,0),self):
 				game.tick()
 		else:
-			grabbed_actor.drag("drag_left")
+			match curr_tex:
+				"up":
+					grabbed_actor.drag("drag_left")
+				"down":
+					grabbed_actor.drag("drag_right")
+				"left":
+					grabbed_actor.drag("push")
+				"right":
+					grabbed_actor.drag("pull")
 	elif event.is_action("ui_right"):
 		if !grabbing:
 			if game.move_actor(Vector2(1,0),self):
 				game.tick()
 		else:
-			grabbed_actor.drag("drag_right")
+			match curr_tex:
+				"up":
+					grabbed_actor.drag("drag_right")
+				"down":
+					grabbed_actor.drag("drag_left")
+				"left":
+					grabbed_actor.drag("pull")
+				"right":
+					grabbed_actor.drag("push")
 	elif event.is_action("ui_up"):
 		if !grabbing:
 			if game.move_actor(Vector2(0,-1),self):
 				game.tick()
 		else:
-			grabbed_actor.drag("push")
+			match curr_tex:
+				"up":
+					grabbed_actor.drag("push")
+				"down":
+					grabbed_actor.drag("pull")
+				"left":
+					grabbed_actor.drag("drag_right")
+				"right":
+					grabbed_actor.drag("drag_left")
 	elif event.is_action("ui_down"):
 		if !grabbing:
 			if game.move_actor(Vector2(0,1),self):
 				game.tick()
 		else:
-			grabbed_actor.drag("pull")
+			match curr_tex:
+				"up":
+					grabbed_actor.drag("pull")
+				"down":
+					grabbed_actor.drag("push")
+				"left":
+					grabbed_actor.drag("drag_left")
+				"right":
+					grabbed_actor.drag("drag_right")
 			
 	# Grabbing key
 	elif Input.is_action_just_pressed("ui_grab"):
