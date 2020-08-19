@@ -3,42 +3,60 @@ extends "res://scenes/Actors.gd"
 # Child Nodes
 onready var tween = $Sprite/Tween
 onready var sprite = $Sprite
+onready var fct_manager = $FCTManager
+onready var ai_manager = $AI_Manager
 
 # Consts 
-const DEFAULT_ENEMY_HEALTH = 10
-const DEFAULT_ENEMY_TITLE = "..."
-const DEFAULT_ENEMY_DESCRIPTION = "..."
-const DEFAULT_ENEMY_STATUSES = []
-const DEFAULT_ENEMY_EFFECTS = []
-const DEFAULT_ENEMY_ARMOR = 0
-const DEFAULT_ENEMY_DMG = 0
+const DEFAULT_AI = "none"
+const DEFAULT_IDENTIFIER = "..."
+const DEFAULT_HEALTH = 10
+const DEFAULT_TITLE = "..."
+const DEFAULT_DESCRIPTION = "..."
+const DEFAULT_STATUSES = []
+const DEFAULT_EFFECTS = []
+const DEFAULT_ARMOR = 0
+const DEFAULT_DMG = 0
+const DEFAULT_CURR_TEXT = "down"
+const DEFAULT_LEVEL = 0
 
 # Enemy data
 var health
 var armor
-var dmg
+var dmg = 4
 var effect_arr
 var status_arr
+
+# AI
+var ai
+var ai_tick_callback
 
 # Game ref
 var game
 
-# Init the enemy
+# Init the character
 func init(game_ref, x, y,
-new_title=DEFAULT_ENEMY_TITLE,
-new_description=DEFAULT_ENEMY_DESCRIPTION,
-new_health=DEFAULT_ENEMY_HEALTH,
-new_armor=DEFAULT_ENEMY_ARMOR,
-new_dmg=DEFAULT_ENEMY_DMG,
-new_status_arr=DEFAULT_ENEMY_STATUSES,
-new_effect_arr=DEFAULT_ENEMY_EFFECTS,
-can_change_texture=false):
+new_identifier=DEFAULT_IDENTIFIER,
+new_title=DEFAULT_TITLE,
+new_description=DEFAULT_DESCRIPTION,
+new_ai=DEFAULT_AI,
+can_change_texture=false,
+new_curr_text=DEFAULT_CURR_TEXT,
+new_level=DEFAULT_LEVEL,
+new_health=DEFAULT_HEALTH,
+new_armor=DEFAULT_ARMOR,
+new_status_arr=DEFAULT_STATUSES,
+new_effect_arr=DEFAULT_EFFECTS):
 	
 	# Identifier
-	identifier = "enemy"
+	identifier = new_identifier
+	
+	# AI
+	ai_tick_callback = ai_manager.get_callback(ai)
+	
+	# Game ref
+	game = get_parent()
 	
 	# Set position in game world
-	game = game_ref
 	curr_tile = Vector2(x,y)
 	game.actor_map[x][y] = sprite_node
 	position = curr_tile * game.TILE_SIZE
@@ -48,7 +66,6 @@ can_change_texture=false):
 	description = new_description
 	health = new_health
 	armor = new_armor
-	dmg = new_dmg
 	status_arr = new_status_arr
 	effect_arr = new_effect_arr
 	changeable_texture = can_change_texture
@@ -57,19 +74,14 @@ can_change_texture=false):
 
 # Follow the player
 func tick():
-	if game.player.curr_tile.x > curr_tile.x and game.can_move(1,0,self,false):
-		game.move_actor(Vector2(1,0),self)
-	elif game.player.curr_tile.x < curr_tile.x and game.can_move(-1,0,self,false):
-		game.move_actor(Vector2(-1,0),self)
-	elif game.player.curr_tile.y > curr_tile.y and game.can_move(0,1,self,false):
-		game.move_actor(Vector2(0,1),self)
-	elif game.player.curr_tile.y < curr_tile.y and game.can_move(0,-1,self,false):
-		game.move_actor(Vector2(0,-1),self)
+	ai_tick_callback.call_func(self)
 		
-func take_dmg(num):
+func take_dmg(num, crit=false):
 	var dmg_taken = (num - armor)
 	health = health - dmg_taken
+	fct_manager.show_value(dmg_taken, crit)
 	game.logg(title + " has taken " + str(dmg_taken) + " dmg. Health is now " + str(health))
+	# TODO: Update UI
 	if health <= 0:
 		die()
 		
@@ -89,6 +101,20 @@ func set_title(new_title):
 # Set a new description
 func set_description(new_description):
 	description = new_description
+	
+# Game util --------------------------------------------------------------------
+
+# Get the actor this actor is facing, -1 if no actor is present
+func get_actor_facing(game):
+	match curr_tex:
+		"right":
+			return game.get_actor_at(curr_tile.x + 1, curr_tile.y)
+		"left":
+			return game.get_actor_at(curr_tile.x - 1, curr_tile.y)
+		"down":
+			return game.get_actor_at(curr_tile.x, curr_tile.y + 1)
+		"up":
+			return game.get_actor_at(curr_tile.x, curr_tile.y - 1)
 	
 # Effect and status util -------------------------------------------------------	
 

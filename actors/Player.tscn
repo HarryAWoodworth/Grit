@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/player_sprite/player_down.png" type="Texture" id=1]
+[ext_resource path="res://util/FCTManager.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/Player.gd" type="Script" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 8, 8 )
+
+[node name="Player" type="Area2D"]
+gravity_vec = Vector2( 0, 0 )
+gravity = 0.0
+script = ExtResource( 4 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Camera2D" type="Camera2D" parent="Sprite"]
+position = Vector2( 8, 8 )
+current = true
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+
+[node name="Tween" type="Tween" parent="Sprite"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 8, 8 )
+shape = SubResource( 1 )
+
+[node name="FCTManager" parent="." instance=ExtResource( 3 )]
