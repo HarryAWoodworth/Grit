@@ -1,24 +1,38 @@
 ## TODO
-# More player info?
-# Fix dragging controls
-# Input button for opening
+# add level to character class
+# More player info
+# More enemy info
+# Detect if player is in sight
 
 ## TODO to beta:
-# [2/3] Player character
+# [2/4] Player character
 #	[X] Move
 #	[X] Drag
-#	[] Fight
+#	[1/2] Fight
+#		[X] Melee
+#		[] Ranged
+#	[] Inventory
 # [1/3] Enemies 
-#	[X] Move towards player
-# 	[] Fight
+#	[] Move towards player
+#		[] Detect if in sight
+#		[] A* Following
+#		[] Out of sight non-following
+# 	[X] Fight
 #	[] Hover over info
+#	[] Corpse
+#		[] Drop items
+# [] Combat
+#	[] Visual effect
+#	[] Sound effect
 # [] Inventory system
 #	[] Drop Items
 #	[] Use Items
 #	[] Equip Items
 # [] Items
 #	[] Open furniture
-#	[] Drop from enemies
+# [] Weapons
+#	[] Degredation
+#	[] Unique visual effect?
 # [] Bunker
 # [] Random world gen
 #	[] Buildings
@@ -56,7 +70,8 @@ onready var player_info = $UI/PlayerInfo
 # Entity Preloads --------------------------------------------------------------
 
 var Box = preload("res://actors/Box.tscn")
-var Enemy = preload("res://actors/Enemy.tscn")
+var Character = preload("res://actors/Character.tscn")
+var Player = preload("res://actors/Player.tscn")
 
 # Game State -------------------------------------------------------------------
 
@@ -66,6 +81,7 @@ var map = []
 var buildings = []
 var actor_map = []
 
+# Get actor at coords
 func get_actor_at(x,y):
 	if x < 0 or x > actor_map.size()-1 or y < 0 or y > actor_map[0].size()-1:
 		print("No actor there")
@@ -75,6 +91,7 @@ func get_actor_at(x,y):
 
 # Ready ------------------------------------------------------------------------
 
+# Init the game
 func _ready():
 	OS.set_window_size(Vector2(1280, 720))
 	randomize()
@@ -83,6 +100,7 @@ func _ready():
 	
 # Input ------------------------------------------------------------------------
 
+# Checks if actor can move using a difference vector
 func can_move(dx, dy, node, check_for_another_actor=true):
 	var x = node.curr_tile.x + dx
 	var y = node.curr_tile.y + dy
@@ -134,7 +152,7 @@ func move_actor(vector, node, turn=1):
 	# Melee combat via running into enemy
 	var actor_adjacent = get_actor_at(x,y)
 	if typeof(actor_adjacent) != 2:
-		if actor_adjacent.identifier == "enemy":
+		if (node.identifier == "player" and actor_adjacent.identifier == "enemy") or (node.identifier == "enemy" and actor_adjacent.identifier == "player"):
 			exchange_combat_damage(node, actor_adjacent)
 			cant_move_anim(dx,dy,node)
 			return true
@@ -234,44 +252,28 @@ func build_chunk():
 				tile_map.set_cell(x, y, Tile.Grass)
 	
 	# Extra walls for testing
-	tile_map.set_cell(2, 13, Tile.Wall)
-	map[2][13] = Tile.Wall
-	tile_map.set_cell(3, 13, Tile.Wall)
-	map[3][13] = Tile.Wall
-	tile_map.set_cell(4, 13, Tile.Wall)
-	map[4][13] = Tile.Wall
-	tile_map.set_cell(5, 13, Tile.Wall)
-	map[5][13] = Tile.Wall
-	tile_map.set_cell(6, 13, Tile.Wall)
-	map[6][13] = Tile.Wall
-	tile_map.set_cell(2, 12, Tile.Wall)
-	map[2][12] = Tile.Wall
-	tile_map.set_cell(2, 11, Tile.Wall)
-	map[2][11] = Tile.Wall
-	tile_map.set_cell(2, 10, Tile.Wall)
-	map[2][10] = Tile.Wall
-	tile_map.set_cell(2, 9, Tile.Wall)
-	map[2][9] = Tile.Wall
-	tile_map.set_cell(4, 9, Tile.Wall)
-	map[4][9] = Tile.Wall
-	tile_map.set_cell(5, 9, Tile.Wall)
-	map[5][9] = Tile.Wall
-	tile_map.set_cell(6, 9, Tile.Wall)
-	map[6][9] = Tile.Wall
-	tile_map.set_cell(6, 10, Tile.Wall)
-	map[6][10] = Tile.Wall
-	tile_map.set_cell(6, 11, Tile.Wall)
-	map[6][11] = Tile.Wall
-	tile_map.set_cell(6, 12, Tile.Wall)
-	map[6][12] = Tile.Wall
-	
+	set_tile(2, 8, Tile.Wall)
+	set_tile(3, 8, Tile.Wall)
+	set_tile(4, 8, Tile.Wall)
+	set_tile(4, 8, Tile.Wall)
+	set_tile(5, 8, Tile.Wall)
+	set_tile(6, 8, Tile.Wall)
+	set_tile(7, 8, Tile.Wall)
+
 	
 	# Place Player
-	var player_start_coords = round(CHUNK_DIMENSION/2.0)
-	player.curr_tile = Vector2(player_start_coords,player_start_coords)
-	player.position = player.curr_tile * TILE_SIZE
+	var player_start_coord = round(CHUNK_DIMENSION/2.0)
+	var player = Player.instance()
+	player.init(self,
+				player_start_coord,player_start_coord,
+				"player",
+				"Thunder Magee",
+				"...",
+				"none",
+				true)
+	#player.position = player.curr_tile * TILE_SIZE
 	actor_list.append(player)
-	actor_map[player_start_coords][player_start_coords] = player
+	actor_map[player_start_coord][player_start_coord] = player
 	player_info.list_player_info(player)
 	
 	# Place Box
@@ -284,13 +286,16 @@ func build_chunk():
 	actor_map[box_x][box_y] = box
 	
 	# Place Enemy
-	var e_x = 13
-	var e_y = 2
-	var enemy = Enemy.instance()
-	enemy.init(self,e_x,e_y,"Mutant Crab","A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...")
-	add_child(enemy)
-	actor_list.append(enemy)
-	actor_map[e_x][e_y] = enemy
+	add_character(13,2,
+				"enemy",
+				"Mutant Crab",
+				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
+				"monster_classic",
+				false,
+				"down",
+				0,
+				150,
+				1)
 	
 # Set a tile at (x,y) with tile type
 func set_tile(x, y, type):
@@ -299,3 +304,10 @@ func set_tile(x, y, type):
 	
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)
+	
+func add_character(x,y,identifier,name,descr,ai,change_tex,start_tex,level,health,armor):
+	var character = Character.instance()
+	character.init(self,x,y,identifier,name,descr,ai,change_tex,start_tex,level,health,armor)
+	add_child(character)
+	actor_list.append(character)
+	actor_map[x][y] = character

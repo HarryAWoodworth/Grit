@@ -1,25 +1,14 @@
-extends Area2D
+extends "res://Character.gd"
 
 # Constants --------------------------------------------------------------------
 const DEFAULT_PLAYER_MAX_HEALTH = 50
 const DEFAULT_PLAYER_STARTING_LEVEL = 0
 const DEFAULT_PLAYER_ARMOR = 0
 
-# Player game info -------------------------------------------------------------
-var identifier = "player"
-var curr_tile
-var curr_tex = "down"
-var changeable_texture = true
-onready var tween = $Sprite/Tween
-onready var sprite = $Sprite
-
 # Player Info ------------------------------------------------------------------
-var title = "Thunder McDonald"
-var health = DEFAULT_PLAYER_MAX_HEALTH
 var weapon = "Big Ass Laser Gun"
-var level = DEFAULT_PLAYER_STARTING_LEVEL
-var armor = DEFAULT_PLAYER_ARMOR
-var dmg = 4
+var grabbing = false
+var grabbed_actor
 
 # Sprite preload ---------------------------------------------------------------
 var right = preload("res://assets/player_sprite/player_right.png")
@@ -31,9 +20,19 @@ var left_grab = preload("res://assets/player_sprite/player_left_grab.png")
 var up_grab = preload("res://assets/player_sprite/player_up_grab.png")
 var down_grab = preload("res://assets/player_sprite/player_down_grab.png")
 
-# Key Booleans -----------------------------------------------------------------
-var grabbing = false
-var grabbed_actor
+# Init -------------------------------------------------------------------------
+
+func init_player():
+	identifier = "player"
+	curr_tex = "down"
+	changeable_texture = true
+	title = "Thunder McDonald"
+	
+	# Info
+	health = DEFAULT_PLAYER_MAX_HEALTH
+	level = DEFAULT_PLAYER_STARTING_LEVEL
+	armor = DEFAULT_PLAYER_ARMOR
+	dmg = 5
 
 # Input ------------------------------------------------------------------------
 func _input(event):
@@ -113,7 +112,7 @@ func _input(event):
 		if !grabbing:
 			var actor_facing = get_actor_facing(game)
 			if typeof(actor_facing) == 2:
-				get_parent().logg("No grabbable object in front of you.")
+				game.logg("No grabbable object in front of you.")
 				return
 			if actor_facing.grabbable:
 				grabbing = true
@@ -140,33 +139,9 @@ func _input(event):
 				"up":
 					sprite.set_texture(up)
 			
-# Get the actor the player is facing
-func get_actor_facing(game):
-	match curr_tex:
-		"right":
-			return game.get_actor_at(curr_tile.x + 1, curr_tile.y)
-		"left":
-			return game.get_actor_at(curr_tile.x - 1, curr_tile.y)
-		"down":
-			return game.get_actor_at(curr_tile.x, curr_tile.y + 1)
-		"up":
-			return game.get_actor_at(curr_tile.x, curr_tile.y - 1)
+
 			
 # Game input -------------------------------------------------------------------
-func on_click():
-	pass
 	
-func tick():
-	pass
-	
-func take_dmg(num):
-	var game = get_parent()
-	var dmg_taken = (num - armor)
-	health = health - dmg_taken
-	game.logg("Player has taken " + dmg_taken + " dmg. Health is now " + health)
-	game.player_info.update_health(health)
-	if health <= 0:
-		die()
-		
 func die():
-	get_parent().remove_node(self)
+	print("Player died :C")
