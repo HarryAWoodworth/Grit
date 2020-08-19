@@ -19,8 +19,8 @@ func drag(ID):
 		"drag_right":
 			# Drag player and box right
 			var diff_vec = player_distance()
-			var x = diff_vec.y
 			var y = -1 * diff_vec.x
+			var x = diff_vec.y
 			var vec = Vector2(x,y)
 			if game.can_move(x, y, self) and game.can_move(x, y, game.player):
 				game.move_actor(vec,game.player,0)
