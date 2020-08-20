@@ -1,4 +1,4 @@
-extends "res://Character.gd"
+extends "res://scripts/Character.gd"
 
 # Constants --------------------------------------------------------------------
 const DEFAULT_PLAYER_MAX_HEALTH = 50
@@ -37,11 +37,9 @@ func init_player():
 # Input ------------------------------------------------------------------------
 func _input(event):
 	# Record on click
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
-		on_click()
-		return
-	# Get game parent node
-	var game = get_parent().get_parent()
+#	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
+#		on_click()
+#		return
 	# Return if animating movement
 	if(!game.anim_finished):
 		return
@@ -110,7 +108,7 @@ func _input(event):
 	elif Input.is_action_just_pressed("ui_grab"):
 		# If not grabbing, check for grabbable actor and change sprite
 		if !grabbing:
-			var actor_facing = get_actor_facing(game)
+			var actor_facing = get_actor_facing()
 			if typeof(actor_facing) == 2:
 				game.logg("No grabbable object in front of you.")
 				return

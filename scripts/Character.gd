@@ -1,4 +1,4 @@
-extends "res://scenes/Actors.gd"
+extends "res://scripts/Actors.gd"
 
 # Child Nodes
 onready var tween = $Sprite/Tween
@@ -16,12 +16,13 @@ const DEFAULT_STATUSES = []
 const DEFAULT_EFFECTS = []
 const DEFAULT_ARMOR = 0
 const DEFAULT_DMG = 0
-const DEFAULT_CURR_TEXT = "down"
+const DEFAULT_CURR_TEX = "down"
 const DEFAULT_LEVEL = 0
 
 # Enemy data
 var health
 var armor
+var level
 var dmg = 4
 var effect_arr
 var status_arr
@@ -40,7 +41,7 @@ new_title=DEFAULT_TITLE,
 new_description=DEFAULT_DESCRIPTION,
 new_ai=DEFAULT_AI,
 can_change_texture=false,
-new_curr_text=DEFAULT_CURR_TEXT,
+new_curr_tex=DEFAULT_CURR_TEX,
 new_level=DEFAULT_LEVEL,
 new_health=DEFAULT_HEALTH,
 new_armor=DEFAULT_ARMOR,
@@ -51,19 +52,22 @@ new_effect_arr=DEFAULT_EFFECTS):
 	identifier = new_identifier
 	
 	# AI
+	ai = new_ai
 	ai_tick_callback = ai_manager.get_callback(ai)
 	
 	# Game ref
-	game = get_parent()
+	game = game_ref
 	
 	# Set position in game world
 	curr_tile = Vector2(x,y)
 	game.actor_map[x][y] = sprite_node
 	position = curr_tile * game.TILE_SIZE
+	curr_tex = new_curr_tex
 	
 	# Info
 	title = new_title
 	description = new_description
+	level = new_level
 	health = new_health
 	armor = new_armor
 	status_arr = new_status_arr
@@ -74,7 +78,7 @@ new_effect_arr=DEFAULT_EFFECTS):
 
 # Follow the player
 func tick():
-	ai_tick_callback.call_func(self)
+	ai_tick_callback.call_funcv([self, game])
 		
 func take_dmg(num, crit=false):
 	var dmg_taken = (num - armor)
@@ -105,7 +109,7 @@ func set_description(new_description):
 # Game util --------------------------------------------------------------------
 
 # Get the actor this actor is facing, -1 if no actor is present
-func get_actor_facing(game):
+func get_actor_facing():
 	match curr_tex:
 		"right":
 			return game.get_actor_at(curr_tile.x + 1, curr_tile.y)

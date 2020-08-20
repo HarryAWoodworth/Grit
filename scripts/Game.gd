@@ -62,7 +62,6 @@ enum Tile { Wall, Unknown, Box, Grass, Forest, Opening }
 # Node Refs --------------------------------------------------------------------
 
 onready var tile_map = $TileMap
-onready var player = $Actors/Player
 onready var textlog = $UI/TextLog
 onready var actor_info = $UI/ActorInfo
 onready var player_info = $UI/PlayerInfo
@@ -75,6 +74,7 @@ var Player = preload("res://actors/Player.tscn")
 
 # Game State -------------------------------------------------------------------
 
+var player
 var anim_finished = true
 var actor_list = []
 var map = []
@@ -263,8 +263,9 @@ func build_chunk():
 	
 	# Place Player
 	var player_start_coord = round(CHUNK_DIMENSION/2.0)
-	var player = Player.instance()
-	player.init(self,
+	var player_inst = Player.instance()
+	add_child(player_inst)
+	player_inst.init(self,
 				player_start_coord,player_start_coord,
 				"player",
 				"Thunder Magee",
@@ -272,9 +273,10 @@ func build_chunk():
 				"none",
 				true)
 	#player.position = player.curr_tile * TILE_SIZE
-	actor_list.append(player)
-	actor_map[player_start_coord][player_start_coord] = player
-	player_info.list_player_info(player)
+	actor_list.append(player_inst)
+	actor_map[player_start_coord][player_start_coord] = player_inst
+	player_info.list_player_info(player_inst)
+	player = player_inst
 	
 	# Place Box
 	var box_x = 4
@@ -307,7 +309,7 @@ func set_texture(texture, node):
 	
 func add_character(x,y,identifier,name,descr,ai,change_tex,start_tex,level,health,armor):
 	var character = Character.instance()
-	character.init(self,x,y,identifier,name,descr,ai,change_tex,start_tex,level,health,armor)
 	add_child(character)
+	character.init(self,x,y,identifier,name,descr,ai,change_tex,start_tex,level,health,armor)
 	actor_list.append(character)
 	actor_map[x][y] = character

@@ -1,4 +1,4 @@
-extends "res://scenes/Actors.gd"
+extends "res://scripts/Actors.gd"
 	
 onready var tween = $Sprite/Tween
 onready var sprite = $Sprite

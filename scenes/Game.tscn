@@ -1,13 +1,13 @@
 [gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://scenes/Game.gd" type="Script" id=1]
+[ext_resource path="res://scripts/Game.gd" type="Script" id=1]
+[ext_resource path="res://scripts/ActorInfoContainer.gd" type="Script" id=2]
 [ext_resource path="res://assets/wall.png" type="Texture" id=3]
 [ext_resource path="res://assets/grass.png" type="Texture" id=4]
-[ext_resource path="res://scenes/ActorInfoContainer.gd" type="Script" id=5]
 [ext_resource path="res://assets/opening.png" type="Texture" id=6]
 [ext_resource path="res://assets/forest.png" type="Texture" id=7]
-[ext_resource path="res://scenes/Actors.gd" type="Script" id=8]
-[ext_resource path="res://scenes/PlayerInfo.gd" type="Script" id=10]
+[ext_resource path="res://scripts/Actors.gd" type="Script" id=8]
+[ext_resource path="res://scripts/PlayerInfo.gd" type="Script" id=10]
 
 [sub_resource type="TileSet" id=1]
 0/name = "wall.png 0"
@@ -67,15 +67,15 @@
 5/shapes = [  ]
 5/z_index = 0
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
 corner_detail = 4
 anti_aliasing = false
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
 
-[sub_resource type="StyleBoxFlat" id=5]
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
 
 [node name="Game" type="Node2D"]
@@ -98,7 +98,7 @@ margin_top = 300.0
 margin_right = 140.0
 margin_bottom = 400.0
 rect_scale = Vector2( 0.5, 0.5 )
-custom_styles/normal = SubResource( 3 )
+custom_styles/normal = SubResource( 2 )
 scroll_active = false
 scroll_following = true
 __meta__ = {
@@ -111,7 +111,7 @@ margin_top = 175.0
 margin_right = 780.0
 margin_bottom = 405.0
 rect_scale = Vector2( 0.5, 0.5 )
-script = ExtResource( 5 )
+script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -127,7 +127,7 @@ stretch_mode = 6
 margin_top = 64.0
 margin_right = 300.0
 margin_bottom = 78.0
-custom_styles/normal = SubResource( 4 )
+custom_styles/normal = SubResource( 3 )
 align = 1
 valign = 1
 autowrap = true
@@ -137,7 +137,7 @@ uppercase = true
 margin_top = 82.0
 margin_right = 300.0
 margin_bottom = 96.0
-custom_styles/normal = SubResource( 5 )
+custom_styles/normal = SubResource( 4 )
 autowrap = true
 
 [node name="ColorRect" type="ColorRect" parent="UI"]

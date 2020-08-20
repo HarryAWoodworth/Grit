@@ -1,19 +1,16 @@
-extends Node2D
-
-# Game ref
-var game = get_parent()
+extends Node
 
 # AI's -------------------------------------------------------------------------
 
 # AI types
-var none = funcref(self, "none")
-var monster_classic = funcref(self, "monster_classic")
+var none_func = funcref(self, "none")
+var monster_classic_func = funcref(self, "monster_classic")
 
-func none():
+func none(node, game):
 	pass
 
 # Monster Classic AI
-func monster_classic(node):
+func monster_classic(node, game):
 	if game.player.curr_tile.x > node.curr_tile.x and game.can_move(1,0,node,false):
 		game.move_actor(Vector2(1,0),node)
 	elif game.player.curr_tile.x < node.curr_tile.x and game.can_move(-1,0,node,false):
@@ -29,6 +26,6 @@ func monster_classic(node):
 func get_callback(func_name):
 	match func_name:
 		"none":
-			return none
+			return none_func
 		"monster_classic":
-			return monster_classic
+			return monster_classic_func
