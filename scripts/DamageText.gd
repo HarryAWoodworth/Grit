@@ -1,14 +1,13 @@
 extends Label
 
 func show_value(value, travel, duration, spread, crit):
-	print("Showing value!")
 	text = value
 	var movement = travel.rotated(rand_range(-spread/2, spread/2))
 	rect_pivot_offset = rect_size / 2
 	
 	modulate = Color(256, 0, 0)
 	$Tween.interpolate_property(self, "rect_position",rect_position, rect_position + movement,duration, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$Tween.interpolate_property(self, "modulate:a",1.0, 0.25, duration,Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	#$Tween.interpolate_property(self, "modulate:a",1.0, 0.75, duration,Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	
 	if crit:
 		modulate = Color(1, 0, 0)

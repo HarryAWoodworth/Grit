@@ -1,10 +1,10 @@
 extends Node2D
 
-const TRAVEL_Y = -4
+const TRAVEL_Y = -6
 const TRAVEL_X = 0
 const DEFAULT_TRAVEL = Vector2(TRAVEL_X, TRAVEL_Y)
-const DEFAULT_DURATION = 0.5
-const DEFAULT_SPREAD = 0
+const DEFAULT_DURATION = 0.7
+const DEFAULT_SPREAD = 1
 
 var FCT = preload("res://util/DamageText.tscn")
 

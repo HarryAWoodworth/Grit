@@ -7,7 +7,7 @@ var identifier = "actor"
 var changeable_texture = false
 var grabbable = false
 
-# Info box stuff
+# Info
 var title = "..."
 var description = "..."
 	

@@ -1,8 +1,8 @@
 ## TODO
-# add level to character class
 # More player info
 # More enemy info
 # Detect if player is in sight
+# Get array of in sight actors
 
 ## TODO to beta:
 # [2/4] Player character
@@ -71,6 +71,9 @@ onready var player_info = $UI/PlayerInfo
 var Box = preload("res://actors/Box.tscn")
 var Character = preload("res://actors/Character.tscn")
 var Player = preload("res://actors/Player.tscn")
+var Barrier = preload("res://actors/Barrier.tscn")
+
+var wall_tex = preload("res://assets/wall.png")
 
 # Game State -------------------------------------------------------------------
 
@@ -252,13 +255,13 @@ func build_chunk():
 				tile_map.set_cell(x, y, Tile.Grass)
 	
 	# Extra walls for testing
-	set_tile(2, 8, Tile.Wall)
-	set_tile(3, 8, Tile.Wall)
-	set_tile(4, 8, Tile.Wall)
-	set_tile(4, 8, Tile.Wall)
-	set_tile(5, 8, Tile.Wall)
-	set_tile(6, 8, Tile.Wall)
-	set_tile(7, 8, Tile.Wall)
+	add_barrier(2, 8, wall_tex)
+	add_barrier(3, 8, wall_tex)
+	add_barrier(4, 8, wall_tex)
+	add_barrier(4, 8, wall_tex)
+	add_barrier(5, 8, wall_tex)
+	add_barrier(6, 8, wall_tex)
+	add_barrier(7, 8, wall_tex)
 
 	
 	# Place Player
@@ -313,3 +316,10 @@ func add_character(x,y,identifier,name,descr,ai,change_tex,start_tex,level,healt
 	character.init(self,x,y,identifier,name,descr,ai,change_tex,start_tex,level,health,armor)
 	actor_list.append(character)
 	actor_map[x][y] = character
+	
+func add_barrier(x,y,texture):
+	var barrier = Barrier.instance()
+	add_child(barrier)
+	barrier.init(x,y,texture)
+	actor_map[x][y] = barrier
+	
