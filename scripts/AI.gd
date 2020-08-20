@@ -6,7 +6,7 @@ extends Node
 var none_func = funcref(self, "none")
 var monster_classic_func = funcref(self, "monster_classic")
 
-func none(node, game):
+func none(_node, _game):
 	pass
 
 # Monster Classic AI
