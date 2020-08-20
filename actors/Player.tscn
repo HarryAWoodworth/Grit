@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/player_sprite/player_down.png" type="Texture" id=1]
 [ext_resource path="res://util/AI_Manager.tscn" type="PackedScene" id=2]
@@ -7,6 +7,9 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 4.00969
 
 [node name="Player" type="Area2D"]
 gravity_vec = Vector2( 0, 0 )
@@ -34,3 +37,10 @@ shape = SubResource( 1 )
 [node name="FCTManager" parent="." instance=ExtResource( 3 )]
 
 [node name="AI_Manager" parent="." instance=ExtResource( 2 )]
+
+[node name="Visibility" type="Area2D" parent="."]
+
+[node name="DetectionShape" type="CollisionShape2D" parent="Visibility"]
+position = Vector2( 8, 8 )
+scale = Vector2( -2.73122, -2.92156 )
+shape = SubResource( 2 )

@@ -5,6 +5,8 @@ onready var tween = $Sprite/Tween
 onready var sprite = $Sprite
 onready var fct_manager = $FCTManager
 onready var ai_manager = $AI_Manager
+onready var detection_shape = $Visibility/DetectionShape
+
 
 # Consts 
 const DEFAULT_AI = "none"
@@ -18,6 +20,13 @@ const DEFAULT_ARMOR = 0
 const DEFAULT_DMG = 0
 const DEFAULT_CURR_TEX = "down"
 const DEFAULT_LEVEL = 0
+
+# Detection
+const DEFAULT_DETECT_RADIUS = 5
+var detect_radius
+var vis_color = Color(.867, .91, .247, 0.1)
+var target
+var follow = true
 
 # Enemy data
 var health
@@ -74,7 +83,19 @@ new_effect_arr=DEFAULT_EFFECTS):
 	effect_arr = new_effect_arr
 	changeable_texture = can_change_texture
 	
+	# Detection
+	detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
+	sprite.self_modulate = Color(0.2, 0, 0)
+	detection_shape.shape.radius = detect_radius
+	
 # Tick -------------------------------------------------------------------------
+
+func _draw():
+	var tiles = 4
+	var halftile = game.TILE_SIZE/2
+	var radius = halftile + halftile*tiles
+	#draw_circle(Vector2(8,8), detect_radius, vis_color)
+	draw_rect(Rect2(Vector2(halftile,halftile), Vector2(radius,radius)),vis_color)
 
 # Follow the player
 func tick():

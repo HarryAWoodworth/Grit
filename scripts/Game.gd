@@ -1,6 +1,7 @@
 ## TODO
 # More player info
 # More enemy info
+# Dictionary object for Character creations
 # Detect if player is in sight
 # Get array of in sight actors
 
@@ -47,6 +48,8 @@
 
 extends Node2D
 
+# Consts -----------------------------------------------------------------------
+
 const TILE_SIZE = 16
 const ANIM_SPEED = 5
 const CANT_MOVE_ANIM_DIST = 2
@@ -68,11 +71,13 @@ onready var player_info = $UI/PlayerInfo
 
 # Entity Preloads --------------------------------------------------------------
 
+# Node preloads for instancing
 var Box = preload("res://actors/Box.tscn")
 var Character = preload("res://actors/Character.tscn")
 var Player = preload("res://actors/Player.tscn")
 var Barrier = preload("res://actors/Barrier.tscn")
 
+# Texture preloads
 var wall_tex = preload("res://assets/wall.png")
 
 # Game State -------------------------------------------------------------------
@@ -84,14 +89,6 @@ var map = []
 var buildings = []
 var actor_map = []
 
-# Get actor at coords
-func get_actor_at(x,y):
-	if x < 0 or x > actor_map.size()-1 or y < 0 or y > actor_map[0].size()-1:
-		print("No actor there")
-		return 0
-	#print("actor_map[" + str(x) + "][" + str(y) + "]: " + str(actor_map[x][y]))
-	return actor_map[x][y]
-
 # Ready ------------------------------------------------------------------------
 
 # Init the game
@@ -101,7 +98,7 @@ func _ready():
 	textlog.text = "This is a test!"
 	build_chunk()
 	
-# Input ------------------------------------------------------------------------
+# Actor Movement ------------------------------------------------------------------------
 
 # Checks if actor can move using a difference vector
 func can_move(dx, dy, node, check_for_another_actor=true):
@@ -198,9 +195,12 @@ func set_anim_done():
 
 # Tick -------------------------------------------------------------------------
 
+# Call tick on all actors in actor_list
 func tick():
 	for actor in actor_list:
 		actor.tick()
+
+# Actor Combat -----------------------------------------------------------------
 		
 func exchange_combat_damage(agressor, defender):
 	defender.take_dmg(agressor.dmg)
@@ -263,6 +263,8 @@ func build_chunk():
 	add_barrier(6, 8, wall_tex)
 	add_barrier(7, 8, wall_tex)
 
+
+
 	
 	# Place Player
 	var player_start_coord = round(CHUNK_DIMENSION/2.0)
@@ -275,6 +277,8 @@ func build_chunk():
 				"...",
 				"none",
 				true)
+	
+	
 	#player.position = player.curr_tile * TILE_SIZE
 	actor_list.append(player_inst)
 	actor_map[player_start_coord][player_start_coord] = player_inst
@@ -301,6 +305,16 @@ func build_chunk():
 				0,
 				150,
 				1)
+	
+# Util -------------------------------------------------------------------------
+	
+# Get actor at coords
+func get_actor_at(x,y):
+	if x < 0 or x > actor_map.size()-1 or y < 0 or y > actor_map[0].size()-1:
+		print("No actor there")
+		return 0
+	#print("actor_map[" + str(x) + "][" + str(y) + "]: " + str(actor_map[x][y]))
+	return actor_map[x][y]
 	
 # Set a tile at (x,y) with tile type
 func set_tile(x, y, type):
