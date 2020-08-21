@@ -1,10 +1,29 @@
+## Ordered TODO
+# - Notice animation for enemies
+# - Light system
+# - A* Pathfinding for enemies
+# - Items
+# - Inventory System
+#	- Dropping
+#	- Using
+# - Weapons (Equipping)
+# - Corpses
+# - Looting boxes
+# - Looting from ground
+# - Sound system
+#	- Actions make sound
+#	- Sound tile circle
+#	- Player can hear sounds
+#	- Question mark from sound location
+# - Player and Enemy dictionary data
+# - Complete Player and Enemy information
+# - Add color to Player and Enemy information
+
 ## TODO
 # More player info
 # More enemy info
 # Dictionary object for Character creations
 # Noticed animation
-# Add kinematicBody2D to barrier
-# Detect if player is in sight
 # Get array of in sight actors
 
 # Long Term
@@ -12,8 +31,10 @@
 # Shooting Effects
 # Stealth
 # Hiding in Objects
+# Night brings complete darkness, inhuman horrors, enemies noticing your light source...
 
 ## TODO to beta:
+# Implement Speed
 # [2/4] Player character
 #	[X] Move
 #	[X] Drag
@@ -21,13 +42,16 @@
 #		[X] Melee
 #		[] Ranged
 #	[] Inventory
+#		[] Inventory display
 # [1/3] Enemies 
 #	[] Move towards player
-#		[] Detect if in sight
+#		[1/2] Line of in sight
+#			[] Detect if in sight
+#			[] Notice animation
 #		[] A* Following
 #		[] Out of sight non-following
 # 	[X] Fight
-#	[] Hover over info
+#	[] Complete Hover over info
 #	[] Corpse
 #		[] Drop items
 # [] Combat
@@ -47,6 +71,7 @@
 #	[] Buildings
 #	[] Items
 # [] Permadeath
+# [] Maximaize/ minimize UI
 
 ## Extra special TODO
 # Better, sharper fonts
@@ -256,13 +281,10 @@ func build_chunk():
 				add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
 				
 	# Extra walls for testing
-	add_barrier(2, 8, wall_tex)
-	add_barrier(3, 8, wall_tex)
-	add_barrier(4, 8, wall_tex)
-	add_barrier(4, 8, wall_tex)
-	add_barrier(5, 8, wall_tex)
-	add_barrier(6, 8, wall_tex)
-	add_barrier(7, 8, wall_tex)
+	add_barrier(8, 4, wall_tex)
+	add_barrier(9, 4, wall_tex)
+	add_barrier(10, 4, wall_tex)
+	add_barrier(11, 4, wall_tex)
 	
 	# Place Player
 	var player_start_coord = round(CHUNK_DIMENSION/2.0)
@@ -294,6 +316,17 @@ func build_chunk():
 	
 	# Place Enemy
 	add_character(13,2,
+				"enemy",
+				"Mutant Crab",
+				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
+				"monster_classic",
+				false,
+				"down",
+				0,
+				150,
+				1)
+	
+	add_character(10,2,
 				"enemy",
 				"Mutant Crab",
 				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",

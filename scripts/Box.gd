@@ -10,6 +10,9 @@ func init(game_ref, x, y):
 	game.actor_map[x][y] = sprite_node
 	position = curr_tile * game.TILE_SIZE
 	
+	# Identifier
+	identifier = "box"
+	
 	# Info box stuff
 	title = "Blue Test Box"
 	description = "This techno blue see-through box doesn't belong in this post apocalyptic waste- oh wait, this is a test forest for development..."

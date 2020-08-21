@@ -6,6 +6,7 @@ onready var sprite = $Sprite
 onready var fct_manager = $FCTManager
 onready var ai_manager = $AI_Manager
 onready var detection_shape = $Visibility/DetectionShape
+onready var notice_animation = $NoticeAnimation
 
 # Consts 
 const DEFAULT_AI = "none"
@@ -19,6 +20,7 @@ const DEFAULT_ARMOR = 0
 const DEFAULT_DMG = 0
 const DEFAULT_CURR_TEX = "down"
 const DEFAULT_LEVEL = 0
+const DEFAULT_BLOCKSLOS = false
 
 # Detection
 const DEFAULT_DETECT_RADIUS = 5
@@ -28,6 +30,7 @@ var target
 var follow = true
 var hit_pos = Vector2(0,0)
 var laser_color = Color(0, 0, 0.7)
+var blockslos
 
 # Enemy data
 var health
@@ -53,7 +56,8 @@ new_level=DEFAULT_LEVEL,
 new_health=DEFAULT_HEALTH,
 new_armor=DEFAULT_ARMOR,
 new_status_arr=DEFAULT_STATUSES,
-new_effect_arr=DEFAULT_EFFECTS):
+new_effect_arr=DEFAULT_EFFECTS,
+new_blockslos=DEFAULT_BLOCKSLOS):
 	
 	# Identifier
 	identifier = new_identifier
@@ -80,8 +84,12 @@ new_effect_arr=DEFAULT_EFFECTS):
 	status_arr = new_status_arr
 	effect_arr = new_effect_arr
 	changeable_texture = can_change_texture
+	blockslos = new_blockslos
 	
 	# Detection
+	if blockslos:
+		self.collision_mask = 4
+	
 	if identifier != "player":
 		detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
 		print("Detect radius: " + str(detect_radius))
@@ -102,16 +110,19 @@ func _physics_process(_delta):
 	# Draw a ray to target
 	if target:
 		var space_state = get_world_2d().direct_space_state
-		# Send the ray out from the middle of the actor
+		# Send the ray out from the middle of the actor to the middle of the target
 		var half_tile = game.TILE_SIZE/2
 		var offset_pos = Vector2(position.x + half_tile, position.y + half_tile)
-		var result = space_state.intersect_ray(offset_pos, target.position, [self], self.collision_mask)
+		var offset_target_pos = Vector2(target.position.x + half_tile, target.position.y + half_tile)
+		var result = space_state.intersect_ray(offset_pos, offset_target_pos, [self], self.collision_mask)
 		# If it hits something, record the hit position
 		if result:
 			hit_pos = result.position
 			# If the actor hit is the player make the sprite red
 			if result.collider.identifier == "player":
-				sprite.self_modulate.r = 1.0
+				laser_color = Color(1,0,0)
+			else:
+				laser_color = Color(0,0,1)
 		
 func _draw():
 	var half_tile = game.TILE_SIZE/2
@@ -206,13 +217,15 @@ func _on_Enemy_mouse_exited():
 
 # When a body enters the visibility shape, make it a target if not already
 func _on_Visibility_body_entered(body):
-	print("Body entered: " + str(body))
-	if body.identifier == identifier or target:
+	var arr_non_targetable = ["barrier","box"]
+	if body.identifier == identifier or arr_non_targetable.has(body.identifier) or target:
 		return
 	game.logg(title + " has spotted " + body.title + "!")
 	target = body
 	print("New target " + str(target))
-	sprite.self_modulate.r = 1.0
+	sprite.self_modulate.r = 1
+	sprite.self_modulate.g = 1
+	sprite.self_modulate.b = 1
 
 
 func _on_Visibility_body_exited(body):
