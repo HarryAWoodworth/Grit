@@ -1,10 +1,17 @@
 ## TODO
 # More player info
 # More enemy info
-# Add tree to barriers
 # Dictionary object for Character creations
+# Noticed animation
+# Add kinematicBody2D to barrier
 # Detect if player is in sight
 # Get array of in sight actors
+
+# Long Term
+# Weather
+# Shooting Effects
+# Stealth
+# Hiding in Objects
 
 ## TODO to beta:
 # [2/4] Player character
@@ -109,8 +116,7 @@ func can_move(dx, dy, node, check_for_another_actor=true):
 	# Check x and y are in map
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
 		return false
-	# Check that tile_type and actor_type are valid
-	var tile_type = map[x][y]
+	# Check that actor_type is valid
 	if check_for_another_actor:
 		var actor_type = actor_map[x][y]
 		if typeof(actor_type) != 2:

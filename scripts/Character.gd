@@ -26,6 +26,8 @@ var detect_radius
 var vis_color = Color(.867, .91, .247, 0.1)
 var target
 var follow = true
+var hit_pos = Vector2(0,0)
+var laser_color = Color(0, 0, 0.7)
 
 # Enemy data
 var health
@@ -84,18 +86,42 @@ new_effect_arr=DEFAULT_EFFECTS):
 		detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
 		print("Detect radius: " + str(detect_radius))
 		sprite.self_modulate = Color(0.2, 0, 0)
-		detection_shape.shape.radius = detect_radius
+		var shape = CircleShape2D.new()
+		shape.radius = detect_radius
+		detection_shape.shape = shape
 	
 # Tick -------------------------------------------------------------------------
-
-func _draw():
-	if identifier != "player":
-		draw_circle(Vector2(8,8), detect_radius, vis_color)
 
 # Follow the player
 func tick():
 	ai_tick_callback.call_funcv([self, game])
+	
+func _physics_process(_delta):
+	# Call _draw()
+	update()
+	# Draw a ray to target
+	if target:
+		var space_state = get_world_2d().direct_space_state
+		# Send the ray out from the middle of the actor
+		var half_tile = game.TILE_SIZE/2
+		var offset_pos = Vector2(position.x + half_tile, position.y + half_tile)
+		var result = space_state.intersect_ray(offset_pos, target.position, [self], self.collision_mask)
+		# If it hits something, record the hit position
+		if result:
+			hit_pos = result.position
+			# If the actor hit is the player make the sprite red
+			if result.collider.identifier == "player":
+				sprite.self_modulate.r = 1.0
 		
+func _draw():
+	var half_tile = game.TILE_SIZE/2
+	var offset_pos = Vector2(half_tile, half_tile)
+	if identifier != "player":
+		draw_circle(Vector2(8,8), detect_radius, vis_color)
+		if target:
+			draw_line(offset_pos, (hit_pos - position).rotated(-rotation), laser_color)
+			draw_circle((hit_pos - position).rotated(-rotation), 1, laser_color)
+	
 func take_dmg(num, crit=false):
 	var dmg_taken = (num - armor)
 	health = health - dmg_taken
@@ -173,23 +199,25 @@ func has_effect(effect):
 # Mouse input data display signals ---------------------------------------------
 
 func _on_Enemy_mouse_entered():
-	get_parent().display_actor_data(self)
+	game.display_actor_data(self)
 
 func _on_Enemy_mouse_exited():
-	get_parent().clear_actor_data()
+	game.clear_actor_data()
 
 # When a body enters the visibility shape, make it a target if not already
-func _on_Visibility_body_shape_entered(_body_id, body, _body_shape, _area_shape):
-	print("Circle Entered!")
-	if target:
+func _on_Visibility_body_entered(body):
+	print("Body entered: " + str(body))
+	if body.identifier == identifier or target:
 		return
+	game.logg(title + " has spotted " + body.title + "!")
 	target = body
+	print("New target " + str(target))
 	sprite.self_modulate.r = 1.0
 
 
-func _on_Visibility_body_shape_exited(_body_id, body, _body_shape, _area_shape):
-	print("Circle Exited!")
+func _on_Visibility_body_exited(body):
 	if body == target:
 		target = null
+		print("No more target")
 		sprite.self_modulate.r = 0.2
 		

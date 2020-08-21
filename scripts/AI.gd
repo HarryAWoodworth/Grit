@@ -10,10 +10,8 @@ func none(_node, _game):
 	pass
 
 # Monster Classic AI
-func monster_classic(node, game):
-	
-	if node.target:
-		print("TARGET!")
+func monster_classic(_node, _game):
+	pass
 	
 #	if game.player.curr_tile.x > node.curr_tile.x and game.can_move(1,0,node,false):
 #		game.move_actor(Vector2(1,0),node)

@@ -5,15 +5,14 @@
 [ext_resource path="res://util/FCTManager.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=4]
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="CircleShape2D" id=3]
+radius = 8.0
+
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 8, 8 )
 
-[sub_resource type="CircleShape2D" id=2]
-radius = 4.00969
-
-[node name="Player" type="Area2D"]
-gravity_vec = Vector2( 0, 0 )
-gravity = 0.0
+[node name="Player" type="KinematicBody2D"]
+collision_mask = 6
 script = ExtResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -30,10 +29,6 @@ drag_margin_bottom = 0.0
 
 [node name="Tween" type="Tween" parent="Sprite"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 8, 8 )
-shape = SubResource( 1 )
-
 [node name="FCTManager" parent="." instance=ExtResource( 3 )]
 
 [node name="AI_Manager" parent="." instance=ExtResource( 2 )]
@@ -42,5 +37,8 @@ shape = SubResource( 1 )
 
 [node name="DetectionShape" type="CollisionShape2D" parent="Visibility"]
 position = Vector2( 8, 8 )
-scale = Vector2( -2.73122, -2.92156 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+position = Vector2( 8, 8 )
 shape = SubResource( 2 )
