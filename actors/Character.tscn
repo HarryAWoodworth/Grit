@@ -5,10 +5,10 @@
 [ext_resource path="res://scripts/Character.gd" type="Script" id=3]
 [ext_resource path="res://util/AI_Manager.tscn" type="PackedScene" id=4]
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
 
-[sub_resource type="CircleShape2D" id=3]
+[sub_resource type="CircleShape2D" id=2]
 
 [node name="Character" type="Area2D"]
 script = ExtResource( 3 )
@@ -21,7 +21,7 @@ centered = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 8, 8 )
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="FCTManager" parent="." instance=ExtResource( 2 )]
 
@@ -31,6 +31,8 @@ shape = SubResource( 2 )
 
 [node name="DetectionShape" type="CollisionShape2D" parent="Visibility"]
 position = Vector2( 8, 8 )
-shape = SubResource( 3 )
+shape = SubResource( 2 )
 [connection signal="mouse_entered" from="." to="." method="_on_Enemy_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_Enemy_mouse_exited"]
+[connection signal="body_shape_entered" from="Visibility" to="." method="_on_Visibility_body_shape_entered"]
+[connection signal="body_shape_exited" from="Visibility" to="." method="_on_Visibility_body_shape_exited"]

@@ -7,7 +7,6 @@ onready var fct_manager = $FCTManager
 onready var ai_manager = $AI_Manager
 onready var detection_shape = $Visibility/DetectionShape
 
-
 # Consts 
 const DEFAULT_AI = "none"
 const DEFAULT_IDENTIFIER = "..."
@@ -39,9 +38,6 @@ var status_arr
 # AI
 var ai
 var ai_tick_callback
-
-# Game ref
-var game
 
 # Init the character
 func init(game_ref, x, y,
@@ -84,18 +80,17 @@ new_effect_arr=DEFAULT_EFFECTS):
 	changeable_texture = can_change_texture
 	
 	# Detection
-	detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
-	sprite.self_modulate = Color(0.2, 0, 0)
-	detection_shape.shape.radius = detect_radius
+	if identifier != "player":
+		detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
+		print("Detect radius: " + str(detect_radius))
+		sprite.self_modulate = Color(0.2, 0, 0)
+		detection_shape.shape.radius = detect_radius
 	
 # Tick -------------------------------------------------------------------------
 
 func _draw():
-	var tiles = 4
-	var halftile = game.TILE_SIZE/2
-	var radius = halftile + halftile*tiles
-	#draw_circle(Vector2(8,8), detect_radius, vis_color)
-	draw_rect(Rect2(Vector2(halftile,halftile), Vector2(radius,radius)),vis_color)
+	if identifier != "player":
+		draw_circle(Vector2(8,8), detect_radius, vis_color)
 
 # Follow the player
 func tick():
@@ -182,3 +177,19 @@ func _on_Enemy_mouse_entered():
 
 func _on_Enemy_mouse_exited():
 	get_parent().clear_actor_data()
+
+# When a body enters the visibility shape, make it a target if not already
+func _on_Visibility_body_shape_entered(_body_id, body, _body_shape, _area_shape):
+	print("Circle Entered!")
+	if target:
+		return
+	target = body
+	sprite.self_modulate.r = 1.0
+
+
+func _on_Visibility_body_shape_exited(_body_id, body, _body_shape, _area_shape):
+	print("Circle Exited!")
+	if body == target:
+		target = null
+		sprite.self_modulate.r = 0.2
+		

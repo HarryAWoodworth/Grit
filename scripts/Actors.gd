@@ -7,6 +7,8 @@ var identifier = "actor"
 var changeable_texture = false
 var grabbable = false
 
+var game
+
 # Info
 var title = "..."
 var description = "..."

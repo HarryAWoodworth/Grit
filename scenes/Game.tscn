@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://scripts/ActorInfoContainer.gd" type="Script" id=2]
 [ext_resource path="res://assets/wall.png" type="Texture" id=3]
 [ext_resource path="res://assets/grass.png" type="Texture" id=4]
+[ext_resource path="res://assets/goal.png" type="Texture" id=5]
 [ext_resource path="res://assets/opening.png" type="Texture" id=6]
 [ext_resource path="res://assets/forest.png" type="Texture" id=7]
 [ext_resource path="res://scripts/Actors.gd" type="Script" id=8]
@@ -66,6 +67,20 @@
 5/shape_one_way_margin = 0.0
 5/shapes = [  ]
 5/z_index = 0
+6/name = "goal.png 6"
+6/texture = ExtResource( 5 )
+6/tex_offset = Vector2( 0, 0 )
+6/modulate = Color( 1, 1, 1, 1 )
+6/region = Rect2( 0, 0, 16, 16 )
+6/tile_mode = 0
+6/occluder_offset = Vector2( 0, 0 )
+6/navigation_offset = Vector2( 0, 0 )
+6/shape_offset = Vector2( 0, 0 )
+6/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+6/shape_one_way = false
+6/shape_one_way_margin = 0.0
+6/shapes = [  ]
+6/z_index = 0
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )

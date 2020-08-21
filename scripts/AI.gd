@@ -11,14 +11,18 @@ func none(_node, _game):
 
 # Monster Classic AI
 func monster_classic(node, game):
-	if game.player.curr_tile.x > node.curr_tile.x and game.can_move(1,0,node,false):
-		game.move_actor(Vector2(1,0),node)
-	elif game.player.curr_tile.x < node.curr_tile.x and game.can_move(-1,0,node,false):
-		game.move_actor(Vector2(-1,0),node)
-	elif game.player.curr_tile.y >  node.curr_tile.y and game.can_move(0,1,node,false):
-		game.move_actor(Vector2(0,1),node)
-	elif game.player.curr_tile.y <  node.curr_tile.y and game.can_move(0,-1,node,false):
-		game.move_actor(Vector2(0,-1),node)
+	
+	if node.target:
+		print("TARGET!")
+	
+#	if game.player.curr_tile.x > node.curr_tile.x and game.can_move(1,0,node,false):
+#		game.move_actor(Vector2(1,0),node)
+#	elif game.player.curr_tile.x < node.curr_tile.x and game.can_move(-1,0,node,false):
+#		game.move_actor(Vector2(-1,0),node)
+#	elif game.player.curr_tile.y >  node.curr_tile.y and game.can_move(0,1,node,false):
+#		game.move_actor(Vector2(0,1),node)
+#	elif game.player.curr_tile.y <  node.curr_tile.y and game.can_move(0,-1,node,false):
+#		game.move_actor(Vector2(0,-1),node)
 		
 # Util -------------------------------------------------------------------------
 		

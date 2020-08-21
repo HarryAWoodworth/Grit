@@ -1,6 +1,7 @@
 ## TODO
 # More player info
 # More enemy info
+# Add tree to barriers
 # Dictionary object for Character creations
 # Detect if player is in sight
 # Get array of in sight actors
@@ -60,7 +61,7 @@ const MAX_BUILDING_DIMENSION = 8
 const MIN_BUILDING_DIMENSION = 5
 const MAX_TESTLOG_LENGTH = 10000
 
-enum Tile { Wall, Unknown, Box, Grass, Forest, Opening }
+enum Tile { Wall, Unknown, Box, Grass, Forest, Opening, Goal }
 
 # Node Refs --------------------------------------------------------------------
 
@@ -79,6 +80,7 @@ var Barrier = preload("res://actors/Barrier.tscn")
 
 # Texture preloads
 var wall_tex = preload("res://assets/wall.png")
+var forest_tex = preload("res://assets/forest.png")
 
 # Game State -------------------------------------------------------------------
 
@@ -104,8 +106,6 @@ func _ready():
 func can_move(dx, dy, node, check_for_another_actor=true):
 	var x = node.curr_tile.x + dx
 	var y = node.curr_tile.y + dy
-	# Tiles actors cannot move into
-	var arr_tile_no_move = [Tile.Forest, Tile.Wall]
 	# Check x and y are in map
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
 		return false
@@ -114,11 +114,9 @@ func can_move(dx, dy, node, check_for_another_actor=true):
 	if check_for_another_actor:
 		var actor_type = actor_map[x][y]
 		if typeof(actor_type) != 2:
+			if actor_type.identifier == "barrier" and actor_type.has_description:
+				logg(actor_type.description)
 			return false
-	if arr_tile_no_move.has(tile_type):
-		if tile_type == Tile.Forest:
-			logg("I'm not traversing those dark woods...")
-		return false
 	# Return true
 	return true
 
@@ -245,15 +243,12 @@ func build_chunk():
 		actor_map.append([])
 		for y in range(CHUNK_DIMENSION):
 			actor_map[x].append(0)
+			map[x].append(Tile.Grass)
+			tile_map.set_cell(x, y, Tile.Goal)
 			# Set the chunk's outer edge to forest tiles
 			if x < FOREST_DEPTH or x > CHUNK_DIMENSION-(FOREST_DEPTH+1) or y < FOREST_DEPTH or y > CHUNK_DIMENSION-(FOREST_DEPTH+1):
-				map[x].append(Tile.Forest)
-				tile_map.set_cell(x, y, Tile.Forest)
-			# Set every other tile to default grass
-			else:
-				map[x].append(Tile.Grass)
-				tile_map.set_cell(x, y, Tile.Grass)
-	
+				add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
+				
 	# Extra walls for testing
 	add_barrier(2, 8, wall_tex)
 	add_barrier(3, 8, wall_tex)
@@ -262,9 +257,6 @@ func build_chunk():
 	add_barrier(5, 8, wall_tex)
 	add_barrier(6, 8, wall_tex)
 	add_barrier(7, 8, wall_tex)
-
-
-
 	
 	# Place Player
 	var player_start_coord = round(CHUNK_DIMENSION/2.0)
@@ -331,9 +323,9 @@ func add_character(x,y,identifier,name,descr,ai,change_tex,start_tex,level,healt
 	actor_list.append(character)
 	actor_map[x][y] = character
 	
-func add_barrier(x,y,texture):
+func add_barrier(x,y,texture,descr="..."):
 	var barrier = Barrier.instance()
 	add_child(barrier)
-	barrier.init(x,y,texture)
+	barrier.init(x,y,texture,descr)
 	actor_map[x][y] = barrier
 	

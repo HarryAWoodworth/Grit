@@ -17,3 +17,4 @@ func update_health(health):
 	
 func update_weapon(weapon):
 	player_weapon.text = "Weapon: " + str(weapon)
+	

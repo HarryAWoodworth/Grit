@@ -3,7 +3,8 @@ extends "res://scripts/Actors.gd"
 onready var tween = $Sprite/Tween
 onready var sprite = $Sprite
 	
-func init(game, x, y):
+func init(game_ref, x, y):
+	game = game_ref
 	grabbable = true
 	curr_tile = Vector2(x,y)
 	game.actor_map[x][y] = sprite_node
@@ -14,7 +15,6 @@ func init(game, x, y):
 	description = "This techno blue see-through box doesn't belong in this post apocalyptic waste- oh wait, this is a test forest for development..."
 
 func drag(ID):
-	var game = get_parent()
 	match ID:
 		"drag_right":
 			# Drag player and box right
@@ -77,8 +77,8 @@ func tick():
 	pass
 
 func _on_Box_mouse_entered():
-	get_parent().display_actor_data(self)
+	game.display_actor_data(self)
 
 
 func _on_Box_mouse_exited():
-	get_parent().clear_actor_data()
+	game.clear_actor_data()
