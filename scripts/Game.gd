@@ -1,5 +1,6 @@
 ## Ordered TODO
-# - Light system
+# x Light system (To Be Updated)
+# - Enemies drawn in sight
 # - A* Pathfinding for enemies
 # - Items
 # - Inventory System
@@ -18,7 +19,9 @@
 # - Complete Player and Enemy information
 # - Add color to Player and Enemy information
 
+
 ## TODO
+# hit_pos ??
 # More player info
 # More enemy info
 # Dictionary object for Character creations
@@ -26,6 +29,12 @@
 # Get array of in sight actors
 
 # Long Term
+# - Day/Night Cycle
+#	- Light
+#	- Logs
+#	- Spawns
+#	- Loot Rate
+# - Season Cycle
 # Weather
 # Shooting Effects
 # Stealth
@@ -274,7 +283,7 @@ func build_chunk():
 		for y in range(CHUNK_DIMENSION):
 			actor_map[x].append(0)
 			map[x].append(Tile.Grass)
-			tile_map.set_cell(x, y, Tile.Goal)
+			tile_map.set_cell(x, y, Tile.Grass)
 			# Set the chunk's outer edge to forest tiles
 			if x < FOREST_DEPTH or x > CHUNK_DIMENSION-(FOREST_DEPTH+1) or y < FOREST_DEPTH or y > CHUNK_DIMENSION-(FOREST_DEPTH+1):
 				add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
@@ -296,6 +305,7 @@ func build_chunk():
 				"...",
 				"none",
 				true)
+	player_inst.init_player()
 	
 	
 	#player.position = player.curr_tile * TILE_SIZE
@@ -322,7 +332,7 @@ func build_chunk():
 				false,
 				"down",
 				0,
-				150,
+				15,
 				1)
 	
 	add_character(10,2,
@@ -333,7 +343,7 @@ func build_chunk():
 				false,
 				"down",
 				0,
-				150,
+				15,
 				1)
 	
 # Util -------------------------------------------------------------------------

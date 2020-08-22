@@ -23,7 +23,6 @@ const DEFAULT_ARMOR = 0
 const DEFAULT_DMG = 0
 const DEFAULT_CURR_TEX = "down"
 const DEFAULT_LEVEL = 0
-const DEFAULT_BLOCKSLOS = false
 
 # Detection
 const DEFAULT_DETECT_RADIUS = 5
@@ -33,7 +32,6 @@ var target
 var follow = true
 var hit_pos = Vector2(0,0)
 var laser_color = Color(0, 0, 0.7)
-var blockslos
 var animation_playing = false
 var target_aquired = false
 
@@ -61,8 +59,7 @@ new_level=DEFAULT_LEVEL,
 new_health=DEFAULT_HEALTH,
 new_armor=DEFAULT_ARMOR,
 new_status_arr=DEFAULT_STATUSES,
-new_effect_arr=DEFAULT_EFFECTS,
-new_blockslos=DEFAULT_BLOCKSLOS):
+new_effect_arr=DEFAULT_EFFECTS):
 	
 	# Identifier
 	identifier = new_identifier
@@ -89,24 +86,17 @@ new_blockslos=DEFAULT_BLOCKSLOS):
 	status_arr = new_status_arr
 	effect_arr = new_effect_arr
 	changeable_texture = can_change_texture
-	blockslos = new_blockslos
 	
-	# Detection
-	if blockslos:
-		self.collision_mask = 4
-	
-	if identifier != "player":
-		detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
-		sprite.self_modulate = Color(0.2, 0, 0)
-		var shape = CircleShape2D.new()
-		shape.radius = detect_radius
-		detection_shape.shape = shape
+	detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
+	var shape = CircleShape2D.new()
+	shape.radius = detect_radius
+	detection_shape.shape = shape
 	
 # Tick -------------------------------------------------------------------------
 
 func tick():
-	# Play the notice animation on bool
-	if notice_animation:
+	# Remove notice animation
+	if has_node("NoticeAnimation") and notice_animation != null:
 		remove_child(notice_animation)
 		
 	# Ai callback to decide action
@@ -140,18 +130,16 @@ func _physics_process(_delta):
 					notice_animation.sprite.offset.x -= quarter_tile
 					notice_animation.sprite.offset.y += quarter_tile
 					notice_animation.play("NoticeAnim")
-					
 			else:
 				laser_color = Color(0,0,1)
 		
 func _draw():
 	var half_tile = game.TILE_SIZE/2
 	var offset_pos = Vector2(half_tile, half_tile)
-	if identifier != "player":
-		draw_circle(Vector2(8,8), detect_radius, vis_color)
-		if target:
-			draw_line(offset_pos, (hit_pos - position).rotated(-rotation), laser_color)
-			draw_circle((hit_pos - position).rotated(-rotation), 1, laser_color)
+	#draw_circle(Vector2(8,8), detect_radius, vis_color)
+	if target:
+		draw_line(offset_pos, (hit_pos - position).rotated(-rotation), laser_color)
+		draw_circle((hit_pos - position).rotated(-rotation), 1, laser_color)
 	
 func take_dmg(num, crit=false):
 	var dmg_taken = (num - armor)
@@ -229,12 +217,6 @@ func has_effect(effect):
 	
 # Mouse input data display signals ---------------------------------------------
 
-func _on_Enemy_mouse_entered():
-	game.display_actor_data(self)
-
-func _on_Enemy_mouse_exited():
-	game.clear_actor_data()
-
 # When a body enters the visibility shape, make it a target if not already
 func _on_Visibility_body_entered(body):
 	# Check that it is a targetable body
@@ -247,6 +229,10 @@ func _on_Visibility_body_exited(body):
 	if body == target:
 		target = null
 		target_aquired = false
-		sprite.self_modulate.r = 0.2
 	
+func _on_Character_mouse_entered():
+	game.display_actor_data(self)
+	
+func _on_Character_mouse_exited():
+	game.clear_actor_data()
 	

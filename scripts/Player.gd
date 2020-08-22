@@ -10,6 +10,9 @@ var weapon = "Big Ass Laser Gun"
 var grabbing = false
 var grabbed_actor
 
+# Detection --------------------------------------------------------------------
+var targets
+
 # Sprite preload ---------------------------------------------------------------
 var right = preload("res://assets/player_sprite/player_right.png")
 var left = preload("res://assets/player_sprite/player_left.png")
@@ -28,13 +31,60 @@ func init_player():
 	changeable_texture = true
 	title = "Thunder McDonald"
 	
+	# Detection
+	targets = []
+	hit_pos = []
+	detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
+	var shape = CircleShape2D.new()
+	shape.radius = detect_radius
+	detection_shape.shape = shape
+	
 	# Info
 	health = DEFAULT_PLAYER_MAX_HEALTH
 	level = DEFAULT_PLAYER_STARTING_LEVEL
 	armor = DEFAULT_PLAYER_ARMOR
 	dmg = 5
 
+# Raycasting -------------------------------------------------------------------
+
+func _physics_process(_delta):
+	# Call _draw()
+	update()
+	# Draw rays to targets
+	
+	if targets and targets.size() > 0:
+		# Space state, half tile, and offset position
+		var space_state = get_world_2d().direct_space_state
+		var half_tile = game.TILE_SIZE/2
+		var offset_pos = Vector2(position.x + half_tile, position.y + half_tile)
+		# Loop through targets
+		var i = -1
+		for target in targets:
+			i = i+1
+			# Send the ray out from the middle of the player to the middle of the target
+			var offset_target_pos = Vector2(target.position.x + half_tile, target.position.y + half_tile)
+			# Get the actor hit by the raycast
+			var result = space_state.intersect_ray(offset_pos, offset_target_pos, [self], self.collision_mask)
+			# If it hits something, record the hit position
+			if result:
+				hit_pos[i] = result.position
+				if result.collider.identifier == "enemy":
+					# draw enemy
+					print(result.collider.identifier + " spotted!")
+
+func _draw():
+	var half_tile = game.TILE_SIZE/2
+	var offset_pos = Vector2(half_tile, half_tile)
+	draw_circle(Vector2(8,8), detect_radius, vis_color)
+	if targets and targets.size() > 0:
+		var i = -1
+		for target in targets:
+			i = i+1
+			draw_line(offset_pos, (hit_pos[i] - position).rotated(-rotation), laser_color)
+			draw_circle((hit_pos[i] - position).rotated(-rotation), 1, laser_color)
+
 # Input ------------------------------------------------------------------------
+
 func _input(event):
 	# Record on click
 #	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
@@ -136,10 +186,25 @@ func _input(event):
 					sprite.set_texture(down)
 				"up":
 					sprite.set_texture(up)
-			
-
-			
+	
 # Game input -------------------------------------------------------------------
 	
 func die():
 	print("Player died :C")
+
+# Signals ----------------------------------------------------------------------
+
+func _on_Visibility_body_entered(body):
+	print("Bazinga" + body.identifier)
+	# Check that it is a targetable body
+	var arr_non_targetable = ["barrier","box"]
+	if body.identifier == identifier or arr_non_targetable.has(body.identifier):
+		return
+	targets.append(body)
+	print(body.identifier +  " inside!")
+	
+func _on_Visibility_body_exited(body):
+	if targets and targets.has(body):
+		targets.erase(body)
+		print(body.identifier +  " outside!")
+	
