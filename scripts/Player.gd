@@ -34,6 +34,8 @@ func init_player():
 	# Detection
 	targets = []
 	hit_pos = []
+	for _j in range(40):
+		hit_pos.append(null)
 	detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
 	var shape = CircleShape2D.new()
 	shape.radius = detect_radius
@@ -49,7 +51,7 @@ func init_player():
 
 func _physics_process(_delta):
 	# Call _draw()
-	update()
+	#update()
 	# Draw rays to targets
 	
 	if targets and targets.size() > 0:
@@ -73,15 +75,16 @@ func _physics_process(_delta):
 					print(result.collider.identifier + " spotted!")
 
 func _draw():
-	var half_tile = game.TILE_SIZE/2
-	var offset_pos = Vector2(half_tile, half_tile)
-	draw_circle(Vector2(8,8), detect_radius, vis_color)
-	if targets and targets.size() > 0:
-		var i = -1
-		for target in targets:
-			i = i+1
-			draw_line(offset_pos, (hit_pos[i] - position).rotated(-rotation), laser_color)
-			draw_circle((hit_pos[i] - position).rotated(-rotation), 1, laser_color)
+	pass
+#	var half_tile = game.TILE_SIZE/2
+#	var offset_pos = Vector2(half_tile, half_tile)
+#	draw_circle(Vector2(8,8), detect_radius, vis_color)
+#	if targets and targets.size() > 0:
+#		var i = -1
+#		for target in targets:
+#			i = i+1
+#			draw_line(offset_pos, (hit_pos[i] - position).rotated(-rotation), laser_color)
+#			draw_circle((hit_pos[i] - position).rotated(-rotation), 1, laser_color)
 
 # Input ------------------------------------------------------------------------
 
