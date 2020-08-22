@@ -34,7 +34,8 @@ var follow = true
 var hit_pos = Vector2(0,0)
 var laser_color = Color(0, 0, 0.7)
 var blockslos
-var notice_animation_playing = false
+var animation_playing = false
+var target_aquired = false
 
 # Enemy data
 var health
@@ -105,30 +106,42 @@ new_blockslos=DEFAULT_BLOCKSLOS):
 # Tick -------------------------------------------------------------------------
 
 func tick():
-	# Stop the notice animation after tick
-	if notice_animation_playing:
-		notice_animation_playing = false
-		notice_animation.stop()
+	# Play the notice animation on bool
+	if notice_animation:
+		remove_child(notice_animation)
+		
 	# Ai callback to decide action
 	ai_tick_callback.call_funcv([self, game])
 	
 func _physics_process(_delta):
 	# Call _draw()
 	update()
-	# Draw a ray to target
+	# Draw a ray to the target
 	if target:
 		var space_state = get_world_2d().direct_space_state
 		# Send the ray out from the middle of the actor to the middle of the target
 		var half_tile = game.TILE_SIZE/2
 		var offset_pos = Vector2(position.x + half_tile, position.y + half_tile)
 		var offset_target_pos = Vector2(target.position.x + half_tile, target.position.y + half_tile)
+		# Get the actor hit by the raycast
 		var result = space_state.intersect_ray(offset_pos, offset_target_pos, [self], self.collision_mask)
 		# If it hits something, record the hit position
 		if result:
 			hit_pos = result.position
-			# If the actor hit is the player make the sprite red
+			# If the actor hit is the player make the laser red
 			if result.collider.identifier == "player":
 				laser_color = Color(1,0,0)
+				# If the animation has not been played, play it
+				if !target_aquired:
+					target_aquired = true
+					notice_animation = NoticeAnim.instance()
+					add_child(notice_animation)
+					var quarter_tile = (game.TILE_SIZE/4)
+					notice_animation.sprite.offset = position * 2
+					notice_animation.sprite.offset.x -= quarter_tile
+					notice_animation.sprite.offset.y += quarter_tile
+					notice_animation.play("NoticeAnim")
+					
 			else:
 				laser_color = Color(0,0,1)
 		
@@ -229,20 +242,12 @@ func _on_Visibility_body_entered(body):
 	var arr_non_targetable = ["barrier","box"]
 	if body.identifier == identifier or arr_non_targetable.has(body.identifier) or target:
 		return
-	# Log and set
-	game.logg(title + " has spotted " + body.title + "!")
 	target = body
-	# Play notice animation if it is the player
-	if target.identifier == "player":
-		notice_animation_playing = true
-		notice_animation = NoticeAnim.instance()
-		add_child(notice_animation)
-		notice_animation.play("NoticeAnim")
-
-
+	
 func _on_Visibility_body_exited(body):
 	if body == target:
 		target = null
-		print("No more target")
+		target_aquired = false
 		sprite.self_modulate.r = 0.2
-		
+	
+	
