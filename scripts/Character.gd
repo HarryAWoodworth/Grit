@@ -97,7 +97,6 @@ new_blockslos=DEFAULT_BLOCKSLOS):
 	
 	if identifier != "player":
 		detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
-		print("Detect radius: " + str(detect_radius))
 		sprite.self_modulate = Color(0.2, 0, 0)
 		var shape = CircleShape2D.new()
 		shape.radius = detect_radius

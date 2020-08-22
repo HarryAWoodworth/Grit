@@ -1,5 +1,4 @@
 ## Ordered TODO
-# - Notice animation for enemies
 # - Light system
 # - A* Pathfinding for enemies
 # - Items
