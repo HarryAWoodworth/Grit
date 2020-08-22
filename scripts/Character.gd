@@ -6,7 +6,10 @@ onready var sprite = $Sprite
 onready var fct_manager = $FCTManager
 onready var ai_manager = $AI_Manager
 onready var detection_shape = $Visibility/DetectionShape
-onready var notice_animation = $NoticeAnimation
+
+# Preload anim
+var NoticeAnim = preload("res://util/NoticeAnimation.tscn")
+var notice_animation
 
 # Consts 
 const DEFAULT_AI = "none"
@@ -31,6 +34,7 @@ var follow = true
 var hit_pos = Vector2(0,0)
 var laser_color = Color(0, 0, 0.7)
 var blockslos
+var notice_animation_playing = false
 
 # Enemy data
 var health
@@ -100,8 +104,12 @@ new_blockslos=DEFAULT_BLOCKSLOS):
 	
 # Tick -------------------------------------------------------------------------
 
-# Follow the player
 func tick():
+	# Stop the notice animation after tick
+	if notice_animation_playing:
+		notice_animation_playing = false
+		notice_animation.stop()
+	# Ai callback to decide action
 	ai_tick_callback.call_funcv([self, game])
 	
 func _physics_process(_delta):
@@ -217,15 +225,19 @@ func _on_Enemy_mouse_exited():
 
 # When a body enters the visibility shape, make it a target if not already
 func _on_Visibility_body_entered(body):
+	# Check that it is a targetable body
 	var arr_non_targetable = ["barrier","box"]
 	if body.identifier == identifier or arr_non_targetable.has(body.identifier) or target:
 		return
+	# Log and set
 	game.logg(title + " has spotted " + body.title + "!")
 	target = body
-	print("New target " + str(target))
-	sprite.self_modulate.r = 1
-	sprite.self_modulate.g = 1
-	sprite.self_modulate.b = 1
+	# Play notice animation if it is the player
+	if target.identifier == "player":
+		notice_animation_playing = true
+		notice_animation = NoticeAnim.instance()
+		add_child(notice_animation)
+		notice_animation.play("NoticeAnim")
 
 
 func _on_Visibility_body_exited(body):

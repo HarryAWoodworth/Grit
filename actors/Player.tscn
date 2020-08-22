@@ -44,3 +44,5 @@ position = Vector2( 8, 8 )
 shape = SubResource( 2 )
 
 [node name="NoticeAnimation" type="AnimationPlayer" parent="."]
+
+[node name="NoticeSprite" type="Sprite" parent="NoticeAnimation"]
