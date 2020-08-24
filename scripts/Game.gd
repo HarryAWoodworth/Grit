@@ -130,6 +130,7 @@ var actor_list = []
 var map = []
 var buildings = []
 var actor_map = []
+var barrier_list = []
 
 # Ready ------------------------------------------------------------------------
 
@@ -286,13 +287,15 @@ func build_chunk():
 			tile_map.set_cell(x, y, Tile.Grass)
 			# Set the chunk's outer edge to forest tiles
 			if x < FOREST_DEPTH or x > CHUNK_DIMENSION-(FOREST_DEPTH+1) or y < FOREST_DEPTH or y > CHUNK_DIMENSION-(FOREST_DEPTH+1):
-				add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
+				pass#add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
 				
 	# Extra walls for testing
 	add_barrier(8, 4, wall_tex)
 	add_barrier(9, 4, wall_tex)
-	add_barrier(10, 4, wall_tex)
-	add_barrier(11, 4, wall_tex)
+	#add_barrier(10, 4, wall_tex)
+	#add_barrier(11, 4, wall_tex)
+	
+	set_barrier_occluder_polygons()
 	
 	# Place Player
 	var player_start_coord = round(CHUNK_DIMENSION/2.0)
@@ -345,15 +348,57 @@ func build_chunk():
 				0,
 				15,
 				1)
+				
+# Set the occulder polygon based on neighboring barriers
+func set_barrier_occluder_polygons():
+	var zero_set = false
+	var upp_right_set = false
+	var bott_right_set = false
+	for barrier in barrier_list:
+		var x = barrier.curr_tile.x
+		var y = barrier.curr_tile.y
+		# Get adjacent actors
+		var top = get_actor_at(x,y-1)
+		var bottom = get_actor_at(x,y+1)
+		var left = get_actor_at(x-1,y)
+		var right = get_actor_at(x+1,y)
+		# Vector array for polygon
+		var vecArr = []
+		# Check for sides without neighboring barriers and add a wall in the occluder polygon
+		if typeof(left) == 2:
+			print("!left")
+			vecArr.append(Vector2(0,TILE_SIZE))
+			vecArr.append(Vector2(0,0))
+			zero_set = true
+		if typeof(top) == 2:
+			print("!top")
+			if !zero_set:
+				vecArr.append(Vector2(0,0))
+			vecArr.append(Vector2(TILE_SIZE,0))
+			upp_right_set = true
+		if typeof(right) == 2:
+			print("!right")
+			if !upp_right_set:
+				vecArr.append(Vector2(TILE_SIZE,0))
+			vecArr.append(Vector2(TILE_SIZE,TILE_SIZE))
+			bott_right_set = true
+		if typeof(bottom) == 2:
+			print("!bottom")
+			if !bott_right_set:
+				vecArr.append(Vector2(TILE_SIZE,TILE_SIZE))
+			vecArr.append(Vector2(0,TILE_SIZE))
+		var occluder_poly = OccluderPolygon2D.new()
+		occluder_poly.polygon = vecArr
+		occluder_poly.closed = false
+		occluder_poly.cull_mode = 1
+		barrier.light_occluder.set_occluder_polygon(occluder_poly)
 	
 # Util -------------------------------------------------------------------------
 	
 # Get actor at coords
 func get_actor_at(x,y):
 	if x < 0 or x > actor_map.size()-1 or y < 0 or y > actor_map[0].size()-1:
-		print("No actor there")
 		return 0
-	#print("actor_map[" + str(x) + "][" + str(y) + "]: " + str(actor_map[x][y]))
 	return actor_map[x][y]
 	
 # Set a tile at (x,y) with tile type
@@ -376,4 +421,5 @@ func add_barrier(x,y,texture,descr="..."):
 	add_child(barrier)
 	barrier.init(x,y,texture,descr)
 	actor_map[x][y] = barrier
+	barrier_list.append(barrier)
 	

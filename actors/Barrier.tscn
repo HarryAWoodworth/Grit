@@ -7,7 +7,8 @@
 extents = Vector2( 8, 8 )
 
 [sub_resource type="OccluderPolygon2D" id=2]
-polygon = PoolVector2Array( 0, 16, 16, 16, 16, 0, 0, 0 )
+closed = false
+polygon = PoolVector2Array( 0, 16, 0, 0, 16, 0, 16, 16 )
 
 [node name="Barrier" type="KinematicBody2D"]
 input_pickable = true

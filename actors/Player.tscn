@@ -54,9 +54,7 @@ texture = ExtResource( 5 )
 offset = Vector2( 8, 8 )
 texture_scale = 0.2
 color = Color( 0.94902, 0.968627, 0.705882, 1 )
-energy = 0.75
 shadow_enabled = true
 shadow_color = Color( 0, 0, 0, 1 )
-shadow_filter_smooth = 11.5
 [connection signal="body_entered" from="Visibility" to="." method="_on_Visibility_body_entered"]
 [connection signal="body_exited" from="Visibility" to="." method="_on_Visibility_body_exited"]

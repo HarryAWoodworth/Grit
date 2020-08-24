@@ -1,6 +1,7 @@
 extends "res://scripts/Actors.gd"
 
 onready var sprite = $Sprite
+onready var light_occluder = $LightOccluder2D
 
 var has_description = false
 

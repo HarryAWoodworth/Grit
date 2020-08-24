@@ -71,8 +71,9 @@ func _physics_process(_delta):
 			if result:
 				hit_pos[i] = result.position
 				if result.collider.identifier == "enemy":
+					pass
 					# draw enemy
-					print(result.collider.identifier + " spotted!")
+					#print(result.collider.identifier + " spotted!")
 
 func _draw():
 	pass
@@ -198,16 +199,15 @@ func die():
 # Signals ----------------------------------------------------------------------
 
 func _on_Visibility_body_entered(body):
-	print("Bazinga" + body.identifier)
 	# Check that it is a targetable body
 	var arr_non_targetable = ["barrier","box"]
 	if body.identifier == identifier or arr_non_targetable.has(body.identifier):
 		return
 	targets.append(body)
-	print(body.identifier +  " inside!")
+	#print(body.identifier +  " inside!")
 	
 func _on_Visibility_body_exited(body):
 	if targets and targets.has(body):
 		targets.erase(body)
-		print(body.identifier +  " outside!")
+		#print(body.identifier +  " outside!")
 	
