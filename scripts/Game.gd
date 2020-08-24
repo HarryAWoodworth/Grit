@@ -290,10 +290,17 @@ func build_chunk():
 				pass#add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
 				
 	# Extra walls for testing
+	add_barrier(6, 4, wall_tex)
+	
 	add_barrier(8, 4, wall_tex)
 	add_barrier(9, 4, wall_tex)
-	#add_barrier(10, 4, wall_tex)
-	#add_barrier(11, 4, wall_tex)
+	
+	add_barrier(11, 4, wall_tex)
+	add_barrier(11, 3, wall_tex)
+	
+	add_barrier(13, 4, wall_tex)
+	add_barrier(13, 3, wall_tex)
+	add_barrier(14, 4, wall_tex)
 	
 	set_barrier_occluder_polygons()
 	
@@ -351,10 +358,9 @@ func build_chunk():
 				
 # Set the occulder polygon based on neighboring barriers
 func set_barrier_occluder_polygons():
-	var zero_set = false
-	var upp_right_set = false
-	var bott_right_set = false
+	var num = 0
 	for barrier in barrier_list:
+		num = num + 1
 		var x = barrier.curr_tile.x
 		var y = barrier.curr_tile.y
 		# Get adjacent actors
@@ -365,33 +371,43 @@ func set_barrier_occluder_polygons():
 		# Vector array for polygon
 		var vecArr = []
 		# Check for sides without neighboring barriers and add a wall in the occluder polygon
-		if typeof(left) == 2:
-			print("!left")
-			vecArr.append(Vector2(0,TILE_SIZE))
-			vecArr.append(Vector2(0,0))
-			zero_set = true
-		if typeof(top) == 2:
-			print("!top")
-			if !zero_set:
-				vecArr.append(Vector2(0,0))
-			vecArr.append(Vector2(TILE_SIZE,0))
-			upp_right_set = true
-		if typeof(right) == 2:
-			print("!right")
-			if !upp_right_set:
-				vecArr.append(Vector2(TILE_SIZE,0))
-			vecArr.append(Vector2(TILE_SIZE,TILE_SIZE))
-			bott_right_set = true
-		if typeof(bottom) == 2:
-			print("!bottom")
-			if !bott_right_set:
-				vecArr.append(Vector2(TILE_SIZE,TILE_SIZE))
-			vecArr.append(Vector2(0,TILE_SIZE))
+		var leftw = typeof(left) == 2
+		var topw = typeof(top) == 2
+		var rightw = typeof(right) == 2
+		var bottomw = typeof(bottom) == 2
+		
+		if leftw and topw and rightw and bottomw:
+			vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE), Vector2(0,TILE_SIZE)]
+		elif leftw and topw and rightw and !bottomw:
+			vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE)]
+		elif leftw and topw and !rightw and bottomw:
+			vecArr = [Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0)]
+		elif leftw and !topw and rightw and bottomw:
+			vecArr = [Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0)]
+		elif !leftw and topw and rightw and bottomw:
+			vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE)]
+		elif leftw and topw and !rightw and !bottomw:
+			vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0)]
+		elif leftw and !topw and rightw and !bottomw:
+			vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(TILE_SIZE,0)]
+		elif !leftw and topw and rightw and !bottomw:
+			vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE)]
+		elif leftw and !topw and !rightw and bottomw:
+			vecArr = [Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0)]
+		elif !leftw and topw and !rightw and bottomw:
+			vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(0,TILE_SIZE),Vector2(TILE_SIZE,TILE_SIZE)]
+		elif !leftw and !topw and rightw and bottomw:
+			vecArr = [Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE)]
+
 		var occluder_poly = OccluderPolygon2D.new()
 		occluder_poly.polygon = vecArr
 		occluder_poly.closed = false
 		occluder_poly.cull_mode = 1
 		barrier.light_occluder.set_occluder_polygon(occluder_poly)
+		print("Barrier " + str(num) + ": " + str(vecArr))
+	
+	#Barrier 1: [(0, 16), (0, 0), (16, 0), (16, 16), (0, 16)]
+
 	
 # Util -------------------------------------------------------------------------
 	

@@ -8,7 +8,7 @@ extents = Vector2( 8, 8 )
 
 [sub_resource type="OccluderPolygon2D" id=2]
 closed = false
-polygon = PoolVector2Array( 0, 16, 0, 0, 16, 0, 16, 16 )
+polygon = PoolVector2Array( 0, 16, 0, 0, 16, 16, 16, 0 )
 
 [node name="Barrier" type="KinematicBody2D"]
 input_pickable = true
@@ -21,7 +21,7 @@ texture = ExtResource( 1 )
 offset = Vector2( 8, 8 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 8, 8 )
+position = Vector2( 8.06622, 8 )
 shape = SubResource( 1 )
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
