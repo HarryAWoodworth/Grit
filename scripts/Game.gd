@@ -291,17 +291,18 @@ func build_chunk():
 				pass#add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
 				
 	# Extra walls for testing
-	add_barrier(6, 4, wall_tex)
+	#add_barrier(6, 4, wall_tex)
 	
+	#add_barrier(8, 4, wall_tex)
+	#add_barrier(9, 4, wall_tex)
+	
+	#add_barrier(11, 4, wall_tex)
+	#add_barrier(11, 3, wall_tex)
+	
+	add_barrier(7, 3, wall_tex)
 	add_barrier(8, 4, wall_tex)
+	add_barrier(8, 3, wall_tex)
 	add_barrier(9, 4, wall_tex)
-	
-	add_barrier(11, 4, wall_tex)
-	add_barrier(11, 3, wall_tex)
-	
-	add_barrier(13, 4, wall_tex)
-	add_barrier(13, 3, wall_tex)
-	add_barrier(14, 4, wall_tex)
 	
 	set_barrier_occluder_polygons()
 	
@@ -326,36 +327,36 @@ func build_chunk():
 	player = player_inst
 	
 	# Place Box
-	var box_x = 4
-	var box_y = 10
-	var box = Box.instance()
-	box.init(self,box_x,box_y)
-	add_child(box)
-	actor_list.append(box)
-	actor_map[box_x][box_y] = box
+#	var box_x = 4
+#	var box_y = 10
+#	var box = Box.instance()
+#	box.init(self,box_x,box_y)
+#	add_child(box)
+#	actor_list.append(box)
+#	actor_map[box_x][box_y] = box
 	
 	# Place Enemy
-	add_character(13,2,
-				"enemy",
-				"Mutant Crab",
-				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
-				"monster_classic",
-				false,
-				"down",
-				0,
-				15,
-				1)
-	
-	add_character(10,2,
-				"enemy",
-				"Mutant Crab",
-				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
-				"monster_classic",
-				false,
-				"down",
-				0,
-				15,
-				1)
+#	add_character(13,2,
+#				"enemy",
+#				"Mutant Crab",
+#				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
+#				"monster_classic",
+#				false,
+#				"down",
+#				0,
+#				15,
+#				1)
+#
+#	add_character(10,2,
+#				"enemy",
+#				"Mutant Crab",
+#				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
+#				"monster_classic",
+#				false,
+#				"down",
+#				0,
+#				15,
+#				1)
 				
 # Set the occulder polygon based on neighboring barriers
 func set_barrier_occluder_polygons():

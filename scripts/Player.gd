@@ -75,21 +75,23 @@ func _physics_process(_delta):
 			if result:
 				hit_pos[i] = result.position
 				if result.collider != target:
-					hit_pos[i] = result.position
-					result.collider.sprite.hide()
+					target.sprite.hide()
+					if target.light_occluder:
+						target.light_occluder.hide()
 				else:
-					result.collider.sprite.show()
+					target.sprite.show()
 
 func _draw():
-	var half_tile = game.TILE_SIZE/2
-	var offset_pos = Vector2(half_tile, half_tile)
-	draw_circle(Vector2(8,8), detect_radius, vis_color)
-	if targets and targets.size() > 0:
-		var i = -1
-		for target in targets:
-			i = i+1
-			draw_line(offset_pos, (hit_pos[i] - position).rotated(-rotation), laser_color)
-			draw_circle((hit_pos[i] - position).rotated(-rotation), 1, laser_color)
+	pass
+#	var half_tile = game.TILE_SIZE/2
+#	var offset_pos = Vector2(half_tile, half_tile)
+#	draw_circle(Vector2(8,8), detect_radius, vis_color)
+#	if targets and targets.size() > 0:
+#		var i = -1
+#		for target in targets:
+#			i = i+1
+#			draw_line(offset_pos, (hit_pos[i] - position).rotated(-rotation), laser_color)
+#			draw_circle((hit_pos[i] - position).rotated(-rotation), 1, laser_color)
 
 # Input ------------------------------------------------------------------------
 
