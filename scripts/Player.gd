@@ -47,13 +47,17 @@ func init_player():
 	armor = DEFAULT_PLAYER_ARMOR
 	dmg = 5
 
+# Tick -------------------------------------------------------------------------
+
+func tick():
+	pass
+
 # Raycasting -------------------------------------------------------------------
 
 func _physics_process(_delta):
 	# Call _draw()
-	#update()
+	update()
 	# Draw rays to targets
-	
 	if targets and targets.size() > 0:
 		# Space state, half tile, and offset position
 		var space_state = get_world_2d().direct_space_state
@@ -70,22 +74,22 @@ func _physics_process(_delta):
 			# If it hits something, record the hit position
 			if result:
 				hit_pos[i] = result.position
-				if result.collider.identifier == "enemy":
-					pass
-					# draw enemy
-					#print(result.collider.identifier + " spotted!")
+				if result.collider != target:
+					hit_pos[i] = result.position
+					result.collider.sprite.hide()
+				else:
+					result.collider.sprite.show()
 
 func _draw():
-	pass
-#	var half_tile = game.TILE_SIZE/2
-#	var offset_pos = Vector2(half_tile, half_tile)
-#	draw_circle(Vector2(8,8), detect_radius, vis_color)
-#	if targets and targets.size() > 0:
-#		var i = -1
-#		for target in targets:
-#			i = i+1
-#			draw_line(offset_pos, (hit_pos[i] - position).rotated(-rotation), laser_color)
-#			draw_circle((hit_pos[i] - position).rotated(-rotation), 1, laser_color)
+	var half_tile = game.TILE_SIZE/2
+	var offset_pos = Vector2(half_tile, half_tile)
+	draw_circle(Vector2(8,8), detect_radius, vis_color)
+	if targets and targets.size() > 0:
+		var i = -1
+		for target in targets:
+			i = i+1
+			draw_line(offset_pos, (hit_pos[i] - position).rotated(-rotation), laser_color)
+			draw_circle((hit_pos[i] - position).rotated(-rotation), 1, laser_color)
 
 # Input ------------------------------------------------------------------------
 
@@ -157,6 +161,7 @@ func _input(event):
 					grabbed_actor.drag("drag_left")
 				"right":
 					grabbed_actor.drag("drag_right")
+					
 			
 	# Grabbing key
 	elif Input.is_action_just_pressed("ui_grab"):
@@ -200,8 +205,9 @@ func die():
 
 func _on_Visibility_body_entered(body):
 	# Check that it is a targetable body
-	var arr_non_targetable = ["barrier","box"]
-	if body.identifier == identifier or arr_non_targetable.has(body.identifier):
+	#var arr_non_targetable = ["barrier","box"]
+	#if body.identifier == identifier or arr_non_targetable.has(body.identifier):
+	if body.identifier == identifier:
 		return
 	targets.append(body)
 	#print(body.identifier +  " inside!")

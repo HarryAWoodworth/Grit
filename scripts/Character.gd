@@ -95,6 +95,13 @@ new_effect_arr=DEFAULT_EFFECTS):
 # Tick -------------------------------------------------------------------------
 
 func tick():
+	
+	print(self)
+	print(game.player.targets)
+	
+	if sprite.is_visible() and !game.player.targets.has(self):
+		sprite.hide()
+	
 	# Remove notice animation
 	if has_node("NoticeAnimation") and notice_animation != null:
 		remove_child(notice_animation)
@@ -105,7 +112,7 @@ func tick():
 func _physics_process(_delta):
 	# Call _draw()
 	update()
-	# Draw a ray to the target
+	# Send a ray to the target
 	if target:
 		var space_state = get_world_2d().direct_space_state
 		# Send the ray out from the middle of the actor to the middle of the target
@@ -119,7 +126,7 @@ func _physics_process(_delta):
 			hit_pos = result.position
 			# If the actor hit is the player make the laser red
 			if result.collider.identifier == "player":
-				laser_color = Color(1,0,0)
+				#laser_color = Color(1,0,0)
 				# If the animation has not been played, play it
 				if !target_aquired:
 					target_aquired = true
@@ -134,12 +141,13 @@ func _physics_process(_delta):
 				laser_color = Color(0,0,1)
 		
 func _draw():
-	var half_tile = game.TILE_SIZE/2
-	var offset_pos = Vector2(half_tile, half_tile)
-	#draw_circle(Vector2(8,8), detect_radius, vis_color)
-	if target:
-		draw_line(offset_pos, (hit_pos - position).rotated(-rotation), laser_color)
-		draw_circle((hit_pos - position).rotated(-rotation), 1, laser_color)
+	pass
+#	var half_tile = game.TILE_SIZE/2
+#	var offset_pos = Vector2(half_tile, half_tile)
+#	#draw_circle(Vector2(8,8), detect_radius, vis_color)
+#	if target:
+#		draw_line(offset_pos, (hit_pos - position).rotated(-rotation), laser_color)
+#		draw_circle((hit_pos - position).rotated(-rotation), 1, laser_color)
 	
 func take_dmg(num, crit=false):
 	var dmg_taken = (num - armor)

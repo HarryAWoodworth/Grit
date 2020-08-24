@@ -1,4 +1,5 @@
 ## Ordered TODO
+# Fix draw
 # x Light system (To Be Updated)
 # - Enemies drawn in sight
 # - A* Pathfinding for enemies
@@ -404,10 +405,6 @@ func set_barrier_occluder_polygons():
 		occluder_poly.closed = false
 		occluder_poly.cull_mode = 1
 		barrier.light_occluder.set_occluder_polygon(occluder_poly)
-		print("Barrier " + str(num) + ": " + str(vecArr))
-	
-	#Barrier 1: [(0, 16), (0, 0), (16, 0), (16, 16), (0, 16)]
-
 	
 # Util -------------------------------------------------------------------------
 	
@@ -438,4 +435,5 @@ func add_barrier(x,y,texture,descr="..."):
 	barrier.init(x,y,texture,descr)
 	actor_map[x][y] = barrier
 	barrier_list.append(barrier)
+	actor_list.append(barrier)
 	
