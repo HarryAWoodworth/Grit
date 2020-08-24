@@ -77,9 +77,7 @@ func drag(ID):
 				game.cant_move_anim(x,y,game.player)
 
 func tick():
-	
-	if sprite.is_visible() and !game.player.targets.has(self):
-		sprite.hide()
+	pass
 
 func _on_Box_mouse_entered():
 	game.display_actor_data(self)

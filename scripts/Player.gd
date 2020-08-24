@@ -4,6 +4,7 @@ extends "res://scripts/Character.gd"
 const DEFAULT_PLAYER_MAX_HEALTH = 50
 const DEFAULT_PLAYER_STARTING_LEVEL = 0
 const DEFAULT_PLAYER_ARMOR = 0
+const DEFAULT_PLAYER_DETECT_RADIUS = 30
 
 # Player Info ------------------------------------------------------------------
 var weapon = "Big Ass Laser Gun"
@@ -36,7 +37,7 @@ func init_player():
 	hit_pos = []
 	for _j in range(40):
 		hit_pos.append(null)
-	detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
+	detect_radius = DEFAULT_PLAYER_DETECT_RADIUS * game.TILE_SIZE
 	var shape = CircleShape2D.new()
 	shape.radius = detect_radius
 	detection_shape.shape = shape
@@ -49,49 +50,7 @@ func init_player():
 
 # Tick -------------------------------------------------------------------------
 
-func tick():
-	pass
-
 # Raycasting -------------------------------------------------------------------
-
-func _physics_process(_delta):
-	# Call _draw()
-	update()
-	# Draw rays to targets
-	if targets and targets.size() > 0:
-		# Space state, half tile, and offset position
-		var space_state = get_world_2d().direct_space_state
-		var half_tile = game.TILE_SIZE/2
-		var offset_pos = Vector2(position.x + half_tile, position.y + half_tile)
-		# Loop through targets
-		var i = -1
-		for target in targets:
-			i = i+1
-			# Send the ray out from the middle of the player to the middle of the target
-			var offset_target_pos = Vector2(target.position.x + half_tile, target.position.y + half_tile)
-			# Get the actor hit by the raycast
-			var result = space_state.intersect_ray(offset_pos, offset_target_pos, [self], self.collision_mask)
-			# If it hits something, record the hit position
-			if result:
-				hit_pos[i] = result.position
-				if result.collider != target:
-					target.sprite.hide()
-					if target.light_occluder:
-						target.light_occluder.hide()
-				else:
-					target.sprite.show()
-
-func _draw():
-	pass
-#	var half_tile = game.TILE_SIZE/2
-#	var offset_pos = Vector2(half_tile, half_tile)
-#	draw_circle(Vector2(8,8), detect_radius, vis_color)
-#	if targets and targets.size() > 0:
-#		var i = -1
-#		for target in targets:
-#			i = i+1
-#			draw_line(offset_pos, (hit_pos[i] - position).rotated(-rotation), laser_color)
-#			draw_circle((hit_pos[i] - position).rotated(-rotation), 1, laser_color)
 
 # Input ------------------------------------------------------------------------
 
@@ -212,10 +171,8 @@ func _on_Visibility_body_entered(body):
 	if body.identifier == identifier:
 		return
 	targets.append(body)
-	#print(body.identifier +  " inside!")
 	
 func _on_Visibility_body_exited(body):
 	if targets and targets.has(body):
 		targets.erase(body)
-		#print(body.identifier +  " outside!")
 	

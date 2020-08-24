@@ -1,7 +1,6 @@
 ## Ordered TODO
-# Fix draw
 # x Light system (To Be Updated)
-# - Enemies drawn in sight
+# x Enemies drawn in sight
 # - A* Pathfinding for enemies
 # - Items
 # - Inventory System
@@ -236,8 +235,10 @@ func set_anim_done():
 
 # Call tick on all actors in actor_list
 func tick():
+	update()
 	for actor in actor_list:
 		actor.tick()
+	#set_barrier_occluder_polygons(barrier_list)
 
 # Actor Combat -----------------------------------------------------------------
 		
@@ -296,15 +297,15 @@ func build_chunk():
 	#add_barrier(8, 4, wall_tex)
 	#add_barrier(9, 4, wall_tex)
 	
-	#add_barrier(11, 4, wall_tex)
-	#add_barrier(11, 3, wall_tex)
+	add_barrier(11, 4, wall_tex)
+	add_barrier(11, 3, wall_tex)
 	
-	add_barrier(7, 3, wall_tex)
-	add_barrier(8, 4, wall_tex)
-	add_barrier(8, 3, wall_tex)
-	add_barrier(9, 4, wall_tex)
+	#add_barrier(7, 3, wall_tex)
+	#add_barrier(8, 4, wall_tex)
+	#add_barrier(8, 3, wall_tex)
+	#add_barrier(9, 4, wall_tex)
 	
-	set_barrier_occluder_polygons()
+	#set_barrier_occluder_polygons(barrier_list)
 	
 	# Place Player
 	var player_start_coord = round(CHUNK_DIMENSION/2.0)
@@ -359,53 +360,52 @@ func build_chunk():
 #				1)
 				
 # Set the occulder polygon based on neighboring barriers
-func set_barrier_occluder_polygons():
-	var num = 0
-	for barrier in barrier_list:
-		num = num + 1
-		var x = barrier.curr_tile.x
-		var y = barrier.curr_tile.y
-		# Get adjacent actors
-		var top = get_actor_at(x,y-1)
-		var bottom = get_actor_at(x,y+1)
-		var left = get_actor_at(x-1,y)
-		var right = get_actor_at(x+1,y)
-		# Vector array for polygon
-		var vecArr = []
-		# Check for sides without neighboring barriers and add a wall in the occluder polygon
-		var leftw = typeof(left) == 2
-		var topw = typeof(top) == 2
-		var rightw = typeof(right) == 2
-		var bottomw = typeof(bottom) == 2
-		
-		if leftw and topw and rightw and bottomw:
-			vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE), Vector2(0,TILE_SIZE)]
-		elif leftw and topw and rightw and !bottomw:
-			vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE)]
-		elif leftw and topw and !rightw and bottomw:
-			vecArr = [Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0)]
-		elif leftw and !topw and rightw and bottomw:
-			vecArr = [Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0)]
-		elif !leftw and topw and rightw and bottomw:
-			vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE)]
-		elif leftw and topw and !rightw and !bottomw:
-			vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0)]
-		elif leftw and !topw and rightw and !bottomw:
-			vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(TILE_SIZE,0)]
-		elif !leftw and topw and rightw and !bottomw:
-			vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE)]
-		elif leftw and !topw and !rightw and bottomw:
-			vecArr = [Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0)]
-		elif !leftw and topw and !rightw and bottomw:
-			vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(0,TILE_SIZE),Vector2(TILE_SIZE,TILE_SIZE)]
-		elif !leftw and !topw and rightw and bottomw:
-			vecArr = [Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE)]
-
-		var occluder_poly = OccluderPolygon2D.new()
-		occluder_poly.polygon = vecArr
-		occluder_poly.closed = false
-		occluder_poly.cull_mode = 1
-		barrier.light_occluder.set_occluder_polygon(occluder_poly)
+func set_barrier_occluder_polygons(_barrier_list):
+	pass
+#		for barrier in _barrier_list:
+#			var x = barrier.curr_tile.x
+#			var y = barrier.curr_tile.y
+#			# Get adjacent actors
+#			var top = get_actor_at(x,y-1)
+#			var bottom = get_actor_at(x,y+1)
+#			var left = get_actor_at(x-1,y)
+#			var right = get_actor_at(x+1,y)
+			# Vector array for polygon
+#			var vecArr = []
+#			# Check for sides without neighboring barriers and add a wall in the occluder polygon
+#			var leftw = typeof(left) == 2 or !left.sprite.is_visible()
+#			var topw = typeof(top) == 2 or !top.sprite.is_visible()
+#			var rightw = typeof(right) == 2 or !right.sprite.is_visible()
+#			var bottomw = typeof(bottom) == 2 or !bottom.sprite.is_visible()
+#
+#			if leftw and topw and rightw and bottomw:
+#				vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE), Vector2(0,TILE_SIZE)]
+#			elif leftw and topw and rightw and !bottomw:
+#				vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE)]
+#			elif leftw and topw and !rightw and bottomw:
+#				vecArr = [Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0)]
+#			elif leftw and !topw and rightw and bottomw:
+#				vecArr = [Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0)]
+#			elif !leftw and topw and rightw and bottomw:
+#				vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE)]
+#			elif leftw and topw and !rightw and !bottomw:
+#				vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0)]
+#			elif leftw and !topw and rightw and !bottomw:
+#				vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(TILE_SIZE,0)]
+#			elif !leftw and topw and rightw and !bottomw:
+#				vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE)]
+#			elif leftw and !topw and !rightw and bottomw:
+#				vecArr = [Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0)]
+#			elif !leftw and topw and !rightw and bottomw:
+#				vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(0,TILE_SIZE),Vector2(TILE_SIZE,TILE_SIZE)]
+#			elif !leftw and !topw and rightw and bottomw:
+#				vecArr = [Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE)]
+#
+#			#var occluder_poly = OccluderPolygon2D.new()
+#			#occluder_poly.polygon = vecArr
+#			#occluder_poly.closed = true
+#			#occluder_poly.cull_mode = 2
+#			#barrier.light_occluder.set_occluder_polygon(occluder_poly)
 	
 # Util -------------------------------------------------------------------------
 	

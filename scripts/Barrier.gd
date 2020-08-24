@@ -6,9 +6,7 @@ onready var light_occluder = $LightOccluder2D
 var has_description = false
 
 func tick():
-	
-	if sprite.is_visible() and !game.player.targets.has(self):
-		sprite.hide()
+	pass
 
 func init(x,y,new_texture,new_description="..."):
 	game = get_parent()

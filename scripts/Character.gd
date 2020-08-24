@@ -96,12 +96,6 @@ new_effect_arr=DEFAULT_EFFECTS):
 
 func tick():
 	
-	print(self)
-	print(game.player.targets)
-	
-	if sprite.is_visible() and !game.player.targets.has(self):
-		sprite.hide()
-	
 	# Remove notice animation
 	if has_node("NoticeAnimation") and notice_animation != null:
 		remove_child(notice_animation)
