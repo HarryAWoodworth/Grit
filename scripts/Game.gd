@@ -347,65 +347,34 @@ func build_chunk():
 #				0,
 #				15,
 #				1)
-#
-#	add_character(10,2,
-#				"enemy",
-#				"Mutant Crab",
-#				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
-#				"monster_classic",
-#				false,
-#				"down",
-#				0,
-#				15,
-#				1)
-				
-# Set the occulder polygon based on neighboring barriers
-func set_barrier_occluder_polygons(_barrier_list):
-	pass
-#		for barrier in _barrier_list:
-#			var x = barrier.curr_tile.x
-#			var y = barrier.curr_tile.y
-#			# Get adjacent actors
-#			var top = get_actor_at(x,y-1)
-#			var bottom = get_actor_at(x,y+1)
-#			var left = get_actor_at(x-1,y)
-#			var right = get_actor_at(x+1,y)
-			# Vector array for polygon
-#			var vecArr = []
-#			# Check for sides without neighboring barriers and add a wall in the occluder polygon
-#			var leftw = typeof(left) == 2 or !left.sprite.is_visible()
-#			var topw = typeof(top) == 2 or !top.sprite.is_visible()
-#			var rightw = typeof(right) == 2 or !right.sprite.is_visible()
-#			var bottomw = typeof(bottom) == 2 or !bottom.sprite.is_visible()
-#
-#			if leftw and topw and rightw and bottomw:
-#				vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE), Vector2(0,TILE_SIZE)]
-#			elif leftw and topw and rightw and !bottomw:
-#				vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE)]
-#			elif leftw and topw and !rightw and bottomw:
-#				vecArr = [Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0)]
-#			elif leftw and !topw and rightw and bottomw:
-#				vecArr = [Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0)]
-#			elif !leftw and topw and rightw and bottomw:
-#				vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE)]
-#			elif leftw and topw and !rightw and !bottomw:
-#				vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,0)]
-#			elif leftw and !topw and rightw and !bottomw:
-#				vecArr = [Vector2(0,TILE_SIZE),Vector2(0,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(TILE_SIZE,0)]
-#			elif !leftw and topw and rightw and !bottomw:
-#				vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE)]
-#			elif leftw and !topw and !rightw and bottomw:
-#				vecArr = [Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE),Vector2(0,0)]
-#			elif !leftw and topw and !rightw and bottomw:
-#				vecArr = [Vector2(0,0),Vector2(TILE_SIZE,0),Vector2(0,TILE_SIZE),Vector2(TILE_SIZE,TILE_SIZE)]
-#			elif !leftw and !topw and rightw and bottomw:
-#				vecArr = [Vector2(TILE_SIZE,0),Vector2(TILE_SIZE,TILE_SIZE),Vector2(0,TILE_SIZE)]
-#
-#			#var occluder_poly = OccluderPolygon2D.new()
-#			#occluder_poly.polygon = vecArr
-#			#occluder_poly.closed = true
-#			#occluder_poly.cull_mode = 2
-#			#barrier.light_occluder.set_occluder_polygon(occluder_poly)
+
+# Tile visibility --------------------------------------------------------------
+
+func compute(octant, origin, rangeLimit, x, top, bottom):
+	while x <= rangeLimit:
+		
+		var topY
+		if top.x == 1:
+			topY = x
+		else:
+			topY = (((x * 2) - 1) * top.y + top.x) / (top.x * 2)
+			if blocksLight(x,topY):
+				if greaterThanEqual(top, topY*2+1, x*2) and !:
+					
+		x = x + 1
+	
+# Compare slope1 to slope2 (other_x,other_y)
+func greaterThanEqual(slope1, other_x, other_y):
+	return slope1.y*other_x >= slope1.x*other_y
+	
+# Returns true if the tile at (x,y) blocks light
+func blocksLight(x,y):
+	var actor_x_y = actor_map[x][y]
+	if typeof(actor_x_y) == 2:
+		return false
+	if "blocks_light" in actor_x_y:
+		return actor_x_y.blocks_light
+	return false
 	
 # Util -------------------------------------------------------------------------
 	

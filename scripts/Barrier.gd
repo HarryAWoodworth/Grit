@@ -14,6 +14,8 @@ func init(x,y,new_texture,new_description="..."):
 	sprite.texture = new_texture
 	position = curr_tile * game.TILE_SIZE
 	
+	blocks_light = true
+	
 	identifier = "barrier"
 	
 	if new_description != "...":

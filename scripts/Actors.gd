@@ -6,6 +6,7 @@ var curr_tex
 var identifier = "actor"
 var changeable_texture = false
 var grabbable = false
+var blocks_light = false
 
 var game
 
