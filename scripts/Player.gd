@@ -53,36 +53,40 @@ func tick():
 # Raycasting -------------------------------------------------------------------
 
 func check_los():
+	print("updating los!")
+	update()
 	var space_state = get_world_2d().direct_space_state
 	var tile_len = game.TILE_SIZE
 	var half_tile = tile_len/2
 	var center_of_player = Vector2(position.x + half_tile, position.y + half_tile)
+	hit_pos = []
 	for target in targets:
-		var center_of_target = Vector2(target.position.x + half_tile, target.position.y + half_tile)
 		var iden = target.unique_id
-#		var corner2 = Vector2(target.position.x + tile_len, target.position.y)
-#		var corner3 = Vector2(target.position.x, target.position.y + tile_len) 
-#		var corner4 = Vector2(target.position.x + tile_len, target.position.y + tile_len)
-		var corner1_res = space_state.intersect_ray(center_of_player, center_of_target, [self], self.collision_mask)
-#		var corner2_res = space_state.intersect_ray(center_of_player, corner2, [self], self.collision_mask)
-#		var corner3_res = space_state.intersect_ray(center_of_player, corner3, [self], self.collision_mask)
-#		var corner4_res = space_state.intersect_ray(center_of_player, corner4, [self], self.collision_mask)
-		if corner1_res:
-			hit_pos.append(corner1_res.position)
-			if corner1_res.collider.unique_id == iden:
-#		if (corner1_res and corner1_res.collider.unique_id == iden) or (corner2_res and corner2_res.collider.unique_id == iden) or (corner3_res and corner3_res.collider.unique_id == iden)or (corner4_res and corner4_res.collider.unique_id == iden):
-				show_target(target)
-			else:
-				hide_target(target)
+		var corner1 = Vector2(target.position.x + half_tile, target.position.y)
+		var corner2 = Vector2(target.position.x + tile_len, target.position.y + half_tile)
+		var corner3 = Vector2(target.position.x, target.position.y + half_tile) 
+		var corner4 = Vector2(target.position.x + half_tile, target.position.y + tile_len)
+		var corner1_res = space_state.intersect_ray(center_of_player, corner1, [self], self.collision_mask)
+		var corner2_res = space_state.intersect_ray(center_of_player, corner2, [self], self.collision_mask)
+		var corner3_res = space_state.intersect_ray(center_of_player, corner3, [self], self.collision_mask)
+		var corner4_res = space_state.intersect_ray(center_of_player, corner4, [self], self.collision_mask)
+#		if corner1_res:
+#			hit_pos.append(corner1_res.position)
+#			if corner1_res.collider.unique_id == iden:
+		if (corner1_res and corner1_res.collider.unique_id == iden) or (corner2_res and corner2_res.collider.unique_id == iden) or (corner3_res and corner3_res.collider.unique_id == iden)or (corner4_res and corner4_res.collider.unique_id == iden):
+			show_target(target)
+		else:
+			hide_target(target)
+		
 		
 func _draw():
-	var half_tile = game.TILE_SIZE/2
+#	var half_tile = game.TILE_SIZE/2
 	draw_circle(Vector2(), detect_radius, vis_color)
-	if targets:
-		for hit_poss in hit_pos:
-			draw_line(Vector2(half_tile,half_tile), (hit_poss - position).rotated(-rotation), laser_color)
-			draw_circle((hit_poss - position).rotated(-rotation), 1, laser_color)
-		
+#	if targets:
+#		for hit_poss in hit_pos:
+#			draw_line(Vector2(half_tile,half_tile), (hit_poss - position).rotated(-rotation), laser_color)
+#			draw_circle((hit_poss - position).rotated(-rotation), 1, laser_color)
+
 func show_target(target):
 	target.sprite.show()
 	
@@ -105,8 +109,7 @@ func _input(event):
 	# Movement keys
 	if event.is_action_pressed("ui_left"):
 		if !grabbing:
-			if game.move_actor(Vector2(-1,0),self):
-				game.tick()
+			game.move_actor(Vector2(-1,0),self)
 		else:
 			match curr_tex:
 				"up":
@@ -119,8 +122,7 @@ func _input(event):
 					grabbed_actor.drag("pull")
 	elif event.is_action_pressed("ui_right"):
 		if !grabbing:
-			if game.move_actor(Vector2(1,0),self):
-				game.tick()
+			game.move_actor(Vector2(1,0),self)
 		else:
 			match curr_tex:
 				"up":
@@ -133,8 +135,7 @@ func _input(event):
 					grabbed_actor.drag("push")
 	elif event.is_action_pressed("ui_up"):
 		if !grabbing:
-			if game.move_actor(Vector2(0,-1),self):
-				game.tick()
+			game.move_actor(Vector2(0,-1),self)
 		else:
 			match curr_tex:
 				"up":
@@ -147,8 +148,7 @@ func _input(event):
 					grabbed_actor.drag("drag_left")
 	elif event.is_action_pressed("ui_down"):
 		if !grabbing:
-			if game.move_actor(Vector2(0,1),self):
-				game.tick()
+			game.move_actor(Vector2(0,1),self)
 		else:
 			match curr_tex:
 				"up":
@@ -207,11 +207,13 @@ func die():
 # Signals ----------------------------------------------------------------------
 
 func _on_Visibility_body_entered(body):
+	print(str(body.unique_id) + " entered")
 	if body.identifier == identifier:
 		return
 	targets.append(body)
 	
 func _on_Visibility_body_exited(body):
+	print(str(body.unique_id) + " exited")
 	if targets and targets.has(body):
 		targets.erase(body)
 		hide_target(body)

@@ -104,7 +104,6 @@ scale = Vector2( 117.082, 56.5674 )
 texture = ExtResource( 9 )
 
 [node name="CanvasModulate" type="CanvasModulate" parent="Background"]
-visible = false
 position = Vector2( -4.00803, -1.49048 )
 scale = Vector2( 0.008541, 0.017678 )
 color = Color( 0, 0, 0, 1 )
@@ -121,6 +120,7 @@ script = ExtResource( 8 )
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="TextLog" type="RichTextLabel" parent="UI"]
+visible = false
 anchor_right = 1.0
 margin_left = 480.0
 margin_top = 300.0
@@ -135,6 +135,7 @@ __meta__ = {
 }
 
 [node name="ActorInfo" type="VBoxContainer" parent="UI"]
+visible = false
 margin_left = 480.0
 margin_top = 175.0
 margin_right = 780.0
@@ -170,6 +171,7 @@ custom_styles/normal = SubResource( 4 )
 autowrap = true
 
 [node name="ColorRect" type="ColorRect" parent="UI"]
+visible = false
 show_behind_parent = true
 margin_left = 480.0
 margin_top = 10.0
@@ -182,6 +184,7 @@ __meta__ = {
 }
 
 [node name="PlayerInfo" type="VBoxContainer" parent="UI"]
+visible = false
 margin_left = 480.0
 margin_top = 10.0
 margin_right = 780.0

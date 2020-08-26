@@ -26,6 +26,7 @@ shape = SubResource( 1 )
 occluder = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
+visible = false
 light_mask = -2147483647
 material = SubResource( 3 )
 texture = ExtResource( 1 )

@@ -177,9 +177,10 @@ func move_actor(vector, node, turn=1):
 		actor_map[temp_x][temp_y] = 0
 		actor_map[x][y] = node
 		# Wait for the tween to end
-		yield(node.tween, "tween_all_completed")
-		# Return true
-		return true
+		if node.identifier == "player":
+			yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")
+			# Tick when player is moved
+			tick()
 	else: 
 		cant_move_anim(dx,dy,node)
 	
@@ -208,7 +209,6 @@ func tick():
 	update()
 	for actor in actor_list:
 		actor.tick()
-	#set_barrier_occluder_polygons(barrier_list)
 
 # Actor Combat -----------------------------------------------------------------
 		
@@ -291,13 +291,14 @@ func build_chunk():
 				"...",
 				"none",
 				true)
-	player_inst.init_player()
 	player_inst.unique_id = get_unique_id()
 	#player.position = player.curr_tile * TILE_SIZE
 	actor_list.append(player_inst)
 	actor_map[0][0] = player_inst
 	player_info.list_player_info(player_inst)
+	player_inst.init_player()
 	player = player_inst
+	
 	
 	# Place Box
 #	var box_x = 4
