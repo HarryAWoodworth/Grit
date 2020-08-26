@@ -7,6 +7,7 @@ var identifier = "actor"
 var changeable_texture = false
 var grabbable = false
 var blocks_light = false
+var unique_id
 
 var game
 

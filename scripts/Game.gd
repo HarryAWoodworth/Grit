@@ -1,14 +1,25 @@
-## Ordered TODO
-# x Light system (To Be Updated)
-# x Enemies drawn in sight
+## PATH TO BETA
+# - Action queue
+# - Light system (To Be Updated)
+# - Actors drawn in sight
+#   - Greyed Out When not in Sight but discovered
+#	- Enemy last-seen question mark when out of sight
+# - Combat
+#   - Visual Effect
+#   - Sound Effect
 # - A* Pathfinding for enemies
+# - Stealth
 # - Items
 # - Inventory System
+#   - Display
 #	- Dropping
 #	- Using
 # - Weapons (Equipping)
+#   - Customizable sound and visual effects
+#	- Gun raycast click and shoot
+#   - Shooting effects
 # - Corpses
-# - Looting boxes
+# - Looting furniture
 # - Looting from ground
 # - Sound system
 #	- Actions make sound
@@ -17,16 +28,15 @@
 #	- Question mark from sound location
 # - Player and Enemy dictionary data
 # - Complete Player and Enemy information
-# - Add color to Player and Enemy information
-
-
-## TODO
-# hit_pos ??
-# More player info
-# More enemy info
-# Dictionary object for Character creations
-# Noticed animation
-# Get array of in sight actors
+#   - Better, sharper fonts
+#   - Add Color Text
+#	- Max/min UI
+# - Crafting
+# - Bunker
+# - Random generation
+#   - Indoor
+#   - Outdoor
+# - CONTENT!!!
 
 # Long Term
 # - Day/Night Cycle
@@ -35,57 +45,11 @@
 #	- Spawns
 #	- Loot Rate
 # - Season Cycle
-# Weather
-# Shooting Effects
-# Stealth
-# Hiding in Objects
-# Night brings complete darkness, inhuman horrors, enemies noticing your light source...
-
-## TODO to beta:
-# Implement Speed
-# [2/4] Player character
-#	[X] Move
-#	[X] Drag
-#	[1/2] Fight
-#		[X] Melee
-#		[] Ranged
-#	[] Inventory
-#		[] Inventory display
-# [1/3] Enemies 
-#	[] Move towards player
-#		[1/2] Line of in sight
-#			[] Detect if in sight
-#			[] Notice animation
-#		[] A* Following
-#		[] Out of sight non-following
-# 	[X] Fight
-#	[] Complete Hover over info
-#	[] Corpse
-#		[] Drop items
-# [] Combat
-#	[] Visual effect
-#	[] Sound effect
-# [] Inventory system
-#	[] Drop Items
-#	[] Use Items
-#	[] Equip Items
-# [] Items
-#	[] Open furniture
-# [] Weapons
-#	[] Degredation
-#	[] Unique visual effect?
-# [] Bunker
-# [] Random world gen
-#	[] Buildings
-#	[] Items
-# [] Permadeath
-# [] Maximaize/ minimize UI
-
-## Extra special TODO
-# Better, sharper fonts
-# Colors in textlog
-# Animation shaking head 'no' when command does nothing
-# Pathfinding double click auto move
+# - Weather
+# - Hiding in Objects
+# - Multi-tile actors
+# - Night brings complete darkness, inhuman horrors, enemies noticing your light source...
+#  - Tile_Lit bool, if a monster sees a tile_lit then it can pathfind to the player?
 
 extends Node2D
 
@@ -131,6 +95,7 @@ var map = []
 var buildings = []
 var actor_map = []
 var barrier_list = []
+var unique_actor_id = 0
 
 # Ready ------------------------------------------------------------------------
 
@@ -149,6 +114,7 @@ func can_move(dx, dy, node, check_for_another_actor=true):
 	var y = node.curr_tile.y + dy
 	# Check x and y are in map
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
+		print(node.identifier + " can't move because out of bounds")
 		return false
 	# Check that actor_type is valid
 	if check_for_another_actor:
@@ -156,6 +122,7 @@ func can_move(dx, dy, node, check_for_another_actor=true):
 		if typeof(actor_type) != 2:
 			if actor_type.identifier == "barrier" and actor_type.has_description:
 				logg(actor_type.description)
+			print(node.identifier + " can't move because it hits " + actor_type.identifier)
 			return false
 	# Return true
 	return true
@@ -196,23 +163,26 @@ func move_actor(vector, node, turn=1):
 			return true
 	
 	if can_move(dx, dy, node):
+		
 		# Set animating bool
 		anim_finished = false
 		# Start tween
-		node.tween.interpolate_property(node, "position", node.curr_tile * TILE_SIZE, Vector2(x,y) * TILE_SIZE, 1.0/ANIM_SPEED, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+		node.tween.interpolate_property(node, "position", node.curr_tile * TILE_SIZE, (Vector2(x,y) * TILE_SIZE), 1.0/ANIM_SPEED, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
 		# Set bool that anim is finished using callback
 		node.tween.interpolate_callback(self, node.tween.get_runtime(), "set_anim_done")
 		# Start tween
 		node.tween.start()
-		# Update node's current tile
+		# Update the node's current tile
 		node.curr_tile = Vector2(x,y)
 		actor_map[temp_x][temp_y] = 0
 		actor_map[x][y] = node
+		# Wait for the tween to end
+		yield(node.tween, "tween_all_completed")
+		# Return true
 		return true
-	
 	else: 
-		cant_move_anim(dx,dy,node)	
-			
+		cant_move_anim(dx,dy,node)
+	
 # Animate the actor moving halfway into the tile and bouncing back
 func cant_move_anim(dx,dy,node):
 	var x = node.curr_tile.x + dx
@@ -292,38 +262,40 @@ func build_chunk():
 				pass#add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
 				
 	# Extra walls for testing
-	#add_barrier(6, 4, wall_tex)
-	
-	#add_barrier(8, 4, wall_tex)
-	#add_barrier(9, 4, wall_tex)
-	
-	add_barrier(11, 4, wall_tex)
-	add_barrier(11, 3, wall_tex)
-	
-	#add_barrier(7, 3, wall_tex)
-	#add_barrier(8, 4, wall_tex)
-	#add_barrier(8, 3, wall_tex)
-	#add_barrier(9, 4, wall_tex)
-	
-	#set_barrier_occluder_polygons(barrier_list)
+	add_barrier(6, 4, wall_tex)
+	add_barrier(8, 4, wall_tex)
+	add_barrier(6, 5, wall_tex)
+	add_barrier(8, 5, wall_tex)
+	add_barrier(6, 6, wall_tex)
+	add_barrier(8, 6, wall_tex)
+	add_barrier(6, 7, wall_tex)
+	add_barrier(8, 7, wall_tex)
+	add_barrier(6, 8, wall_tex)
+	add_barrier(8, 8, wall_tex)
+	add_barrier(5, 8, wall_tex)
+	add_barrier(4, 8, wall_tex)
+	add_barrier(3, 8, wall_tex)
+	add_barrier(9, 8, wall_tex)
+	add_barrier(10, 8, wall_tex)
+	add_barrier(11, 8, wall_tex)
+
 	
 	# Place Player
-	var player_start_coord = round(CHUNK_DIMENSION/2.0)
+	#var player_start_coord = round(CHUNK_DIMENSION/2.0)
 	var player_inst = Player.instance()
 	add_child(player_inst)
 	player_inst.init(self,
-				player_start_coord,player_start_coord,
+				0,0,
 				"player",
 				"Thunder Magee",
 				"...",
 				"none",
 				true)
 	player_inst.init_player()
-	
-	
+	player_inst.unique_id = get_unique_id()
 	#player.position = player.curr_tile * TILE_SIZE
 	actor_list.append(player_inst)
-	actor_map[player_start_coord][player_start_coord] = player_inst
+	actor_map[0][0] = player_inst
 	player_info.list_player_info(player_inst)
 	player = player_inst
 	
@@ -347,26 +319,13 @@ func build_chunk():
 #				0,
 #				15,
 #				1)
+	
+	# Init tick
+	tick()
 
 # Tile visibility --------------------------------------------------------------
 
-func compute(octant, origin, rangeLimit, x, top, bottom):
-	while x <= rangeLimit:
-		
-		var topY
-		if top.x == 1:
-			topY = x
-		else:
-			topY = (((x * 2) - 1) * top.y + top.x) / (top.x * 2)
-			if blocksLight(x,topY):
-				if greaterThanEqual(top, topY*2+1, x*2) and !:
-					
-		x = x + 1
-	
-# Compare slope1 to slope2 (other_x,other_y)
-func greaterThanEqual(slope1, other_x, other_y):
-	return slope1.y*other_x >= slope1.x*other_y
-	
+
 # Returns true if the tile at (x,y) blocks light
 func blocksLight(x,y):
 	var actor_x_y = actor_map[x][y]
@@ -396,6 +355,7 @@ func add_character(x,y,identifier,name,descr,ai,change_tex,start_tex,level,healt
 	var character = Character.instance()
 	add_child(character)
 	character.init(self,x,y,identifier,name,descr,ai,change_tex,start_tex,level,health,armor)
+	character.unique_id = get_unique_id()
 	actor_list.append(character)
 	actor_map[x][y] = character
 	
@@ -403,7 +363,13 @@ func add_barrier(x,y,texture,descr="..."):
 	var barrier = Barrier.instance()
 	add_child(barrier)
 	barrier.init(x,y,texture,descr)
+	barrier.unique_id = get_unique_id()
 	actor_map[x][y] = barrier
 	barrier_list.append(barrier)
 	actor_list.append(barrier)
+	
+func get_unique_id():
+	var temp = unique_actor_id
+	unique_actor_id = unique_actor_id + 1
+	return temp
 	

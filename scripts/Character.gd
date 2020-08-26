@@ -30,7 +30,7 @@ var detect_radius
 var vis_color = Color(.867, .91, .247, 0.1)
 var target
 var follow = true
-var hit_pos = Vector2(0,0)
+var hit_pos = []
 var laser_color = Color(0, 0, 0.7)
 var animation_playing = false
 var target_aquired = false
@@ -95,6 +95,8 @@ new_effect_arr=DEFAULT_EFFECTS):
 # Tick -------------------------------------------------------------------------
 
 func tick():
+	
+	print("Char tick!")
 	
 	# Remove notice animation
 	if has_node("NoticeAnimation") and notice_animation != null:
