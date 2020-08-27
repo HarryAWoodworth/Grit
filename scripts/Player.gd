@@ -193,10 +193,7 @@ func _input(event):
 					sprite.set_texture(up)
 	
 	elif Input.is_action_just_pressed("debug"):
-		pass
-#		print("Debug!")
-#		light.visible = !light.visible
-#		print(game.actor_map)
+		game.darken_tile(curr_tile.x,curr_tile.y)
 	
 # Game input -------------------------------------------------------------------
 	

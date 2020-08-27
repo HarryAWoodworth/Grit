@@ -1,47 +1,52 @@
 ## PATH TO BETA
 # X? Player and Character detection radiuses are strangely large
-# N/A Action queue?
-# X Light system
-# X Actors drawn in sight
-#   X Greyed Out When not in Sight but discovered
-#	X Enemy last-seen question mark when out of sight
-# - make combat text larger
-# X Combat
-#   - Visual Effect
-#   - Sound Effect
-# - A* Pathfinding for enemies
-# - Stealth
-# - Items
-# - Inventory System
-#   - Display
-#	- Dropping
-#	- Using
-# - Weapons (Equipping)
-#   - Customizable sound and visual effects
-#	- Gun raycast click and shoot
-#   - Shooting effects
-# - Corpses
-# - Looting furniture
-# - Looting from ground
-# - Sound system
+# ? Action queue?
+
+# >>>>>>> ENEMY / PLAYER INTERACTION
+# - Attack Diagonally
+# @ A* Pathfinding for enemies
+# s Stealth
+# @ Sound system
 #	- Actions make sound
 #	- Sound tile circle
 #	- Player can hear sounds
 #	- Question mark from sound location
-# - Player and Enemy dictionary data
-# - Complete Player and Enemy information
-#   - Better, sharper fonts
-#   - Add Color Text
-#	- Max/min UI
+# sl Enemies actually make sounds
+
+# >>>>>> ITEMS, WEAPONS, INVENTORY
+# @ Items
+# @ Inventory System
+#   - Display
+#	- Dropping
+#	- Using
+#   - Dropping
+#   - Picking up from ground
+# s Corpses
+# m Looting furniture
+# @ Weapons (Equipping)
+#   - Custom sound and visual effects for combat
+#	- Gun raycast click and shoot
+#   - Shooting effects
 # - Crafting
+
+# >>>>>>> UI
+# ml Player and Enemy dictionary data
+# ml Complete Player and Enemy information
+#   sl Better, sharper fonts
+#   ml Add Color Text
+#	sl Max/min UI
+
+# >>>>>>> WORLD GEN
 # - Random generation
 #   - Indoor
 #   - Outdoor
 # - Bunker
 #   - Saving
+
+# >>>>>>> CONTENT
 # - CONTENT!!!
 
-# Long Term
+# >>>>>>> Long Term
 # - Day/Night Cycle
 #	- Light
 #	- Logs
@@ -68,11 +73,13 @@ const MAX_BUILDING_DIMENSION = 8
 const MIN_BUILDING_DIMENSION = 5
 const MAX_TESTLOG_LENGTH = 10000
 
-enum Tile { Grass, Test }
+enum Tile { Grass, Test, Grasss }
+enum Shadow { Shadow }
 
 # Node Refs --------------------------------------------------------------------
 
 onready var tile_map = $TileMap
+onready var shadow_map = $ShadowMap
 onready var textlog = $UI/TextLog
 onready var actor_info = $UI/ActorInfo
 onready var player_info = $UI/PlayerInfo
@@ -84,6 +91,7 @@ var Box = preload("res://actors/Box.tscn")
 var Character = preload("res://actors/Character.tscn")
 var Player = preload("res://actors/Player.tscn")
 var Barrier = preload("res://actors/Barrier.tscn")
+var SightNode = preload("res://util/SightNode.tscn")
 
 # Texture preloads
 var wall_tex = preload("res://assets/wall.png")
@@ -351,6 +359,17 @@ func get_actor_at(x,y):
 func set_tile(x, y, type):
 	map[x][y] = type
 	tile_map.set_cell(x, y, type)
+	add_sight_node(x,y)
+
+func add_sight_node(x,y):
+	var half_tile = TILE_SIZE/2
+	var sight_node = SightNode.instance()
+	add_child(sight_node)
+	sight_node.positon = Vector2((x * TILE_SIZE) + half_tile, (y * TILE_SIZE) + half_tile)
+	
+func darken_tile(x, y):
+	shadow_map.set_cell(x, y, Shadow.Shadow)
+	print(tile_map.get_cell(x,y))
 	
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)

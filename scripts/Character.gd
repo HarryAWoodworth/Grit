@@ -101,9 +101,7 @@ new_effect_arr=DEFAULT_EFFECTS):
 # Tick -------------------------------------------------------------------------
 
 func tick():
-	print(identifier + " ticks")
-	print("Hidden Last Turn: " + str(hidden_last_turn))
-	print("Hidden: " + str(hidden))
+	
 	# Remove notice animation
 	if has_node("NoticeAnimation") and notice_animation != null:
 		remove_child(notice_animation)
@@ -182,7 +180,6 @@ func unshadow():
 func shadow():
 	if hidden:
 		return
-	print(identifier + " is shadowing")
 	hidden_last_turn = true
 	sprite.texture = unknown_tex
 
