@@ -1,6 +1,6 @@
 ## PATH TO BETA
-# - Player and Character detection radiuses are strangely large
-# - Action queue?
+# X? Player and Character detection radiuses are strangely large
+# N/A Action queue?
 # X Light system
 # X Actors drawn in sight
 #   X Greyed Out When not in Sight but discovered

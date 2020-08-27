@@ -62,7 +62,6 @@ func check_los():
 	var tile_len = game.TILE_SIZE
 	var half_tile = tile_len/2
 	var center_of_player = Vector2(position.x + half_tile, position.y + half_tile)
-	hit_pos = []
 	for target in targets:
 		var dist = target.position.distance_to(position)
 		# Check the distance, probably could be optimized out.
@@ -83,16 +82,7 @@ func check_los():
 			show_target(target)
 		else:
 			hide_target(target)
-		
-		
-func _draw():
-
-#	var half_tile = game.TILE_SIZE/2
-	draw_circle(Vector2(), detect_radius, vis_color)
-#	if targets:
-#		for hit_poss in hit_pos:
-#			draw_line(Vector2(half_tile,half_tile), (hit_poss - position).rotated(-rotation), laser_color)
-#			draw_circle((hit_poss - position).rotated(-rotation), 1, laser_color)
+	
 
 func show_target(target):
 	target.unshadow()

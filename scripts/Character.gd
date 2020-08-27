@@ -7,11 +7,15 @@ onready var fct_manager = $FCTManager
 onready var ai_manager = $AI_Manager
 onready var detection_shape = $Visibility/DetectionShape
 
+# Unknown sprite
+var unknown_tex = preload("res://assets/unknown.png")
+var orig_sprite
+
 # Preload anim
 var NoticeAnim = preload("res://util/NoticeAnimation.tscn")
 var notice_animation
 
-# Consts 
+# Consts s
 const DEFAULT_AI = "none"
 const DEFAULT_IDENTIFIER = "..."
 const DEFAULT_HEALTH = 10
@@ -27,13 +31,12 @@ const DEFAULT_LEVEL = 0
 # Detection
 const DEFAULT_DETECT_RADIUS = 5
 var detect_radius
-var vis_color = Color(.867, .91, .247, 0.1)
 var target
 var follow = true
-var hit_pos
-var laser_color = Color(0, 0, 0.7)
 var animation_playing = false
 var target_aquired = false
+var hidden = true
+var hidden_last_turn = false
 
 # Enemy data
 var health
@@ -87,20 +90,29 @@ new_effect_arr=DEFAULT_EFFECTS):
 	effect_arr = new_effect_arr
 	changeable_texture = can_change_texture
 	
+	# Detection
 	detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
 	var shape = CircleShape2D.new()
 	shape.radius = detect_radius
 	detection_shape.shape = shape
-	
+	orig_sprite = sprite.texture
 	sprite.hide()
 	
 # Tick -------------------------------------------------------------------------
 
 func tick():
-	
+	print(identifier + " ticks")
+	print("Hidden Last Turn: " + str(hidden_last_turn))
+	print("Hidden: " + str(hidden))
 	# Remove notice animation
 	if has_node("NoticeAnimation") and notice_animation != null:
 		remove_child(notice_animation)
+		
+	if hidden_last_turn:
+		hidden_last_turn = false
+		hidden = true
+	elif hidden:
+		sprite.hide()
 		
 	check_los()
 		
@@ -118,12 +130,11 @@ func check_los():
 		# Do this because character and player detect each other's detection radiuses
 		var dist = target.position.distance_to(position)
 		if dist > detect_radius + half_tile:
-			hit_pos = null
+			target_aquired = false
 			return
 		var target_center = Vector2(target.position.x + half_tile, target.position.y+half_tile)
 		var result = space_state.intersect_ray(center, target_center, [self], self.collision_mask)
 		if result:
-			hit_pos = result.position
 			if result.collider.identifier == "player":
 				if !target_aquired:
 						target_aquired = true
@@ -134,18 +145,6 @@ func check_los():
 						notice_animation.sprite.offset.x -= quarter_tile
 						notice_animation.sprite.offset.y += quarter_tile
 						notice_animation.play("NoticeAnim")
-			else:
-				laser_color = Color(0,0,1)
-	
-func _draw():
-	if identifier == "player":
-		return
-	var half_tile = game.TILE_SIZE/2
-	var offset_pos = Vector2(half_tile, half_tile)
-	draw_circle(offset_pos, detect_radius, vis_color)
-	if target and hit_pos:
-		draw_line(offset_pos, (hit_pos - position).rotated(-rotation), laser_color)
-		draw_circle((hit_pos - position).rotated(-rotation), 1, laser_color)
 	
 func take_dmg(num, crit=false):
 	var dmg_taken = (num - armor)
@@ -176,11 +175,16 @@ func set_description(new_description):
 # Game util --------------------------------------------------------------------
 
 func unshadow():
-	sprite.modulate = Color(1,1,1)
+	hidden = false
+	sprite.texture = orig_sprite
 	sprite.show()
 	
 func shadow():
-	sprite.modulate = Color( 0.31, 0.31, 0.31, 1)
+	if hidden:
+		return
+	print(identifier + " is shadowing")
+	hidden_last_turn = true
+	sprite.texture = unknown_tex
 
 # Get the actor this actor is facing, -1 if no actor is present
 func get_actor_facing():
@@ -227,6 +231,7 @@ func has_effect(effect):
 	if found != -1:
 		return true
 	return false
+	
 	
 # Mouse input data display signals ---------------------------------------------
 
