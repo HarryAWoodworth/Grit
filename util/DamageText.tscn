@@ -4,8 +4,8 @@
 [ext_resource path="res://assets/yoster-island.regular.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=1]
-size = 10
-outline_size = 1
+size = 20
+outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 2 )
 

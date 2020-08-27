@@ -4,7 +4,8 @@
 # X Light system
 # X Actors drawn in sight
 #   X Greyed Out When not in Sight but discovered
-#	- Enemy last-seen question mark when out of sight
+#	X Enemy last-seen question mark when out of sight
+# - make combat text larger
 # X Combat
 #   - Visual Effect
 #   - Sound Effect
