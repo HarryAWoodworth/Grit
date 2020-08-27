@@ -64,6 +64,12 @@ func check_los():
 	var center_of_player = Vector2(position.x + half_tile, position.y + half_tile)
 	hit_pos = []
 	for target in targets:
+		var dist = target.position.distance_to(position)
+		# Check the distance, probably could be optimized out.
+		# Do this because character and player detect each other's detection radiuses
+		if dist > detect_radius + half_tile:
+			hide_target(target)
+			continue
 		var iden = target.unique_id
 		var corner1 = Vector2(target.position.x + half_tile, target.position.y)
 		var corner2 = Vector2(target.position.x + tile_len, target.position.y + half_tile)
@@ -210,13 +216,11 @@ func die():
 # Signals ----------------------------------------------------------------------
 
 func _on_Visibility_body_entered(body):
-	print(str(body.identifier) + " entered!")
 	if body.identifier == identifier:
 		return
 	targets.append(body)
 	
 func _on_Visibility_body_exited(body):
-	print(str(body.identifier) + " exited!")
 	if targets and targets.has(body):
 		targets.erase(body)
 		hide_target(body)
