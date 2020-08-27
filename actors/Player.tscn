@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/player_sprite/player_down.png" type="Texture" id=1]
 [ext_resource path="res://util/AI_Manager.tscn" type="PackedScene" id=2]
@@ -6,11 +6,14 @@
 [ext_resource path="res://scripts/Player.gd" type="Script" id=4]
 [ext_resource path="res://assets/light.png" type="Texture" id=5]
 
+[sub_resource type="CanvasItemMaterial" id=3]
+blend_mode = 1
+
 [sub_resource type="CircleShape2D" id=1]
-radius = 8.0
+radius = 11.3137
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 8, 8 )
+extents = Vector2( 16, 16 )
 
 [node name="Player" type="KinematicBody2D"]
 input_pickable = true
@@ -18,13 +21,14 @@ collision_mask = 6
 script = ExtResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 2, 2 )
 texture = ExtResource( 1 )
 centered = false
 
 [node name="Camera2D" type="Camera2D" parent="Sprite"]
 position = Vector2( 8, 8 )
 current = true
-smoothing_enabled = true
+zoom = Vector2( 2, 2 )
 smoothing_speed = 8.0
 drag_margin_left = 0.0
 drag_margin_top = 0.0
@@ -38,18 +42,22 @@ drag_margin_bottom = 0.0
 [node name="AI_Manager" parent="." instance=ExtResource( 2 )]
 
 [node name="Visibility" type="Area2D" parent="."]
+position = Vector2( 16, 16 )
 
 [node name="DetectionShape" type="CollisionShape2D" parent="Visibility"]
-position = Vector2( 8, 8 )
+material = SubResource( 3 )
+scale = Vector2( 1.422, 1.412 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
-position = Vector2( 8, 8 )
+position = Vector2( 16, 16 )
 shape = SubResource( 2 )
 
 [node name="Light2D" type="Light2D" parent="."]
-position = Vector2( 8, 8 )
+visible = false
+position = Vector2( 16, 16 )
 texture = ExtResource( 5 )
+offset = Vector2( 16, 16 )
 texture_scale = 0.2
 color = Color( 0.94902, 0.968627, 0.705882, 1 )
 range_z_min = 0

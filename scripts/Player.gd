@@ -44,6 +44,8 @@ func init_player():
 	level = DEFAULT_PLAYER_STARTING_LEVEL
 	armor = DEFAULT_PLAYER_ARMOR
 	dmg = 5
+	
+	sprite.show()
 
 # Tick -------------------------------------------------------------------------
 
@@ -52,8 +54,9 @@ func tick():
 
 # Raycasting -------------------------------------------------------------------
 
+# Optimizations:
+# Check after every corner raycast result
 func check_los():
-	print("updating los!")
 	update()
 	var space_state = get_world_2d().direct_space_state
 	var tile_len = game.TILE_SIZE
@@ -70,9 +73,6 @@ func check_los():
 		var corner2_res = space_state.intersect_ray(center_of_player, corner2, [self], self.collision_mask)
 		var corner3_res = space_state.intersect_ray(center_of_player, corner3, [self], self.collision_mask)
 		var corner4_res = space_state.intersect_ray(center_of_player, corner4, [self], self.collision_mask)
-#		if corner1_res:
-#			hit_pos.append(corner1_res.position)
-#			if corner1_res.collider.unique_id == iden:
 		if (corner1_res and corner1_res.collider.unique_id == iden) or (corner2_res and corner2_res.collider.unique_id == iden) or (corner3_res and corner3_res.collider.unique_id == iden)or (corner4_res and corner4_res.collider.unique_id == iden):
 			show_target(target)
 		else:
@@ -80,6 +80,7 @@ func check_los():
 		
 		
 func _draw():
+
 #	var half_tile = game.TILE_SIZE/2
 	draw_circle(Vector2(), detect_radius, vis_color)
 #	if targets:
@@ -88,10 +89,11 @@ func _draw():
 #			draw_circle((hit_poss - position).rotated(-rotation), 1, laser_color)
 
 func show_target(target):
-	target.sprite.show()
+	target.unshadow()
+	
 	
 func hide_target(target):
-	target.sprite.hide()
+	target.shadow()
 		
 # Input ------------------------------------------------------------------------
 
@@ -195,9 +197,10 @@ func _input(event):
 					sprite.set_texture(up)
 	
 	elif Input.is_action_just_pressed("debug"):
-		print("Debug!")
-		light.visible = !light.visible
-		print(game.actor_map)
+		pass
+#		print("Debug!")
+#		light.visible = !light.visible
+#		print(game.actor_map)
 	
 # Game input -------------------------------------------------------------------
 	
@@ -207,13 +210,13 @@ func die():
 # Signals ----------------------------------------------------------------------
 
 func _on_Visibility_body_entered(body):
-	print(str(body.unique_id) + " entered")
+	print(str(body.identifier) + " entered!")
 	if body.identifier == identifier:
 		return
 	targets.append(body)
 	
 func _on_Visibility_body_exited(body):
-	print(str(body.unique_id) + " exited")
+	print(str(body.identifier) + " exited!")
 	if targets and targets.has(body):
 		targets.erase(body)
 		hide_target(body)

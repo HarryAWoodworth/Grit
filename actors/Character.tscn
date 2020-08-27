@@ -18,6 +18,7 @@ collision_mask = 5
 script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 2, 2 )
 texture = ExtResource( 1 )
 centered = false
 
@@ -28,13 +29,16 @@ centered = false
 [node name="AI_Manager" parent="." instance=ExtResource( 4 )]
 
 [node name="Visibility" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="DetectionShape" type="CollisionShape2D" parent="Visibility"]
-position = Vector2( 8, 8 )
+position = Vector2( 16, 16 )
+scale = Vector2( 2, 2 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
-position = Vector2( 8, 8 )
+position = Vector2( 16, 16 )
+scale = Vector2( 2, 2 )
 shape = SubResource( 2 )
 [connection signal="mouse_entered" from="." to="." method="_on_Character_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_Character_mouse_exited"]

@@ -30,7 +30,7 @@ var detect_radius
 var vis_color = Color(.867, .91, .247, 0.1)
 var target
 var follow = true
-var hit_pos = []
+var hit_pos
 var laser_color = Color(0, 0, 0.7)
 var animation_playing = false
 var target_aquired = false
@@ -92,58 +92,60 @@ new_effect_arr=DEFAULT_EFFECTS):
 	shape.radius = detect_radius
 	detection_shape.shape = shape
 	
+	sprite.hide()
+	
 # Tick -------------------------------------------------------------------------
 
 func tick():
-	
-	print("Char tick!")
 	
 	# Remove notice animation
 	if has_node("NoticeAnimation") and notice_animation != null:
 		remove_child(notice_animation)
 		
+	check_los()
+		
 	# Ai callback to decide action
 	ai_tick_callback.call_funcv([self, game])
 	
-func _physics_process(_delta):
-	# Call _draw()
+func check_los():
 	update()
-	# Send a ray to the target
+	var space_state = get_world_2d().direct_space_state
+	var tile_len = game.TILE_SIZE
+	var half_tile = tile_len/2
+	var center = Vector2(position.x + half_tile, position.y+half_tile)
 	if target:
-		var space_state = get_world_2d().direct_space_state
-		# Send the ray out from the middle of the actor to the middle of the target
-		var half_tile = game.TILE_SIZE/2
-		var offset_pos = Vector2(position.x + half_tile, position.y + half_tile)
-		var offset_target_pos = Vector2(target.position.x + half_tile, target.position.y + half_tile)
-		# Get the actor hit by the raycast
-		var result = space_state.intersect_ray(offset_pos, offset_target_pos, [self], self.collision_mask)
-		# If it hits something, record the hit position
+		# Check the distance, probably could be optimized out.
+		# Do this because character and player detect each other's detection radiuses
+		var dist = target.position.distance_to(position)
+		if dist > detect_radius + half_tile:
+			hit_pos = null
+			return
+		var target_center = Vector2(target.position.x + half_tile, target.position.y+half_tile)
+		var result = space_state.intersect_ray(center, target_center, [self], self.collision_mask)
 		if result:
 			hit_pos = result.position
-			# If the actor hit is the player make the laser red
 			if result.collider.identifier == "player":
-				#laser_color = Color(1,0,0)
-				# If the animation has not been played, play it
 				if !target_aquired:
-					target_aquired = true
-					notice_animation = NoticeAnim.instance()
-					add_child(notice_animation)
-					var quarter_tile = (game.TILE_SIZE/4)
-					notice_animation.sprite.offset = position * 2
-					notice_animation.sprite.offset.x -= quarter_tile
-					notice_animation.sprite.offset.y += quarter_tile
-					notice_animation.play("NoticeAnim")
+						target_aquired = true
+						notice_animation = NoticeAnim.instance()
+						add_child(notice_animation)
+						var quarter_tile = (game.TILE_SIZE/4)
+						notice_animation.sprite.offset = position
+						notice_animation.sprite.offset.x -= quarter_tile
+						notice_animation.sprite.offset.y += quarter_tile
+						notice_animation.play("NoticeAnim")
 			else:
 				laser_color = Color(0,0,1)
-		
+	
 func _draw():
-	pass
-#	var half_tile = game.TILE_SIZE/2
-#	var offset_pos = Vector2(half_tile, half_tile)
-#	#draw_circle(Vector2(8,8), detect_radius, vis_color)
-#	if target:
-#		draw_line(offset_pos, (hit_pos - position).rotated(-rotation), laser_color)
-#		draw_circle((hit_pos - position).rotated(-rotation), 1, laser_color)
+	if identifier == "player":
+		return
+	var half_tile = game.TILE_SIZE/2
+	var offset_pos = Vector2(half_tile, half_tile)
+	draw_circle(offset_pos, detect_radius, vis_color)
+	if target and hit_pos:
+		draw_line(offset_pos, (hit_pos - position).rotated(-rotation), laser_color)
+		draw_circle((hit_pos - position).rotated(-rotation), 1, laser_color)
 	
 func take_dmg(num, crit=false):
 	var dmg_taken = (num - armor)
@@ -172,6 +174,13 @@ func set_description(new_description):
 	description = new_description
 	
 # Game util --------------------------------------------------------------------
+
+func unshadow():
+	sprite.modulate = Color(1,1,1)
+	sprite.show()
+	
+func shadow():
+	sprite.modulate = Color( 0.31, 0.31, 0.31, 1)
 
 # Get the actor this actor is facing, -1 if no actor is present
 func get_actor_facing():

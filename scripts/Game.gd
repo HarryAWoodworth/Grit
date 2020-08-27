@@ -1,10 +1,11 @@
 ## PATH TO BETA
-# - Action queue
-# - Light system (To Be Updated)
-# - Actors drawn in sight
-#   - Greyed Out When not in Sight but discovered
+# - Player and Character detection radiuses are strangely large
+# - Action queue?
+# X Light system
+# X Actors drawn in sight
+#   X Greyed Out When not in Sight but discovered
 #	- Enemy last-seen question mark when out of sight
-# - Combat
+# X Combat
 #   - Visual Effect
 #   - Sound Effect
 # - A* Pathfinding for enemies
@@ -32,10 +33,11 @@
 #   - Add Color Text
 #	- Max/min UI
 # - Crafting
-# - Bunker
 # - Random generation
 #   - Indoor
 #   - Outdoor
+# - Bunker
+#   - Saving
 # - CONTENT!!!
 
 # Long Term
@@ -55,7 +57,7 @@ extends Node2D
 
 # Consts -----------------------------------------------------------------------
 
-const TILE_SIZE = 16
+const TILE_SIZE = 32
 const ANIM_SPEED = 5
 const CANT_MOVE_ANIM_DIST = 2
 const ANIM_SPEED_CANT = 8
@@ -65,7 +67,7 @@ const MAX_BUILDING_DIMENSION = 8
 const MIN_BUILDING_DIMENSION = 5
 const MAX_TESTLOG_LENGTH = 10000
 
-enum Tile { Wall, Unknown, Box, Grass, Forest, Opening, Goal }
+enum Tile { Grass, Test }
 
 # Node Refs --------------------------------------------------------------------
 
@@ -255,29 +257,29 @@ func build_chunk():
 		actor_map.append([])
 		for y in range(CHUNK_DIMENSION):
 			actor_map[x].append(0)
-			map[x].append(Tile.Grass)
-			tile_map.set_cell(x, y, Tile.Grass)
+			map[x].append(Tile.Test)
+			tile_map.set_cell(x, y, Tile.Test)
 			# Set the chunk's outer edge to forest tiles
 			if x < FOREST_DEPTH or x > CHUNK_DIMENSION-(FOREST_DEPTH+1) or y < FOREST_DEPTH or y > CHUNK_DIMENSION-(FOREST_DEPTH+1):
 				pass#add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
 				
 	# Extra walls for testing
-	add_barrier(6, 4, wall_tex)
-	add_barrier(8, 4, wall_tex)
-	add_barrier(6, 5, wall_tex)
-	add_barrier(8, 5, wall_tex)
-	add_barrier(6, 6, wall_tex)
-	add_barrier(8, 6, wall_tex)
-	add_barrier(6, 7, wall_tex)
-	add_barrier(8, 7, wall_tex)
-	add_barrier(6, 8, wall_tex)
-	add_barrier(8, 8, wall_tex)
-	add_barrier(5, 8, wall_tex)
-	add_barrier(4, 8, wall_tex)
-	add_barrier(3, 8, wall_tex)
-	add_barrier(9, 8, wall_tex)
-	add_barrier(10, 8, wall_tex)
-	add_barrier(11, 8, wall_tex)
+	add_barrier(6, 4, forest_tex)
+	add_barrier(8, 4, forest_tex)
+	add_barrier(6, 5, forest_tex)
+	add_barrier(8, 5, forest_tex)
+	add_barrier(6, 6, forest_tex)
+	add_barrier(8, 6, forest_tex)
+	add_barrier(6, 7, forest_tex)
+	add_barrier(8, 7, forest_tex)
+	add_barrier(6, 8, forest_tex)
+	add_barrier(8, 8, forest_tex)
+	add_barrier(5, 8, forest_tex)
+	add_barrier(4, 8, forest_tex)
+	add_barrier(3, 8, forest_tex)
+	add_barrier(9, 8, forest_tex)
+	add_barrier(10, 8, forest_tex)
+	add_barrier(11, 8, forest_tex)
 
 	
 	# Place Player
@@ -310,16 +312,16 @@ func build_chunk():
 #	actor_map[box_x][box_y] = box
 	
 	# Place Enemy
-#	add_character(13,2,
-#				"enemy",
-#				"Mutant Crab",
-#				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
-#				"monster_classic",
-#				false,
-#				"down",
-#				0,
-#				15,
-#				1)
+	add_character(13,2,
+				"enemy",
+				"Mutant Crab",
+				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
+				"monster_classic",
+				false,
+				"down",
+				0,
+				15,
+				1)
 	
 	# Init tick
 	tick()

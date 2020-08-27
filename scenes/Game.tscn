@@ -1,19 +1,16 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://scripts/ActorInfoContainer.gd" type="Script" id=2]
-[ext_resource path="res://assets/wall.png" type="Texture" id=3]
+[ext_resource path="res://assets/test.png" type="Texture" id=3]
 [ext_resource path="res://assets/grass.png" type="Texture" id=4]
-[ext_resource path="res://assets/goal.png" type="Texture" id=5]
-[ext_resource path="res://assets/opening.png" type="Texture" id=6]
-[ext_resource path="res://assets/forest.png" type="Texture" id=7]
 [ext_resource path="res://scripts/Actors.gd" type="Script" id=8]
 [ext_resource path="res://assets/background.png" type="Texture" id=9]
 [ext_resource path="res://scripts/PlayerInfo.gd" type="Script" id=10]
 
 [sub_resource type="TileSet" id=1]
-0/name = "wall.png 0"
-0/texture = ExtResource( 3 )
+0/name = "grass.png 0"
+0/texture = ExtResource( 4 )
 0/tex_offset = Vector2( 0, 0 )
 0/modulate = Color( 1, 1, 1, 1 )
 0/region = Rect2( 0, 0, 32, 32 )
@@ -26,62 +23,20 @@
 0/shape_one_way_margin = 0.0
 0/shapes = [  ]
 0/z_index = 0
-3/name = "grass1.png 3"
-3/texture = ExtResource( 4 )
-3/tex_offset = Vector2( 0, 0 )
-3/modulate = Color( 1, 1, 1, 1 )
-3/region = Rect2( 0, 0, 16, 16 )
-3/tile_mode = 0
-3/occluder_offset = Vector2( 0, 0 )
-3/navigation_offset = Vector2( 0, 0 )
-3/shape_offset = Vector2( 0, 0 )
-3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-3/shape_one_way = false
-3/shape_one_way_margin = 0.0
-3/shapes = [  ]
-3/z_index = 0
-4/name = "forest.png 4"
-4/texture = ExtResource( 7 )
-4/tex_offset = Vector2( 0, 0 )
-4/modulate = Color( 1, 1, 1, 1 )
-4/region = Rect2( 0, 0, 16, 16 )
-4/tile_mode = 0
-4/occluder_offset = Vector2( 0, 0 )
-4/navigation_offset = Vector2( 0, 0 )
-4/shape_offset = Vector2( 0, 0 )
-4/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-4/shape_one_way = false
-4/shape_one_way_margin = 0.0
-4/shapes = [  ]
-4/z_index = 0
-5/name = "opening.png 5"
-5/texture = ExtResource( 6 )
-5/tex_offset = Vector2( 0, 0 )
-5/modulate = Color( 1, 1, 1, 1 )
-5/region = Rect2( 0, 0, 16, 16 )
-5/tile_mode = 0
-5/occluder_offset = Vector2( 0, 0 )
-5/navigation_offset = Vector2( 0, 0 )
-5/shape_offset = Vector2( 0, 0 )
-5/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-5/shape_one_way = false
-5/shape_one_way_margin = 0.0
-5/shapes = [  ]
-5/z_index = 0
-6/name = "goal.png 6"
-6/texture = ExtResource( 5 )
-6/tex_offset = Vector2( 0, 0 )
-6/modulate = Color( 1, 1, 1, 1 )
-6/region = Rect2( 0, 0, 16, 16 )
-6/tile_mode = 0
-6/occluder_offset = Vector2( 0, 0 )
-6/navigation_offset = Vector2( 0, 0 )
-6/shape_offset = Vector2( 0, 0 )
-6/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-6/shape_one_way = false
-6/shape_one_way_margin = 0.0
-6/shapes = [  ]
-6/z_index = 0
+1/name = "test.png 1"
+1/texture = ExtResource( 3 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 0, 0, 32, 32 )
+1/tile_mode = 0
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shape_offset = Vector2( 0, 0 )
+1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+1/shape_one_way = false
+1/shape_one_way_margin = 0.0
+1/shapes = [  ]
+1/z_index = 0
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
@@ -98,19 +53,21 @@ bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
 script = ExtResource( 1 )
 
 [node name="Background" type="Sprite" parent="."]
+visible = false
 show_behind_parent = true
 position = Vector2( 464, 112 )
 scale = Vector2( 117.082, 56.5674 )
 texture = ExtResource( 9 )
 
 [node name="CanvasModulate" type="CanvasModulate" parent="Background"]
+visible = false
 position = Vector2( -4.00803, -1.49048 )
 scale = Vector2( 0.008541, 0.017678 )
 color = Color( 0, 0, 0, 1 )
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 1 )
-cell_size = Vector2( 16, 16 )
+cell_size = Vector2( 32, 32 )
 format = 1
 
 [node name="Actors" type="Node2D" parent="."]
