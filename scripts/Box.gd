@@ -7,7 +7,6 @@ func init(game_ref, x, y):
 	game = game_ref
 	grabbable = true
 	curr_tile = Vector2(x,y)
-	game.actor_map[x][y] = sprite_node
 	position = curr_tile * game.TILE_SIZE
 	
 	# Identifier

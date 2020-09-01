@@ -26,5 +26,6 @@ occluder = SubResource( 2 )
 visible = false
 light_mask = -2147483647
 scale = Vector2( 2, 2 )
+z_index = 2
 texture = ExtResource( 1 )
 centered = false

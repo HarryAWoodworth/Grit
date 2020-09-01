@@ -15,7 +15,7 @@ var orig_sprite
 var NoticeAnim = preload("res://util/NoticeAnimation.tscn")
 var notice_animation
 
-# Consts s
+# Consts
 const DEFAULT_AI = "none"
 const DEFAULT_IDENTIFIER = "..."
 const DEFAULT_HEALTH = 10
@@ -30,10 +30,9 @@ const DEFAULT_LEVEL = 0
 
 # Detection
 const DEFAULT_DETECT_RADIUS = 5
+const DEFAULT_BLOCKS_LIGHT = false
 var detect_radius
 var target
-var follow = true
-var animation_playing = false
 var target_aquired = false
 var hidden = true
 var hidden_last_turn = false
@@ -50,19 +49,12 @@ var status_arr
 var ai
 var ai_tick_callback
 
+# A* AI
+var closed_list = []
+var open_list = []
+
 # Init the character
-func init(game_ref, x, y,
-new_identifier=DEFAULT_IDENTIFIER,
-new_title=DEFAULT_TITLE,
-new_description=DEFAULT_DESCRIPTION,
-new_ai=DEFAULT_AI,
-can_change_texture=false,
-new_curr_tex=DEFAULT_CURR_TEX,
-new_level=DEFAULT_LEVEL,
-new_health=DEFAULT_HEALTH,
-new_armor=DEFAULT_ARMOR,
-new_status_arr=DEFAULT_STATUSES,
-new_effect_arr=DEFAULT_EFFECTS):
+func init(game_ref, x, y,new_identifier=DEFAULT_IDENTIFIER,new_title=DEFAULT_TITLE,new_description=DEFAULT_DESCRIPTION,new_ai=DEFAULT_AI,can_change_texture=false,new_curr_tex=DEFAULT_CURR_TEX,new_level=DEFAULT_LEVEL,new_health=DEFAULT_HEALTH,new_armor=DEFAULT_ARMOR,new_blocks_light=DEFAULT_BLOCKS_LIGHT,new_status_arr=DEFAULT_STATUSES,new_effect_arr=DEFAULT_EFFECTS):
 	
 	# Identifier
 	identifier = new_identifier
@@ -76,7 +68,6 @@ new_effect_arr=DEFAULT_EFFECTS):
 	
 	# Set position in game world
 	curr_tile = Vector2(x,y)
-	game.actor_map[x][y] = sprite_node
 	position = curr_tile * game.TILE_SIZE
 	curr_tex = new_curr_tex
 	
@@ -92,11 +83,15 @@ new_effect_arr=DEFAULT_EFFECTS):
 	
 	# Detection
 	detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
+	blocks_light = new_blocks_light
 	var shape = CircleShape2D.new()
 	shape.radius = detect_radius
 	detection_shape.shape = shape
 	orig_sprite = sprite.texture
 	sprite.hide()
+	
+	if blocks_light:
+		self.collision_layer = 18
 	
 # Tick -------------------------------------------------------------------------
 
@@ -118,18 +113,11 @@ func tick():
 	ai_tick_callback.call_funcv([self, game])
 	
 func check_los():
-	update()
 	var space_state = get_world_2d().direct_space_state
 	var tile_len = game.TILE_SIZE
 	var half_tile = tile_len/2
 	var center = Vector2(position.x + half_tile, position.y+half_tile)
 	if target:
-		# Check the distance, probably could be optimized out.
-		# Do this because character and player detect each other's detection radiuses
-		var dist = target.position.distance_to(position)
-		if dist > detect_radius + half_tile:
-			target_aquired = false
-			return
 		var target_center = Vector2(target.position.x + half_tile, target.position.y+half_tile)
 		var result = space_state.intersect_ray(center, target_center, [self], self.collision_mask)
 		if result:
@@ -143,6 +131,9 @@ func check_los():
 						notice_animation.sprite.offset.x -= quarter_tile
 						notice_animation.sprite.offset.y += quarter_tile
 						notice_animation.play("NoticeAnim")
+			else:
+				if target_aquired:
+					target_aquired = false
 	
 func take_dmg(num, crit=false):
 	var dmg_taken = (num - armor)
@@ -228,7 +219,6 @@ func has_effect(effect):
 	if found != -1:
 		return true
 	return false
-	
 	
 # Mouse input data display signals ---------------------------------------------
 

@@ -1,6 +1,5 @@
 extends Node2D
 
-var sprite_node
 var curr_tile
 var curr_tex
 var identifier = "actor"

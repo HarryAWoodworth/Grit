@@ -5,16 +5,19 @@ onready var light_occluder = $LightOccluder2D
 
 var has_description = false
 var discovered = false
+var hidden = true
 
 func tick():
 	pass
 
 func unshadow():
-	sprite.modulate = Color(1,1,1)
+	hidden = false
+	#sprite.modulate = Color(1,1,1)
 	sprite.show()
 	
 func shadow():
-	sprite.modulate = Color( 0.31, 0.31, 0.31, 1)
+	pass
+	#sprite.modulate = Color( 0.31, 0.31, 0.31, 1)
 
 func init(x,y,new_texture,new_description="...",new_discovered=false):
 	game = get_parent()

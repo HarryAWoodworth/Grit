@@ -54,7 +54,7 @@
 2/shapes = [  ]
 2/z_index = 0
 
-[sub_resource type="TileSet" id=5]
+[sub_resource type="TileSet" id=2]
 0/name = "shadow_discovered.png 0"
 0/texture = ExtResource( 6 )
 0/tex_offset = Vector2( 0, 0 )
@@ -70,15 +70,15 @@
 0/shapes = [  ]
 0/z_index = 0
 
-[sub_resource type="StyleBoxFlat" id=2]
+[sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
 corner_detail = 4
 anti_aliasing = false
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=5]
 bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
 
 [node name="Game" type="Node2D"]
@@ -104,7 +104,7 @@ format = 1
 
 [node name="ShadowMap" type="TileMap" parent="."]
 z_index = 1
-tile_set = SubResource( 5 )
+tile_set = SubResource( 2 )
 cell_size = Vector2( 32, 32 )
 format = 1
 
@@ -122,7 +122,7 @@ margin_top = 300.0
 margin_right = 140.0
 margin_bottom = 400.0
 rect_scale = Vector2( 0.5, 0.5 )
-custom_styles/normal = SubResource( 2 )
+custom_styles/normal = SubResource( 3 )
 scroll_active = false
 scroll_following = true
 __meta__ = {
@@ -152,7 +152,7 @@ stretch_mode = 6
 margin_top = 64.0
 margin_right = 300.0
 margin_bottom = 78.0
-custom_styles/normal = SubResource( 3 )
+custom_styles/normal = SubResource( 4 )
 align = 1
 valign = 1
 autowrap = true
@@ -162,7 +162,7 @@ uppercase = true
 margin_top = 82.0
 margin_right = 300.0
 margin_bottom = 96.0
-custom_styles/normal = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
 autowrap = true
 
 [node name="ColorRect" type="ColorRect" parent="UI"]

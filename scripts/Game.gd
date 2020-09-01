@@ -1,14 +1,14 @@
 ## PATH TO BETA
-# X? Player and Character detection radiuses are strangely large
 # ? Action queue?
 
 # >>>>>>> ENEMY / PLAYER INTERACTION
+# - Make light-blocking enemies work right
 # - Attack Diagonally
 # @ A* Pathfinding for enemies
 # s Stealth
 # @ Sound system
 #	- Actions make sound
-#	- Sound tile circle
+#	- Sound tile circles
 #	- Player can hear sounds
 #	- Question mark from sound location
 # sl Enemies actually make sounds
@@ -28,6 +28,9 @@
 #	- Gun raycast click and shoot
 #   - Shooting effects
 # - Crafting
+
+# >>>>>>> ITEM COMBAT
+# - Effects
 
 # >>>>>>> UI
 # ml Player and Enemy dictionary data
@@ -125,15 +128,14 @@ func can_move(dx, dy, node, check_for_another_actor=true):
 	var y = node.curr_tile.y + dy
 	# Check x and y are in map
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
-		print(node.identifier + " can't move because out of bounds")
 		return false
 	# Check that actor_type is valid
 	if check_for_another_actor:
 		var actor_type = actor_map[x][y]
 		if typeof(actor_type) != 2:
-			if actor_type.identifier == "barrier" and actor_type.has_description:
+			# Log the description if the player moves into a barrier
+			if node.identifier == "player" and actor_type.identifier == "barrier" and actor_type.has_description:
 				logg(actor_type.description)
-			print(node.identifier + " can't move because it hits " + actor_type.identifier)
 			return false
 	# Return true
 	return true
@@ -212,6 +214,19 @@ func cant_move_anim(dx,dy,node):
 		
 func set_anim_done():
 	anim_finished = true
+	
+# Return an array of movement vectors to empty spaces around a node
+func get_surrounding_empty(node):
+	var free_spaces = []
+	if can_move(1,0,node):
+		free_spaces.append(Vector2(1,0))
+	if can_move(-1,0,node):
+		free_spaces.append(Vector2(-1,0))
+	if can_move(0,1,node):
+		free_spaces.append(Vector2(0,1))
+	if can_move(0,-1,node):
+		free_spaces.append(Vector2(0,-1))
+	return free_spaces
 
 # Tick -------------------------------------------------------------------------
 
@@ -268,27 +283,32 @@ func build_chunk():
 			actor_map[x].append(0)
 			map[x].append(Tile.Test)
 			tile_map.set_cell(x, y, Tile.Test)
+			add_sight_node(x, y)
 			# Set the chunk's outer edge to forest tiles
 			if x < FOREST_DEPTH or x > CHUNK_DIMENSION-(FOREST_DEPTH+1) or y < FOREST_DEPTH or y > CHUNK_DIMENSION-(FOREST_DEPTH+1):
 				pass#add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
 				
 	# Extra walls for testing
-	add_barrier(6, 4, forest_tex)
-	add_barrier(8, 4, forest_tex)
-	add_barrier(6, 5, forest_tex)
-	add_barrier(8, 5, forest_tex)
-	add_barrier(6, 6, forest_tex)
-	add_barrier(8, 6, forest_tex)
+#	add_barrier(6, 4, forest_tex)
+#	add_barrier(8, 4, forest_tex)
+#	add_barrier(6, 5, forest_tex)
+#	add_barrier(8, 5, forest_tex)
+#	add_barrier(6, 6, forest_tex)
+#	add_barrier(8, 6, forest_tex)
 	add_barrier(6, 7, forest_tex)
-	add_barrier(8, 7, forest_tex)
+#	add_barrier(8, 7, forest_tex)
 	add_barrier(6, 8, forest_tex)
-	add_barrier(8, 8, forest_tex)
+#	add_barrier(8, 8, forest_tex)
 	add_barrier(5, 8, forest_tex)
-	add_barrier(4, 8, forest_tex)
-	add_barrier(3, 8, forest_tex)
-	add_barrier(9, 8, forest_tex)
-	add_barrier(10, 8, forest_tex)
-	add_barrier(11, 8, forest_tex)
+#	add_barrier(4, 8, forest_tex)
+#	add_barrier(3, 8, forest_tex)
+#	add_barrier(9, 8, forest_tex)
+#	add_barrier(10, 8, forest_tex)
+#	add_barrier(11, 8, forest_tex)
+
+	add_barrier(5, 3, forest_tex)
+	add_barrier(6, 3, forest_tex)
+	add_barrier(6, 2, forest_tex)
 
 	
 	# Place Player
@@ -331,6 +351,16 @@ func build_chunk():
 				0,
 				15,
 				1)
+	add_character(12,2,
+				"enemy",
+				"Mutant Crab",
+				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
+				"monster_classic",
+				false,
+				"down",
+				0,
+				15,
+				1)
 	
 	# Init tick
 	tick()
@@ -359,17 +389,18 @@ func get_actor_at(x,y):
 func set_tile(x, y, type):
 	map[x][y] = type
 	tile_map.set_cell(x, y, type)
-	add_sight_node(x,y)
 
 func add_sight_node(x,y):
-	var half_tile = TILE_SIZE/2
 	var sight_node = SightNode.instance()
 	add_child(sight_node)
-	sight_node.positon = Vector2((x * TILE_SIZE) + half_tile, (y * TILE_SIZE) + half_tile)
+	sight_node.init(x, y, self)
+	sight_node.unique_id = get_unique_id()
 	
 func darken_tile(x, y):
 	shadow_map.set_cell(x, y, Shadow.Shadow)
-	print(tile_map.get_cell(x,y))
+	
+func undarken_tile(x, y):
+	shadow_map.set_cell(x, y, -1)
 	
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)

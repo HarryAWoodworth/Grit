@@ -4,7 +4,7 @@ extends "res://scripts/Character.gd"
 const DEFAULT_PLAYER_MAX_HEALTH = 50
 const DEFAULT_PLAYER_STARTING_LEVEL = 0
 const DEFAULT_PLAYER_ARMOR = 0
-const DEFAULT_PLAYER_DETECT_RADIUS = 6
+const DEFAULT_PLAYER_DETECT_RADIUS = 5
 
 # Player Info ------------------------------------------------------------------
 var weapon = "Big Ass Laser Gun"
@@ -14,6 +14,8 @@ var grabbed_actor
 # Detection --------------------------------------------------------------------
 var targets = []
 onready var light = $Light2D
+onready var visibility = $Visibility
+var character = preload("res://actors/Character.tscn")
 
 # Sprite preload ---------------------------------------------------------------
 var right = preload("res://assets/player_sprite/player_right.png")
@@ -58,31 +60,41 @@ func tick():
 # Check after every corner raycast result
 func check_los():
 	update()
+	var corner_res
 	var space_state = get_world_2d().direct_space_state
 	var tile_len = game.TILE_SIZE
 	var half_tile = tile_len/2
 	var center_of_player = Vector2(position.x + half_tile, position.y + half_tile)
 	for target in targets:
-		var dist = target.position.distance_to(position)
-		# Check the distance, probably could be optimized out.
-		# Do this because character and player detect each other's detection radiuses
-		if dist > detect_radius + half_tile:
-			hide_target(target)
-			continue
 		var iden = target.unique_id
-		var corner1 = Vector2(target.position.x + half_tile, target.position.y)
-		var corner2 = Vector2(target.position.x + tile_len, target.position.y + half_tile)
-		var corner3 = Vector2(target.position.x, target.position.y + half_tile) 
-		var corner4 = Vector2(target.position.x + half_tile, target.position.y + tile_len)
-		var corner1_res = space_state.intersect_ray(center_of_player, corner1, [self], self.collision_mask)
-		var corner2_res = space_state.intersect_ray(center_of_player, corner2, [self], self.collision_mask)
-		var corner3_res = space_state.intersect_ray(center_of_player, corner3, [self], self.collision_mask)
-		var corner4_res = space_state.intersect_ray(center_of_player, corner4, [self], self.collision_mask)
-		if (corner1_res and corner1_res.collider.unique_id == iden) or (corner2_res and corner2_res.collider.unique_id == iden) or (corner3_res and corner3_res.collider.unique_id == iden)or (corner4_res and corner4_res.collider.unique_id == iden):
+		var sightnodeOrEnemy = target.identifier == "sightnode" or target.identifier == "enemy"
+		var raymask = self.collision_mask
+		var exceptarr = [self]
+		# Floor sightnodes are onlyblocked by barriers and light-blocking actors
+		if sightnodeOrEnemy:
+			raymask = 20
+		# Side 1
+		#  and !corner_res.empty() 
+		corner_res = space_state.intersect_ray(center_of_player, Vector2(target.position.x + half_tile, target.position.y), exceptarr, raymask)
+		if (sightnodeOrEnemy and corner_res.empty()) or (!sightnodeOrEnemy and !corner_res.empty() and corner_res.collider.unique_id == iden):
 			show_target(target)
-		else:
-			hide_target(target)
-	
+			continue
+		# Side 2
+		corner_res = space_state.intersect_ray(center_of_player, Vector2(target.position.x + tile_len, target.position.y + half_tile), exceptarr, raymask)
+		if (sightnodeOrEnemy and corner_res.empty()) or (!sightnodeOrEnemy and !corner_res.empty() and corner_res.collider.unique_id == iden):
+			show_target(target)
+			continue
+		# Side 3
+		corner_res = space_state.intersect_ray(center_of_player, Vector2(target.position.x, target.position.y + half_tile), exceptarr, raymask)
+		if (sightnodeOrEnemy and corner_res.empty()) or (!sightnodeOrEnemy and !corner_res.empty() and corner_res.collider.unique_id == iden):
+			show_target(target)
+			continue
+		# Side 4
+		corner_res = space_state.intersect_ray(center_of_player, Vector2(target.position.x + half_tile, target.position.y + tile_len), exceptarr, raymask)
+		if (sightnodeOrEnemy and corner_res.empty()) or (!sightnodeOrEnemy and !corner_res.empty() and corner_res.collider.unique_id == iden):
+			show_target(target)
+			continue
+		hide_target(target)
 
 func show_target(target):
 	target.unshadow()
@@ -203,6 +215,7 @@ func die():
 # Signals ----------------------------------------------------------------------
 
 func _on_Visibility_body_entered(body):
+	# print(body.identifier + " entered")
 	if body.identifier == identifier:
 		return
 	targets.append(body)
