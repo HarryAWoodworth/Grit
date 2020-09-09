@@ -127,7 +127,7 @@ func check_los():
 						notice_animation = NoticeAnim.instance()
 						add_child(notice_animation)
 						var quarter_tile = (game.TILE_SIZE/4)
-						notice_animation.sprite.offset = position
+						notice_animation.sprite.position = position
 						notice_animation.sprite.offset.x -= quarter_tile
 						notice_animation.sprite.offset.y += quarter_tile
 						notice_animation.play("NoticeAnim")

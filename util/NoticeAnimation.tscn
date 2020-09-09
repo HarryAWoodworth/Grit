@@ -49,6 +49,6 @@ anims/NoticeAnim = SubResource( 1 )
 script = ExtResource( 2 )
 
 [node name="NoticeSprite" type="Sprite" parent="."]
-position = Vector2( 16, -0.93754 )
+position = Vector2( 16, 1.06246 )
 texture = ExtResource( 1 )
-offset = Vector2( -4, 4 )
+centered = false

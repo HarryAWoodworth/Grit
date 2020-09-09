@@ -118,7 +118,7 @@ var unique_actor_id = 0
 
 # Init the game
 func _ready():
-	OS.set_window_size(Vector2(1280, 720))
+	#OS.set_window_size(Vector2(1280, 720))
 	randomize()
 	textlog.text = "This is a test!"
 	build_chunk()
@@ -202,7 +202,7 @@ func move_actor(vector, node, turn=1):
 			actor_map[x][y] = node
 			# Wait for the tween to end
 			if node.identifier == "player":
-				yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")
+				#yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")
 				# Tick when player is moved
 				tick()
 	else: 
