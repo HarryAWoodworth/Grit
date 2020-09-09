@@ -64,9 +64,9 @@ func monster_classic(node, game):
 			print("Path found!")
 			path_found = true
 			var tmp = currentTile
-			while tmp != null:
-				print(tmp.toStr())
+			while tmp.parent.parent != null:
 				tmp = tmp.parent
+			game.move_actor_xy(tmp.x, tmp.y, node)
 			return
 		# Get all of the surrounding free spaces
 		var free_spaces_adjacent = adjacentList(game.get_surrounding_empty(currentTile.x,currentTile.y),currentTile,goal)

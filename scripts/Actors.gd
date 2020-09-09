@@ -7,6 +7,7 @@ var changeable_texture = false
 var grabbable = false
 var blocks_light = false
 var unique_id
+var hidden = false
 
 var game
 

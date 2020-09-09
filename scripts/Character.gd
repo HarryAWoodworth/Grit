@@ -34,7 +34,6 @@ const DEFAULT_BLOCKS_LIGHT = false
 var detect_radius
 var target
 var target_aquired = false
-var hidden = true
 var hidden_last_turn = false
 
 # Enemy data
@@ -82,6 +81,7 @@ func init(game_ref, x, y,new_identifier=DEFAULT_IDENTIFIER,new_title=DEFAULT_TIT
 	changeable_texture = can_change_texture
 	
 	# Detection
+	hidden = true
 	detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
 	blocks_light = new_blocks_light
 	var shape = CircleShape2D.new()

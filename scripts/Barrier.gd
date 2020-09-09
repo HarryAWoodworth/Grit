@@ -5,7 +5,6 @@ onready var light_occluder = $LightOccluder2D
 
 var has_description = false
 var discovered = false
-var hidden = true
 
 func tick():
 	pass

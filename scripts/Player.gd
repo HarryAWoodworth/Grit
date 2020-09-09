@@ -40,6 +40,7 @@ func init_player():
 	var shape = CircleShape2D.new()
 	shape.radius = detect_radius
 	detection_shape.shape = shape
+	hidden = false
 	
 	# Info
 	health = DEFAULT_PLAYER_MAX_HEALTH

@@ -1,4 +1,7 @@
 ## PATH TO BETA
+# Notification is gone
+
+
 # ? Action queue?
 
 # >>>>>>> ENEMY / PLAYER INTERACTION
@@ -135,6 +138,11 @@ func can_move(x, y, check_for_another_actor=true):
 	# Return true
 	return true
 
+func move_actor_xy(toNodeX, toNodeY, node, turn=1):
+	var toNode = Vector2(toNodeX, toNodeY)
+	var move_vec = toNode - node.curr_tile
+	move_actor(move_vec, node, turn)
+
 # Move an actor node to a tile
 func move_actor(vector, node, turn=1):
 	
@@ -172,23 +180,31 @@ func move_actor(vector, node, turn=1):
 	
 	if can_move(node.curr_tile.x + dx, node.curr_tile.y + dy):
 		
-		# Set animating bool
-		anim_finished = false
-		# Start tween
-		node.tween.interpolate_property(node, "position", node.curr_tile * TILE_SIZE, (Vector2(x,y) * TILE_SIZE), 1.0/ANIM_SPEED, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-		# Set bool that anim is finished using callback
-		node.tween.interpolate_callback(self, node.tween.get_runtime(), "set_anim_done")
-		# Start tween
-		node.tween.start()
-		# Update the node's current tile
-		node.curr_tile = Vector2(x,y)
-		actor_map[temp_x][temp_y] = 0
-		actor_map[x][y] = node
-		# Wait for the tween to end
-		if node.identifier == "player":
-			yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")
-			# Tick when player is moved
-			tick()
+		if node.hidden:
+			# Update the node's current tile
+			node.curr_tile = Vector2(x,y)
+			actor_map[temp_x][temp_y] = 0
+			actor_map[x][y] = node
+			node.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
+		# Animate Tween
+		else:
+			# Set animating bool
+			anim_finished = false
+			# Start tween
+			node.tween.interpolate_property(node, "position", node.curr_tile * TILE_SIZE, (Vector2(x,y) * TILE_SIZE), 1.0/ANIM_SPEED, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+			# Set bool that anim is finished using callback
+			node.tween.interpolate_callback(self, node.tween.get_runtime(), "set_anim_done")
+			# Start tween
+			node.tween.start()
+			# Update the node's current tile
+			node.curr_tile = Vector2(x,y)
+			actor_map[temp_x][temp_y] = 0
+			actor_map[x][y] = node
+			# Wait for the tween to end
+			if node.identifier == "player":
+				yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")
+				# Tick when player is moved
+				tick()
 	else: 
 		cant_move_anim(dx,dy,node)
 	
@@ -284,22 +300,22 @@ func build_chunk():
 				pass#add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
 				
 	# Extra walls for testing
-#	add_barrier(6, 4, forest_tex)
-#	add_barrier(8, 4, forest_tex)
-#	add_barrier(6, 5, forest_tex)
-#	add_barrier(8, 5, forest_tex)
-#	add_barrier(6, 6, forest_tex)
-#	add_barrier(8, 6, forest_tex)
+	add_barrier(6, 4, forest_tex)
+	add_barrier(8, 4, forest_tex)
+	add_barrier(6, 5, forest_tex)
+	add_barrier(8, 5, forest_tex)
+	add_barrier(6, 6, forest_tex)
+	add_barrier(8, 6, forest_tex)
 	add_barrier(6, 7, forest_tex)
-#	add_barrier(8, 7, forest_tex)
+	add_barrier(8, 7, forest_tex)
 	add_barrier(6, 8, forest_tex)
-#	add_barrier(8, 8, forest_tex)
+	add_barrier(8, 8, forest_tex)
 	add_barrier(5, 8, forest_tex)
-#	add_barrier(4, 8, forest_tex)
-#	add_barrier(3, 8, forest_tex)
-#	add_barrier(9, 8, forest_tex)
-#	add_barrier(10, 8, forest_tex)
-#	add_barrier(11, 8, forest_tex)
+	add_barrier(4, 8, forest_tex)
+	add_barrier(3, 8, forest_tex)
+	add_barrier(9, 8, forest_tex)
+	add_barrier(10, 8, forest_tex)
+	add_barrier(11, 8, forest_tex)
 
 	add_barrier(5, 3, forest_tex)
 	add_barrier(6, 3, forest_tex)
@@ -336,7 +352,7 @@ func build_chunk():
 #	actor_map[box_x][box_y] = box
 	
 	# Place Enemy
-	add_character(6,4,
+	add_character(0,15,
 				"enemy",
 				"Mutant Crab",
 				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
