@@ -123,9 +123,7 @@ func _ready():
 # Actor Movement ------------------------------------------------------------------------
 
 # Checks if actor can move using a difference vector
-func can_move(dx, dy, node, check_for_another_actor=true):
-	var x = node.curr_tile.x + dx
-	var y = node.curr_tile.y + dy
+func can_move(x, y, check_for_another_actor=true):
 	# Check x and y are in map
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
 		return false
@@ -133,9 +131,6 @@ func can_move(dx, dy, node, check_for_another_actor=true):
 	if check_for_another_actor:
 		var actor_type = actor_map[x][y]
 		if typeof(actor_type) != 2:
-			# Log the description if the player moves into a barrier
-			if node.identifier == "player" and actor_type.identifier == "barrier" and actor_type.has_description:
-				logg(actor_type.description)
 			return false
 	# Return true
 	return true
@@ -175,7 +170,7 @@ func move_actor(vector, node, turn=1):
 			cant_move_anim(dx,dy,node)
 			return true
 	
-	if can_move(dx, dy, node):
+	if can_move(node.curr_tile.x + dx, node.curr_tile.y + dy):
 		
 		# Set animating bool
 		anim_finished = false
@@ -216,15 +211,15 @@ func set_anim_done():
 	anim_finished = true
 	
 # Return an array of movement vectors to empty spaces around a node
-func get_surrounding_empty(node):
+func get_surrounding_empty(x,y):
 	var free_spaces = []
-	if can_move(1,0,node):
+	if can_move(x+1,y):
 		free_spaces.append(Vector2(1,0))
-	if can_move(-1,0,node):
+	if can_move(x-1,y):
 		free_spaces.append(Vector2(-1,0))
-	if can_move(0,1,node):
+	if can_move(x,y+1):
 		free_spaces.append(Vector2(0,1))
-	if can_move(0,-1,node):
+	if can_move(x,y-1):
 		free_spaces.append(Vector2(0,-1))
 	return free_spaces
 
@@ -341,7 +336,7 @@ func build_chunk():
 #	actor_map[box_x][box_y] = box
 	
 	# Place Enemy
-	add_character(13,2,
+	add_character(6,4,
 				"enemy",
 				"Mutant Crab",
 				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
@@ -351,19 +346,23 @@ func build_chunk():
 				0,
 				15,
 				1)
-	add_character(12,2,
-				"enemy",
-				"Mutant Crab",
-				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
-				"monster_classic",
-				false,
-				"down",
-				0,
-				15,
-				1)
+#	add_character(12,2,
+#				"enemy",
+#				"Mutant Crab",
+#				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
+#				"monster_classic",
+#				false,
+#				"down",
+#				0,
+#				15,
+#				1)
 	
 	# Init tick
+	yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")
 	tick()
+	
+#	print("TEST")
+#	print(str(get_surrounding_empty(4,4)))
 
 # Tile visibility --------------------------------------------------------------
 

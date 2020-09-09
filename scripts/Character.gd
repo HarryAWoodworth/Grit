@@ -131,9 +131,9 @@ func check_los():
 						notice_animation.sprite.offset.x -= quarter_tile
 						notice_animation.sprite.offset.y += quarter_tile
 						notice_animation.play("NoticeAnim")
-			else:
-				if target_aquired:
-					target_aquired = false
+#			else:
+#				if target_aquired:
+#					target_aquired = false
 	
 func take_dmg(num, crit=false):
 	var dmg_taken = (num - armor)
@@ -229,6 +229,7 @@ func _on_Visibility_body_entered(body):
 	if body.identifier == identifier or arr_non_targetable.has(body.identifier) or target:
 		return
 	target = body
+	target_aquired = true
 	
 func _on_Visibility_body_exited(body):
 	if body == target:

@@ -18,3 +18,12 @@ var description = "..."
 func player_distance():
 	var player_pos = get_parent().player.curr_tile
 	return player_pos - curr_tile
+	
+# Return true if nodes are adjacent (including diagonal)
+func adjacent(node):
+	var x = curr_tile.x
+	var y = curr_tile.y
+	var _x = node.curr_tile.x
+	var _y = node.curr_tile.y
+	return abs(x - _x) <= 1 and abs(y - _y) <= 1
+	

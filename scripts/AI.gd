@@ -15,6 +15,12 @@ class Tile extends Reference:
 		g = n_g
 		h = n_h
 		f = g + h
+		
+	func equals(otherTile):
+		return x == otherTile.x and y == otherTile.y
+		
+	func toStr():
+		return "(" + str(x) + "," + str(y) + ") g=" + str(g) + " h=" + str(h) + " f=" + str(f) 
 
 # AI's -------------------------------------------------------------------------
 
@@ -29,79 +35,89 @@ func none(_node, _game):
 # Uses A* Pathfinding
 func monster_classic(node, game):
 	if !node.target_aquired:
-		print("Enemy does not have a target aquired...")
 		return
 	# Check adjacent, if so, attack
-	
+	if node.adjacent(node.target):
+		print("we attackin in here...!")
+		return
+	# Else find the best path through A* and move one tile closer
 	# Open and closed lists
 	var closed_list = []
 	var open_list = []
-	var goal = node.target.curr_tile
+	var goal = Tile.new(null,node.target.curr_tile,0,0)
 	var path_found = false
 	# Add the original position ot the open list
 	open_list.append(Tile.new(null,node.curr_tile,0,calcH(node.curr_tile, goal)))
-	while !open_list.empty():
+#	print(open_list[0].toStr())
+	# Iterate while the open list is not empty and no path has been found
+	while !open_list.empty() and !path_found:
 		# Get the tile with the lowest F from the open list
 		var currentTile = open_list.pop_front()
-		# Move it from the open to the closed list
-		closed_list.append(currentTile)
-		# Get all of the surrounding free spaces, incrementing G
-		var free_spaces_adjacent = adjacentList(game.get_surrounding_empty(node),currentTile,goal)
-		# Return if the node is boxed in
-		if free_spaces_adjacent.empty():
+		### DEBUG
+		if currentTile.x > game.CHUNK_DIMENSION or currentTile.y > game.CHUNK_DIMENSION:
 			return
-		if contains(free_spaces_adjacent, goal):
+		print("Current Tile: " + currentTile.toStr() )
+		# Add it to the closed list
+		closed_list.append(currentTile)
+		# If the goal is adjacent to the current search tile, path has been found
+		if adjacent(currentTile, goal):
+			print("Path found!")
 			path_found = true
 			var tmp = currentTile
 			while tmp != null:
-				print("pos = (" + str(currentTile.x) +"," + str(currentTile.y) + ") g=" +str(currentTile.g) + " h=" + str(currentTile.h) + " f=" + str(currentTile.f))
+				print(tmp.toStr())
 				tmp = tmp.parent
-			break
+			return
+		# Get all of the surrounding free spaces
+		var free_spaces_adjacent = adjacentList(game.get_surrounding_empty(currentTile.x,currentTile.y),currentTile,goal)
+		# Do nothing if the node is boxed in
+		if free_spaces_adjacent.empty():
+			return
 		# Go through each adjacent node and check if its in the closed/open lists
 		for adj_tile in free_spaces_adjacent:
-			# Ignore if in closed_list
-			if contains(closed_list, adj_tile):
-				continue
-			# Add to open_list
-			if !contains(open_list, adj_tile):
+			# Add to open list if not in closed and not in open
+			if !contains(closed_list, adj_tile) and !contains(open_list, adj_tile):
 				insertFOrdered(open_list, adj_tile)
-			else:
+#			else:
 				# Test if using the current G score make the aSquare F score lower, if yes update the parent because it means its a better path
-				pass
-		# Do nothing if there are no free spaces to move
-		
-			
-	
+
 
 # Util -------------------------------------------------------------------------
 
-# Compare tile's x and y to see if in a list
+# Compare tile's x and y to see if in list
 func contains(list, target_tile):
 	for tile in list:
-		if tile.x == target_tile.x and tile.y == target_tile.y:
+		if tile.equals(target_tile):
 			return true
 	return false
 
+func adjacent(tile, goal):
+	return abs(tile.x - goal.x) <= 1 and abs(tile.y - goal.y) <= 1
+	
 # Turn an array of adjacent spaces into an array of adjacent Tile objects
 func adjacentList(free_spaces, parent, target_vec):
 	var adjacent_arr = []
 	for space in free_spaces:
-		adjacent_arr.append(Tile.new(parent, space, parent.g+1, calcH(space,target_vec)))
+		var space_loc = Vector2(parent.x + space.x, parent.y + space.y)
+		adjacent_arr.append(Tile.new(parent, space_loc, parent.g+1, calcH(space_loc,target_vec)))
 	return adjacent_arr
 
 # Insert a tile into a list, keeping it ordered by lowest F in front
-func insertFOrdered(tile, list):
+func insertFOrdered(list:Array, tile):
+	if list.empty():
+		list.append(tile)
+		return
 	for index in range (0,list.size()):
-		if tile.f <= list[index]:
+		if tile.f <= list[index].f:
 			list.insert(index, tile)
 			return
 
-
 # Calc the Heuristic value to get from pos to target pos (ignoring walls)
 func calcH(vec, target_vec):
-	return abs(vec.x - target_vec.x) + abs(vec.y - target_vec.y)
+	var ret = abs(vec.x - target_vec.x) + abs(vec.y - target_vec.y)
+	return ret
 
-# Get the ai tick function based on string name
+# Get the AI tick function based on string name
 func get_callback(func_name):
 	match func_name:
 		"none":

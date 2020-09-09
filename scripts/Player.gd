@@ -4,7 +4,7 @@ extends "res://scripts/Character.gd"
 const DEFAULT_PLAYER_MAX_HEALTH = 50
 const DEFAULT_PLAYER_STARTING_LEVEL = 0
 const DEFAULT_PLAYER_ARMOR = 0
-const DEFAULT_PLAYER_DETECT_RADIUS = 5
+const DEFAULT_PLAYER_DETECT_RADIUS = 8
 
 # Player Info ------------------------------------------------------------------
 var weapon = "Big Ass Laser Gun"
