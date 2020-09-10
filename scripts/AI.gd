@@ -34,11 +34,10 @@ func none(_node, _game):
 # Monster Classic AI
 # Uses A* Pathfinding
 func monster_classic(node, game):
-	if !node.target_aquired:
+	if !node.target_aquired or node.target_just_aquired:
 		return
 	# Check adjacent, if so, attack
 	if node.adjacent(node.target):
-		print("we attackin in here...!")
 		return
 	# Else find the best path through A* and move one tile closer
 	# Open and closed lists
@@ -53,15 +52,10 @@ func monster_classic(node, game):
 	while !open_list.empty() and !path_found:
 		# Get the tile with the lowest F from the open list
 		var currentTile = open_list.pop_front()
-		### DEBUG
-		if currentTile.x > game.CHUNK_DIMENSION or currentTile.y > game.CHUNK_DIMENSION:
-			return
-		print("Current Tile: " + currentTile.toStr() )
 		# Add it to the closed list
 		closed_list.append(currentTile)
 		# If the goal is adjacent to the current search tile, path has been found
 		if adjacent(currentTile, goal):
-			print("Path found!")
 			path_found = true
 			var tmp = currentTile
 			while tmp.parent.parent != null:
@@ -75,8 +69,17 @@ func monster_classic(node, game):
 			return
 		# Go through each adjacent node and check if its in the closed/open lists
 		for adj_tile in free_spaces_adjacent:
-			# Add to open list if not in closed and not in open
-			if !contains(closed_list, adj_tile) and !contains(open_list, adj_tile):
+			# Ignore if in closed list
+			if contains(closed_list, adj_tile) != -1:
+				continue
+			# If in open list, see if it can be updated to have a better F score on the current path
+			var index_open = contains(open_list, adj_tile)
+			if index_open != -1:
+				if open_list[index_open].f > adj_tile.f:
+					open_list.remove(index_open)
+					insertFOrdered(open_list, adj_tile)
+			# Otherwise add to open list
+			else:
 				insertFOrdered(open_list, adj_tile)
 #			else:
 				# Test if using the current G score make the aSquare F score lower, if yes update the parent because it means its a better path
@@ -86,10 +89,12 @@ func monster_classic(node, game):
 
 # Compare tile's x and y to see if in list
 func contains(list, target_tile):
+	var index = 0
 	for tile in list:
 		if tile.equals(target_tile):
-			return true
-	return false
+			return index
+		index = index + 1
+	return -1
 
 func adjacent(tile, goal):
 	return abs(tile.x - goal.x) <= 1 and abs(tile.y - goal.y) <= 1

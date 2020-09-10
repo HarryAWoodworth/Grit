@@ -34,6 +34,7 @@ const DEFAULT_BLOCKS_LIGHT = false
 var detect_radius
 var target
 var target_aquired = false
+var target_just_aquired = false
 var hidden_last_turn = false
 
 # Enemy data
@@ -99,6 +100,7 @@ func tick():
 	
 	# Remove notice animation
 	if has_node("NoticeAnimation") and notice_animation != null:
+		target_just_aquired = false
 		remove_child(notice_animation)
 		
 	if hidden_last_turn:
@@ -121,19 +123,19 @@ func check_los():
 		var target_center = Vector2(target.position.x + half_tile, target.position.y+half_tile)
 		var result = space_state.intersect_ray(center, target_center, [self], self.collision_mask)
 		if result:
-			if result.collider.identifier == "player":
-				if !target_aquired:
-						target_aquired = true
-						notice_animation = NoticeAnim.instance()
-						add_child(notice_animation)
-						var quarter_tile = (game.TILE_SIZE/4)
-						notice_animation.sprite.position = position
-						notice_animation.sprite.offset.x -= quarter_tile
-						notice_animation.sprite.offset.y += quarter_tile
-						notice_animation.play("NoticeAnim")
-#			else:
-#				if target_aquired:
-#					target_aquired = false
+			# If the enemy sees a player for the first time, show a notice animation
+			if result.collider.identifier == "player" and !target_aquired:
+				target_aquired = true
+				target_just_aquired = true
+				notice_animation = NoticeAnim.instance()
+				add_child(notice_animation)
+				#var quarter_tile = (game.TILE_SIZE/4)
+				notice_animation.sprite.offset = position
+				#notice_animation.sprite.offset.x -= quarter_tile
+				#notice_animation.sprite.offset.y += quarter_tile
+				notice_animation.play("NoticeAnim")
+#			elif target_aquired:
+#				target_aquired = false
 	
 func take_dmg(num, crit=false):
 	var dmg_taken = (num - armor)
@@ -229,7 +231,6 @@ func _on_Visibility_body_entered(body):
 	if body.identifier == identifier or arr_non_targetable.has(body.identifier) or target:
 		return
 	target = body
-	target_aquired = true
 	
 func _on_Visibility_body_exited(body):
 	if body == target:
