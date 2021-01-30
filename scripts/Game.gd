@@ -1,9 +1,6 @@
 ## PATH TO BETA
 # ? Action queue?
 
-# A* G cmpare for better finding
-# A* Make diagonals adjacent
-
 # >>>>>>> ENEMY / PLAYER INTERACTION
 # - Make light-blocking enemies work right
 # - Attack Diagonally
