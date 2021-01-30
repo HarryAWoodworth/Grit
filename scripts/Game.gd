@@ -1,4 +1,8 @@
 ## PATH TO BETA
+
+# WHERE YOU LEFT OFF: Fixing Add_Barrier and add_character to fix Build_chunks
+# and run the game to see if you permanenlty broke everything :)
+
 # ? Action queue?
 
 # >>>>>>> ENEMY / PLAYER INTERACTION
@@ -68,15 +72,16 @@ extends Node2D
 
 # Consts -----------------------------------------------------------------------
 
+const WINDOW_SIZE = Vector2(1280, 720)
 const TILE_SIZE = 32
-const ANIM_SPEED = 5
-const CANT_MOVE_ANIM_DIST = 2
-const ANIM_SPEED_CANT = 8
 const CHUNK_DIMENSION = 16
-const FOREST_DEPTH = 2
-const MAX_BUILDING_DIMENSION = 8
-const MIN_BUILDING_DIMENSION = 5
 const MAX_TESTLOG_LENGTH = 10000
+#const ANIM_SPEED = 5
+#const CANT_MOVE_ANIM_DIST = 2
+#const ANIM_SPEED_CANT = 8
+#const FOREST_DEPTH = 2
+#const MAX_BUILDING_DIMENSION = 8
+#const MIN_BUILDING_DIMENSION = 5
 
 enum Tile { Grass, Test, Grasss }
 enum Shadow { Shadow }
@@ -93,6 +98,7 @@ onready var player_info = $UI/PlayerInfo
 
 # Node preloads for instancing
 var Box = preload("res://actors/Box.tscn")
+var PositionClass = preload("res://scenes/Position.tscn")
 var Character = preload("res://actors/Character.tscn")
 var Player = preload("res://actors/Player.tscn")
 var Barrier = preload("res://actors/Barrier.tscn")
@@ -105,128 +111,49 @@ var forest_tex = preload("res://assets/forest.png")
 # Game State -------------------------------------------------------------------
 
 var player
-var anim_finished = true
+#var anim_finished = true
+# List of actor unique_id 's 
 var actor_list = []
+# Map of Pos nodes
 var map = []
-var buildings = []
-var actor_map = []
-var barrier_list = []
+# Increasing number for actor unique id's
 var unique_actor_id = 0
 
 # Ready ------------------------------------------------------------------------
 
 # Init the game
 func _ready():
-	OS.set_window_size(Vector2(1280, 720))
+	OS.set_window_size(WINDOW_SIZE)
 	randomize()
-	textlog.text = "This is a test!"
+	# textlog.text = "This is a test!"
 	build_chunk()
 	
 # Actor Movement ------------------------------------------------------------------------
 
-# Checks if actor can move using a difference vector
-func can_move(x, y, check_for_another_actor=true):
-	# Check x and y are in map
+# Checks if an actor can move into a coordinate
+func can_move(x, y):
+	# Return false if coordinates are off the map
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
 		return false
-	# Check that actor_type is valid
-	if check_for_another_actor:
-		var actor_type = actor_map[x][y]
-		if typeof(actor_type) != 2:
-			return false
-	# Return true
-	return true
+	# Check if there is an actor that blocks movement in that path
+	var actor_list = map[x][y].actors
+	if actor_list.empty:
+		return true
+	else:
+		return actor_list[0].blocks_other_actors
 
-func move_actor_xy(toNodeX, toNodeY, node, turn=1):
-	var toNode = Vector2(toNodeX, toNodeY)
-	var move_vec = toNode - node.curr_tile
-	move_actor(move_vec, node, turn)
-
-# Move an actor node to a tile
-func move_actor(vector, node, turn=1):
+# Move an actor to a coordinate
+func move_actor(actor, x ,y):
+	# Remove the actor from its previous position
+	map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
+	# Update actor's current tile
+	actor.curr_tile = Vector2(x,y)
+	# Add it to its new position
+	map[actor.curr_tile.x][actor.curr_tile.y].actors.append(actor)
+	# Update the actor's node
+	actor.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
 	
-	# Set texture
-	if turn == 1 and node.changeable_texture:
-		match vector:
-			Vector2(1,0):
-				node.sprite.set_texture(node.right)
-				node.curr_tex = "right"
-			Vector2(-1,0):
-				node.sprite.set_texture(node.left)
-				node.curr_tex = "left"
-			Vector2(0,-1):
-				node.sprite.set_texture(node.up)
-				node.curr_tex = "up"
-			Vector2(0,1):
-				node.sprite.set_texture(node.down)
-				node.curr_tex = "down"
-				
-	# Coords
-	var dx = vector.x
-	var dy = vector.y
-	var temp_x = node.curr_tile.x
-	var temp_y = node.curr_tile.y
-	var x = node.curr_tile.x + dx
-	var y = node.curr_tile.y + dy
-	
-	# Melee combat via running into enemy
-	var actor_adjacent = get_actor_at(x,y)
-	if typeof(actor_adjacent) != 2:
-		if (node.identifier == "player" and actor_adjacent.identifier == "enemy") or (node.identifier == "enemy" and actor_adjacent.identifier == "player"):
-			exchange_combat_damage(node, actor_adjacent)
-			cant_move_anim(dx,dy,node)
-			return true
-	
-	if can_move(node.curr_tile.x + dx, node.curr_tile.y + dy):
-		
-		if node.hidden:
-			# Update the node's current tile
-			node.curr_tile = Vector2(x,y)
-			actor_map[temp_x][temp_y] = 0
-			actor_map[x][y] = node
-			node.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
-		# Animate Tween
-		else:
-			# Set animating bool
-			#anim_finished = false
-			# Start tween
-			node.tween.interpolate_property(node, "position", node.curr_tile * TILE_SIZE, (Vector2(x,y) * TILE_SIZE), 1.0/ANIM_SPEED, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-			# Set bool that anim is finished using callback
-			#node.tween.interpolate_callback(self, node.tween.get_runtime(), "set_anim_done")
-			# Start tween
-			node.tween.start()
-			# Update the node's current tile
-			node.curr_tile = Vector2(x,y)
-			actor_map[temp_x][temp_y] = 0
-			actor_map[x][y] = node
-			# Wait for the tween to end
-			if node.identifier == "player":
-				yield(get_tree().create_timer(0.25),"timeout")
-				# Tick when player is moved
-				tick()
-	else: 
-		cant_move_anim(dx,dy,node)
-	
-# Animate the actor moving halfway into the tile and bouncing back
-func cant_move_anim(dx,dy,node):
-	var x = node.curr_tile.x + dx
-	var y = node.curr_tile.y + dy
-	anim_finished = false
-	var dest = Vector2(x,y) * TILE_SIZE
-	if dx != 0:
-		dest.x = dest.x - (dx * (float(TILE_SIZE) / float(CANT_MOVE_ANIM_DIST)))
-	if dy != 0:
-		dest.y = dest.y - (dy * (float(TILE_SIZE) / float(CANT_MOVE_ANIM_DIST)))
-	node.tween.interpolate_property(node, "position", node.curr_tile * TILE_SIZE, dest, 1.0/ANIM_SPEED_CANT, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	node.tween.interpolate_property(node, "position", dest, node.curr_tile * TILE_SIZE, 1.0/ANIM_SPEED_CANT, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT,node.tween.get_runtime())
-	node.tween.interpolate_callback(self, node.tween.get_runtime(), "set_anim_done")
-	node.tween.interpolate_callback(self, node.tween.get_runtime(), "set_anim_done")
-	node.tween.start()
-		
-func set_anim_done():
-	anim_finished = true
-	
-# Return an array of movement vectors to empty spaces around a node
+# Return an array of movement vectors to empty spaces around a coordinate
 func get_surrounding_empty(x,y):
 	var free_spaces = []
 	if can_move(x+1,y):
@@ -249,63 +176,51 @@ func get_surrounding_empty(x,y):
 
 # Tick -------------------------------------------------------------------------
 
-# Call tick on all actors in actor_list
+# Call tick on all actors in actor_list in order
 func tick():
 	update()
 	for actor in actor_list:
 		actor.tick()
 
 # Actor Combat -----------------------------------------------------------------
-		
-func exchange_combat_damage(agressor, defender):
-	defender.take_dmg(agressor.dmg)
 	
-func remove_node(node):
-	# Remove from actor_list
-	actor_list.erase(node)
-	# Remove from actor_map
-	actor_map[node.curr_tile.x][node.curr_tile.y] = 0
-	# Remove child from parent
-	remove_child(node)
-		
-# UI ---------------------------------------------------------------------------
-
-# Log string to textlog
-func logg(string):
-	var strlen = textlog.text.length()
-	if strlen > MAX_TESTLOG_LENGTH:
-		textlog.text = textlog.text.substr(int(MAX_TESTLOG_LENGTH - (MAX_TESTLOG_LENGTH/10.0)),strlen)
-	textlog.text = textlog.text + "\n" + string
-
-# Display actor data
-func display_actor_data(actor):
-	actor_info.list_info(actor)
+#func exchange_combat_damage(agressor, defender):
+#	defender.take_dmg(agressor.dmg)
 	
-# CLear actor data
-func clear_actor_data():
-	actor_info.clear()
+# Remove an actor from the game
+func remove_actor(actor):
+	# Remove from actor list
+	actor_list.erase(actor)
+	# Remove from actor map
+	map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
+	# Remove node
+	remove_child(actor)
 
 # Chunk Generation -------------------------------------------------------------
 
 # Build a chunk
 func build_chunk():
 	# Start with a blank map
-	buildings.clear()
 	map.clear()
-	actor_map.clear()
+	# Position var
+	var pos
 	
 	# Init the map with tiles
 	for x in range(CHUNK_DIMENSION):
 		map.append([])
-		actor_map.append([])
 		for y in range(CHUNK_DIMENSION):
-			actor_map[x].append(0)
-			map[x].append(Tile.Test)
-			tile_map.set_cell(x, y, Tile.Test)
+			# Instance/Init a PositionClass node
+			pos = PositionClass.instance()
+			add_child(pos)
+			pos.init(Tile.test)
+			map[x][y] = pos
+			# Set the tile map
+			tile_map.set_cell(x, y, map[x][y].tile)
+			# Add sight node
 			add_sight_node(x, y)
-			# Set the chunk's outer edge to forest tiles
-			if x < FOREST_DEPTH or x > CHUNK_DIMENSION-(FOREST_DEPTH+1) or y < FOREST_DEPTH or y > CHUNK_DIMENSION-(FOREST_DEPTH+1):
-				pass#add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
+#			# Set the chunk's outer edge to forest tiles
+#			if x < FOREST_DEPTH or x > CHUNK_DIMENSION-(FOREST_DEPTH+1) or y < FOREST_DEPTH or y > CHUNK_DIMENSION-(FOREST_DEPTH+1):
+#				pass#add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
 				
 	# Extra walls for testing
 #	add_barrier(6, 4, forest_tex)
@@ -346,7 +261,6 @@ func build_chunk():
 
 	
 	# Place Player
-	#var player_start_coord = round(CHUNK_DIMENSION/2.0)
 	var player_inst = Player.instance()
 	add_child(player_inst)
 	player_inst.init(self,
@@ -357,9 +271,8 @@ func build_chunk():
 				"none",
 				true)
 	player_inst.unique_id = get_unique_id()
-	#player.position = player.curr_tile * TILE_SIZE
 	actor_list.append(player_inst)
-	actor_map[0][0] = player_inst
+	map[0][0].actors.push_front(player_inst)
 	player_info.list_player_info(player_inst)
 	player_inst.init_player()
 	player = player_inst
@@ -385,47 +298,30 @@ func build_chunk():
 				0,
 				15,
 				1)
-#	add_character(12,2,
-#				"enemy",
-#				"Mutant Crab",
-#				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
-#				"monster_classic",
-#				false,
-#				"down",
-#				0,
-#				15,
-#				1)
-	
+
 	# Init tick
-	yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")
+#	yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")
 	tick()
-	
-#	print("TEST")
-#	print(str(get_surrounding_empty(4,4)))
 
-# Tile visibility --------------------------------------------------------------
-
-
-# Returns true if the tile at (x,y) blocks light
-func blocksLight(x,y):
-	var actor_x_y = actor_map[x][y]
-	if typeof(actor_x_y) == 2:
-		return false
-	if "blocks_light" in actor_x_y:
-		return actor_x_y.blocks_light
-	return false
-	
 # Util -------------------------------------------------------------------------
+
+# Returns true if an actor at the position (x,y) blocks light
+func blocksLight(x,y):
+	var pos = map[x][y]
+	if pos.actors.empty:
+		return false
+	else:
+		return pos.actors[0].blocks_light
+
+# Get actors at position (x,y)
+func get_actors_at(x,y):
+	if x < 0 or x > map.size()-1 or y < 0 or y > map[0].size()-1:
+		return null
+	return map[x][y].actors
 	
-# Get actor at coords
-func get_actor_at(x,y):
-	if x < 0 or x > actor_map.size()-1 or y < 0 or y > actor_map[0].size()-1:
-		return 0
-	return actor_map[x][y]
-	
-# Set a tile at (x,y) with tile type
+# Set a position at (x,y) with tile type, and update tile_map
 func set_tile(x, y, type):
-	map[x][y] = type
+	map[x][y].tile = type
 	tile_map.set_cell(x, y, type)
 
 func add_sight_node(x,y):
@@ -443,25 +339,40 @@ func undarken_tile(x, y):
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)
 	
-func add_character(x,y,identifier,name,descr,ai,change_tex,start_tex,level,health,armor):
+	
+# init(game,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
+func add_character(x,y,health=10,ai="none",identifier_="...",title_="...",description_="...",hidden_=false,blocks_other_actors_=false,blocks_light_=false):
 	var character = Character.instance()
 	add_child(character)
-	character.init(self,x,y,identifier,name,descr,ai,change_tex,start_tex,level,health,armor)
-	character.unique_id = get_unique_id()
+	character.init(self,x,y,identifier,title,description,hidden,blocks_other_actors_,blocks_light_)
+	character.init_character(health,ai)
 	actor_list.append(character)
-	actor_map[x][y] = character
+	if character.blocks_light:
+		map[x][y].actors.push_front(character)
+	else:
+		map[x][y].actors.append(character)
 	
-func add_barrier(x,y,texture,descr="..."):
-	var barrier = Barrier.instance()
-	add_child(barrier)
-	barrier.init(x,y,texture,descr)
-	barrier.unique_id = get_unique_id()
-	actor_map[x][y] = barrier
-	barrier_list.append(barrier)
-	actor_list.append(barrier)
-	
+# Return an updating unique ID value
 func get_unique_id():
 	var temp = unique_actor_id
 	unique_actor_id = unique_actor_id + 1
 	return temp
+	
+# UI ---------------------------------------------------------------------------
+
+# Log string to textlog
+func addLog(string):
+	var logLength = textlog.text.length() + string.length()
+	# Remove a chunk of the textlog if it gets too long
+	if logLength > MAX_TESTLOG_LENGTH:
+		textlog.text = textlog.text.substr(int(MAX_TESTLOG_LENGTH - (MAX_TESTLOG_LENGTH/10.0)),logLength)
+	textlog.text = textlog.text + "\n" + string
+
+# Display actor data
+func display_actor_data(actor):
+	actor_info.list_info(actor)
+	
+# Clear actor data
+func clear_actor_data():
+	actor_info.clear()
 	

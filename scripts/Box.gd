@@ -1,20 +1,12 @@
-extends "res://scripts/Actors.gd"
+extends "res://scripts/Actor.gd"
 	
-onready var tween = $Sprite/Tween
+#onready var tween = $Sprite/Tween
 onready var sprite = $Sprite
 	
-func init(game_ref, x, y):
-	game = game_ref
-	grabbable = true
-	curr_tile = Vector2(x,y)
-	position = curr_tile * game.TILE_SIZE
+var moveable
 	
-	# Identifier
-	identifier = "box"
-	
-	# Info box stuff
-	title = "Blue Test Box"
-	description = "This techno blue see-through box doesn't belong in this post apocalyptic waste- oh wait, this is a test forest for development..."
+func init_box(moveable_=false):
+	moveable = moveable_
 
 func drag(ID):
 	match ID:
@@ -27,7 +19,7 @@ func drag(ID):
 			if game.can_move(x, y, self) and game.can_move(x, y, game.player):
 				game.move_actor(vec,game.player,0)
 				game.move_actor(vec,self)
-				game.logg("The box was dragged right.")
+				game.logg("You drag the box")
 				game.tick()
 			else:
 				game.cant_move_anim(x,y,self)
@@ -41,7 +33,7 @@ func drag(ID):
 			if game.can_move(x, y, self) and game.can_move(x, y, game.player):
 				game.move_actor(vec,game.player,0)
 				game.move_actor(vec,self)
-				game.logg("The box was dragged left.")
+				game.logg("You drag the box.")
 				game.tick()
 			else:
 				game.cant_move_anim(x,y,self)
@@ -55,7 +47,7 @@ func drag(ID):
 			if game.can_move(x, y, self):
 				game.move_actor(vec,self)
 				game.move_actor(vec,game.player,0)
-				game.logg("The box was pushed.")
+				game.logg("You push the box.")
 				game.tick()
 			else:
 				game.cant_move_anim(x,y,self)
@@ -69,14 +61,11 @@ func drag(ID):
 			if game.can_move(x, y, game.player):
 				game.move_actor(vec,game.player,0)
 				game.move_actor(vec,self)
-				game.logg("The box was pulled.")
+				game.logg("You pull the box.")
 				game.tick()
 			else:
 				game.cant_move_anim(x,y,self)
 				game.cant_move_anim(x,y,game.player)
-
-func tick():
-	pass
 
 func _on_Box_mouse_entered():
 	game.display_actor_data(self)
