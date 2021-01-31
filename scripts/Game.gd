@@ -97,11 +97,11 @@ onready var player_info = $UI/PlayerInfo
 # Entity Preloads --------------------------------------------------------------
 
 # Node preloads for instancing
-var Box = preload("res://actors/Box.tscn")
+var Furniture = preload("res://actors/Furniture.tscn")
 var PositionClass = preload("res://scenes/Position.tscn")
 var Character = preload("res://actors/Character.tscn")
 var Player = preload("res://actors/Player.tscn")
-var Barrier = preload("res://actors/Barrier.tscn")
+var Wall = preload("res://actors/Wall.tscn")
 var SightNode = preload("res://util/SightNode.tscn")
 
 # Texture preloads
@@ -288,16 +288,14 @@ func build_chunk():
 #	actor_map[box_x][box_y] = box
 	
 	# Place Enemy
-	add_character(0,15,
-				"enemy",
-				"Mutant Crab",
-				"A 6 foot tall mutant crab is hungry for blood. Your blood. What's a crab doing in the middle of the forest? Who knows...",
+	add_character(0,15,10,
 				"monster_classic",
+				"enemy",
+				"monster",
+				"description",
 				false,
-				"down",
-				0,
-				15,
-				1)
+				true,
+				false)
 
 	# Init tick
 #	yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")
@@ -339,6 +337,10 @@ func undarken_tile(x, y):
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)
 	
+func add_wall(x,y,identifier_="...",title_="...",description_="...",hidden_=false,blocks_other_actors_=true,blocks_light_=true):
+	var wall = Wall.instance()
+	add_child(wall)
+	wall.init(self,x,y,identifier,title,description,hidden,blocks_other_actors_,blocks_light_)
 	
 # init(game,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
 func add_character(x,y,health=10,ai="none",identifier_="...",title_="...",description_="...",hidden_=false,blocks_other_actors_=false,blocks_light_=false):

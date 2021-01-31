@@ -5,13 +5,13 @@ onready var sprite = $Sprite
 	
 var moveable
 	
-func init_box(moveable_=false):
+func init_furniture(moveable_=false):
 	moveable = moveable_
 
 func drag(ID):
 	match ID:
 		"drag_right":
-			# Drag player and box right
+			# Drag player and furniture right
 			var diff_vec = player_distance()
 			var y = -1 * diff_vec.x
 			var x = diff_vec.y
@@ -19,7 +19,7 @@ func drag(ID):
 			if game.can_move(x, y, self) and game.can_move(x, y, game.player):
 				game.move_actor(vec,game.player,0)
 				game.move_actor(vec,self)
-				game.logg("You drag the box")
+				game.logg("You drag the " + title + ".")
 				game.tick()
 			else:
 				game.cant_move_anim(x,y,self)
@@ -33,7 +33,7 @@ func drag(ID):
 			if game.can_move(x, y, self) and game.can_move(x, y, game.player):
 				game.move_actor(vec,game.player,0)
 				game.move_actor(vec,self)
-				game.logg("You drag the box.")
+				game.logg("You drag the " + title + ".")
 				game.tick()
 			else:
 				game.cant_move_anim(x,y,self)
@@ -47,7 +47,7 @@ func drag(ID):
 			if game.can_move(x, y, self):
 				game.move_actor(vec,self)
 				game.move_actor(vec,game.player,0)
-				game.logg("You push the box.")
+				game.logg("You push the " + title + ".")
 				game.tick()
 			else:
 				game.cant_move_anim(x,y,self)
@@ -61,7 +61,7 @@ func drag(ID):
 			if game.can_move(x, y, game.player):
 				game.move_actor(vec,game.player,0)
 				game.move_actor(vec,self)
-				game.logg("You pull the box.")
+				game.logg("You pull the " + title + ".")
 				game.tick()
 			else:
 				game.cant_move_anim(x,y,self)
