@@ -1,4 +1,4 @@
-extends "res://scripts/Character.gd"
+extends "res://scripts/Actor.gd"
 
 # Constants --------------------------------------------------------------------
 const DEFAULT_PLAYER_MAX_HEALTH = 50
@@ -7,7 +7,7 @@ const DEFAULT_PLAYER_ARMOR = 0
 const DEFAULT_PLAYER_DETECT_RADIUS = 8
 
 # Player Info ------------------------------------------------------------------
-var weapon = "Big Ass Laser Gun"
+#var weapon = "Big Ass Laser Gun"
 var grabbing = false
 var grabbed_actor
 
@@ -18,21 +18,21 @@ onready var visibility = $Visibility
 var character = preload("res://actors/Character.tscn")
 
 # Sprite preload ---------------------------------------------------------------
-var right = preload("res://assets/player_sprite/player_right.png")
-var left = preload("res://assets/player_sprite/player_left.png")
-var up = preload("res://assets/player_sprite/player_up.png")
-var down = preload("res://assets/player_sprite/player_down.png")
-var right_grab = preload("res://assets/player_sprite/player_right_grab.png")
-var left_grab = preload("res://assets/player_sprite/player_left_grab.png")
-var up_grab = preload("res://assets/player_sprite/player_up_grab.png")
-var down_grab = preload("res://assets/player_sprite/player_down_grab.png")
+#var right = preload("res://assets/player_sprite/player_right.png")
+#var left = preload("res://assets/player_sprite/player_left.png")
+#var up = preload("res://assets/player_sprite/player_up.png")
+#var down = preload("res://assets/player_sprite/player_down.png")
+#var right_grab = preload("res://assets/player_sprite/player_right_grab.png")
+#var left_grab = preload("res://assets/player_sprite/player_left_grab.png")
+#var up_grab = preload("res://assets/player_sprite/player_up_grab.png")
+#var down_grab = preload("res://assets/player_sprite/player_down_grab.png")
 
 # Init -------------------------------------------------------------------------
 
 func init_player():
 	identifier = "player"
-	curr_tex = "down"
-	changeable_texture = true
+	#curr_tex = "down"
+	#changeable_texture = true
 	title = "Thunder McDonald"
 	
 	# Detection

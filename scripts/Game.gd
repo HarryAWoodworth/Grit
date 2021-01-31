@@ -1,6 +1,6 @@
 ## PATH TO BETA
 
-# WHERE YOU LEFT OFF: Fixing Add_Barrier and add_character to fix Build_chunks
+# WHERE YOU LEFT OFF: Fixing add_wall and add_character to fix Build_chunks
 # and run the game to see if you permanenlty broke everything :)
 
 # ? Action queue?
@@ -220,44 +220,44 @@ func build_chunk():
 			add_sight_node(x, y)
 #			# Set the chunk's outer edge to forest tiles
 #			if x < FOREST_DEPTH or x > CHUNK_DIMENSION-(FOREST_DEPTH+1) or y < FOREST_DEPTH or y > CHUNK_DIMENSION-(FOREST_DEPTH+1):
-#				pass#add_barrier(x, y, forest_tex,"I'm not traversing those dark woods...")
+#				pass#add_wall(x, y, forest_tex,"I'm not traversing those dark woods...")
 				
 	# Extra walls for testing
-#	add_barrier(6, 4, forest_tex)
-#	add_barrier(8, 4, forest_tex)
-#	add_barrier(6, 5, forest_tex)
-#	add_barrier(8, 5, forest_tex)
-#	add_barrier(6, 6, forest_tex)
-#	add_barrier(8, 6, forest_tex)
-#	add_barrier(6, 7, forest_tex)
-#	add_barrier(8, 7, forest_tex)
-#	add_barrier(6, 8, forest_tex)
-#	add_barrier(8, 8, forest_tex)
-#	add_barrier(5, 8, forest_tex)
-#	add_barrier(4, 8, forest_tex)
-#	add_barrier(3, 8, forest_tex)
-#	add_barrier(9, 8, forest_tex)
-#	add_barrier(10, 8, forest_tex)
-#	add_barrier(11, 8, forest_tex)
-#	add_barrier(5, 3, forest_tex)
-#	add_barrier(6, 3, forest_tex)
-#	add_barrier(6, 2, forest_tex)
+#	add_wall(6, 4, forest_tex)
+#	add_wall(8, 4, forest_tex)
+#	add_wall(6, 5, forest_tex)
+#	add_wall(8, 5, forest_tex)
+#	add_wall(6, 6, forest_tex)
+#	add_wall(8, 6, forest_tex)
+#	add_wall(6, 7, forest_tex)
+#	add_wall(8, 7, forest_tex)
+#	add_wall(6, 8, forest_tex)
+#	add_wall(8, 8, forest_tex)
+#	add_wall(5, 8, forest_tex)
+#	add_wall(4, 8, forest_tex)
+#	add_wall(3, 8, forest_tex)
+#	add_wall(9, 8, forest_tex)
+#	add_wall(10, 8, forest_tex)
+#	add_wall(11, 8, forest_tex)
+#	add_wall(5, 3, forest_tex)
+#	add_wall(6, 3, forest_tex)
+#	add_wall(6, 2, forest_tex)
 
-	add_barrier(6, 4, forest_tex)
-	add_barrier(8, 4, forest_tex)
-	add_barrier(10, 4, forest_tex)
-	add_barrier(12, 4, forest_tex)
-	add_barrier(14, 4, forest_tex)
-	add_barrier(6, 6, forest_tex)
-	add_barrier(8, 6, forest_tex)
-	add_barrier(10, 6, forest_tex)
-	add_barrier(12, 6, forest_tex)
-	add_barrier(14, 6, forest_tex)
-	add_barrier(6, 8, forest_tex)
-	add_barrier(8, 8, forest_tex)
-	add_barrier(10, 8, forest_tex)
-	add_barrier(12, 8, forest_tex)
-	add_barrier(14, 8, forest_tex)
+	add_wall(6, 4, forest_tex)
+	add_wall(8, 4, forest_tex)
+	add_wall(10, 4, forest_tex)
+	add_wall(12, 4, forest_tex)
+	add_wall(14, 4, forest_tex)
+	add_wall(6, 6, forest_tex)
+	add_wall(8, 6, forest_tex)
+	add_wall(10, 6, forest_tex)
+	add_wall(12, 6, forest_tex)
+	add_wall(14, 6, forest_tex)
+	add_wall(6, 8, forest_tex)
+	add_wall(8, 8, forest_tex)
+	add_wall(10, 8, forest_tex)
+	add_wall(12, 8, forest_tex)
+	add_wall(14, 8, forest_tex)
 
 	
 	# Place Player
@@ -276,16 +276,6 @@ func build_chunk():
 	player_info.list_player_info(player_inst)
 	player_inst.init_player()
 	player = player_inst
-	
-	
-	# Place Box
-#	var box_x = 4
-#	var box_y = 10
-#	var box = Box.instance()
-#	box.init(self,box_x,box_y)
-#	add_child(box)
-#	actor_list.append(box)
-#	actor_map[box_x][box_y] = box
 	
 	# Place Enemy
 	add_character(0,15,10,
@@ -337,22 +327,24 @@ func undarken_tile(x, y):
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)
 	
-func add_wall(x,y,identifier_="...",title_="...",description_="...",hidden_=false,blocks_other_actors_=true,blocks_light_=true):
+func add_wall(x,y,texture,identifier="...",title="...",description="...",hidden=false,blocks_other_actors=true,blocks_light=true):
 	var wall = Wall.instance()
 	add_child(wall)
-	wall.init(self,x,y,identifier,title,description,hidden,blocks_other_actors_,blocks_light_)
+	wall.init(self,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
+	wall.sprite.texture = texture
+	# Add wall to map pos
+	map[x][y].add_actor(wall)
 	
 # init(game,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
-func add_character(x,y,health=10,ai="none",identifier_="...",title_="...",description_="...",hidden_=false,blocks_other_actors_=false,blocks_light_=false):
+func add_character(x,y,health=10,ai="none",identifier="...",title="...",description="...",hidden=false,blocks_other_actors=false,blocks_light=false):
 	var character = Character.instance()
 	add_child(character)
-	character.init(self,x,y,identifier,title,description,hidden,blocks_other_actors_,blocks_light_)
+	character.init(self,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
 	character.init_character(health,ai)
+	# Add character to actor list
 	actor_list.append(character)
-	if character.blocks_light:
-		map[x][y].actors.push_front(character)
-	else:
-		map[x][y].actors.append(character)
+	# Add character to map Pos
+	map[x][y].add_actor(character)
 	
 # Return an updating unique ID value
 func get_unique_id():
