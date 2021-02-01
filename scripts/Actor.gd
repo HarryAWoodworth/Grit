@@ -40,3 +40,6 @@ func init(game_,x,y,identifier_="...",title_="...",description_="...",hidden_=fa
 
 func tick():
 	pass
+	
+func take_turn():
+	pass

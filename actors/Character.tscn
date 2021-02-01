@@ -25,6 +25,7 @@ centered = false
 [node name="Tween" type="Tween" parent="Sprite"]
 
 [node name="FCTManager" parent="." instance=ExtResource( 2 )]
+visible = false
 
 [node name="AI_Manager" parent="." instance=ExtResource( 4 )]
 

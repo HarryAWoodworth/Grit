@@ -21,11 +21,13 @@ const DEFAULT_DMG = 0
 #const DEFAULT_LEVEL = 0
 
 # Detection
-const DEFAULT_DETECT_RADIUS = 5
-var detect_radius
+var hit_pos
+var detect_radius = 5
 var target = null
 var target_aquired = false
 var target_just_aquired = false
+var vis_color = Color(.867, .91, .247, 0.1)
+var laser_color = Color(1,0,0,1)
 
 # Enemy data
 var health
@@ -52,31 +54,42 @@ func init_character(health_=DEFAULT_HEALTH,ai_=DEFAULT_AI):
 	
 	# Detection
 #	hidden = true
-	detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
-	var shape = CircleShape2D.new()
-	shape.radius = detect_radius
-	detection_shape.shape = shape
+	detect_radius = detect_radius * game.TILE_SIZE
+	#var shape = CircleShape2D.new()
+	#shape.radius = detect_radius
+	detection_shape.shape.radius = detect_radius
 #	orig_sprite = sprite.texture
 #	sprite.hide()
 	
-	if blocks_light:
-		self.collision_layer = 18
+	#if blocks_light:
+	#	self.collision_layer = 18
 	
 # Tick -------------------------------------------------------------------------
+
+func take_turn():
+	print("Monster taking turn!")
+	# Ai callback to decide action
+#	ai_tick_callback.call_funcv([self, game])
 
 func tick():
 	
 	# Remove notice animation
-	if has_node("NoticeAnimation") and notice_animation != null:
-		target_just_aquired = false
-		remove_child(notice_animation)
+	#if has_node("NoticeAnimation") and notice_animation != null:
+	#	target_just_aquired = false
+	#	remove_child(notice_animation)
 		
 	check_los()
 		
-	# Ai callback to decide action
-	ai_tick_callback.call_funcv([self, game])
+#	# Ai callback to decide action
+#	ai_tick_callback.call_funcv([self, game])
 
 # Game util --------------------------------------------------------------------
+
+func _draw():
+	draw_circle(Vector2(game.TILE_SIZE/2,game.TILE_SIZE/2), detection_shape.shape.radius, vis_color)
+	if target:
+		draw_line(Vector2(), (hit_pos - position).rotated(-rotation), laser_color)
+		draw_circle((hit_pos - position).rotated(-rotation), 5, laser_color)
 
 func take_dmg(num, crit=false):
 	#var dmg_taken = (num - armor)
@@ -155,17 +168,18 @@ func check_los():
 		var target_center = Vector2(target.position.x + half_tile, target.position.y+half_tile)
 		var result = space_state.intersect_ray(center, target_center, [self], self.collision_mask)
 		if result:
+			hit_pos = result.position
 			# If the enemy sees a player for the first time, show a notice animation
 			if result.collider.identifier == "player" and !target_aquired:
 				target_aquired = true
 				target_just_aquired = true
-				notice_animation = NoticeAnim.instance()
-				add_child(notice_animation)
+				#notice_animation = NoticeAnim.instance()
+				#add_child(notice_animation)
 				#var quarter_tile = (game.TILE_SIZE/4)
-				notice_animation.sprite.offset = position
+				#notice_animation.sprite.offset = position
 				#notice_animation.sprite.offset.x -= quarter_tile
 				#notice_animation.sprite.offset.y += quarter_tile
-				notice_animation.play("NoticeAnim")
+				#notice_animation.play("NoticeAnim")
 #			elif target_aquired:
 #				target_aquired = false
 

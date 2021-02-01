@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://scripts/ActorInfoContainer.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://assets/grass.png" type="Texture" id=4]
 [ext_resource path="res://assets/test_grass.png" type="Texture" id=5]
 [ext_resource path="res://assets/shadow_discovered.png" type="Texture" id=6]
+[ext_resource path="res://scenes/Ticker.gd" type="Script" id=7]
 [ext_resource path="res://scripts/Actor.gd" type="Script" id=8]
 [ext_resource path="res://assets/background.png" type="Texture" id=9]
 [ext_resource path="res://scripts/PlayerInfo.gd" type="Script" id=10]
@@ -219,3 +220,6 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Ticker" type="Node" parent="."]
+script = ExtResource( 7 )

@@ -72,7 +72,7 @@ extends Node2D
 
 # Consts -----------------------------------------------------------------------
 
-const WINDOW_SIZE = Vector2(1280, 720)
+const WINDOW_SIZE = Vector2(1920, 1080)
 const TILE_SIZE = 32
 const CHUNK_DIMENSION = 16
 const MAX_TESTLOG_LENGTH = 10000
@@ -88,6 +88,7 @@ enum Shadow { Shadow }
 
 # Node Refs --------------------------------------------------------------------
 
+onready var ticker = $Ticker
 onready var tile_map = $TileMap
 onready var shadow_map = $ShadowMap
 onready var textlog = $UI/TextLog
@@ -284,6 +285,12 @@ func build_chunk():
 				false,
 				true,
 				false)
+
+	ticker.init()
+	ticker.schedule_turn(player,0)
+	for x in range(12):
+		ticker.next_turn()
+	
 
 	# Init tick
 #	yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")

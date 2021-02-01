@@ -53,6 +53,9 @@ func init_player():
 
 # Tick -------------------------------------------------------------------------
 
+func take_turn():
+	print("Player taking turn!")
+
 func tick():
 	pass
 	#check_los()
@@ -123,6 +126,7 @@ func _input(event):
 	if event.is_action_pressed("ui_left"):
 		if !grabbing:
 			game.move_actor_vect(self,Vector2(-1,0))
+			game.tick()
 #		else:
 #			match curr_tex:
 #				"up":
@@ -136,6 +140,7 @@ func _input(event):
 	elif event.is_action_pressed("ui_right"):
 		if !grabbing:
 			game.move_actor_vect(self,Vector2(1,0))
+			
 #		else:
 #			match curr_tex:
 #				"up":
