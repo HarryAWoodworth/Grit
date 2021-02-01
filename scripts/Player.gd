@@ -6,10 +6,14 @@ const DEFAULT_PLAYER_STARTING_LEVEL = 0
 const DEFAULT_PLAYER_ARMOR = 0
 const DEFAULT_PLAYER_DETECT_RADIUS = 8
 
+# Game State -------------------------------------------------------------------
+var has_turn = false
+
 # Player Info ------------------------------------------------------------------
 onready var sprite = $Sprite
 #var weapon = "Big Ass Laser Gun"
 var health: int
+var speed: int
 var grabbing = false
 var grabbed_actor
 
@@ -32,20 +36,20 @@ var character = preload("res://actors/Character.tscn")
 # Init -------------------------------------------------------------------------
 
 func init_player():
-	identifier = "player"
 	#curr_tex = "down"
 	#changeable_texture = true
-	title = "Thunder McDonald"
+	
 	
 	# Detection
 	#detect_radius = DEFAULT_PLAYER_DETECT_RADIUS * game.TILE_SIZE
 	#var shape = CircleShape2D.new()
 	#shape.radius = detect_radius
 	#detection_shape.shape = shape
-	hidden = false
+	#hidden = false
 	
 	# Info
 	health = DEFAULT_PLAYER_MAX_HEALTH
+	speed = 5
 	#level = DEFAULT_PLAYER_STARTING_LEVEL
 	#armor = DEFAULT_PLAYER_ARMOR
 	
@@ -112,6 +116,15 @@ func tick():
 # Input ------------------------------------------------------------------------
 
 func _input(event):
+	# Return if it is not a press event
+	if !event.is_pressed():
+		return
+	if Input.is_action_just_pressed("debug"):
+		#game.darken_tile(curr_tile.x,curr_tile.y)
+		game.ticker.print_ticker()
+	# Return if it is not the player's turn
+	if !has_turn:
+		return
 	# Record on click
 #	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.is_pressed():
 #		on_click()
@@ -119,14 +132,13 @@ func _input(event):
 	# Return if animating movement
 	#if(!game.anim_finished):
 	#	return
-	# Return if it is not a press event
-	if !event.is_pressed():
-		return
+	
 	# Movement keys
 	if event.is_action_pressed("ui_left"):
 		if !grabbing:
 			game.move_actor_vect(self,Vector2(-1,0))
-			game.tick()
+			game.ticker.schedule(self,speed)
+			game.run_until_player_turn()
 #		else:
 #			match curr_tex:
 #				"up":
@@ -140,7 +152,8 @@ func _input(event):
 	elif event.is_action_pressed("ui_right"):
 		if !grabbing:
 			game.move_actor_vect(self,Vector2(1,0))
-			
+			game.ticker.schedule(self,speed)
+			game.run_until_player_turn()
 #		else:
 #			match curr_tex:
 #				"up":
@@ -154,6 +167,8 @@ func _input(event):
 	elif event.is_action_pressed("ui_up"):
 		if !grabbing:
 			game.move_actor_vect(self,Vector2(0,-1))
+			game.ticker.schedule(self,speed)
+			game.run_until_player_turn()
 #		else:
 #			match curr_tex:
 #				"up":
@@ -167,6 +182,8 @@ func _input(event):
 	elif event.is_action_pressed("ui_down"):
 		if !grabbing:
 			game.move_actor_vect(self,Vector2(0,1))
+			game.ticker.schedule(self,speed)
+			game.run_until_player_turn()
 #		else:
 #			match curr_tex:
 #				"up":
@@ -211,9 +228,6 @@ func _input(event):
 #					sprite.set_texture(down)
 #				"up":
 #					sprite.set_texture(up)
-	
-#	elif Input.is_action_just_pressed("debug"):
-#		game.darken_tile(curr_tile.x,curr_tile.y)
 	
 # Game input -------------------------------------------------------------------
 	

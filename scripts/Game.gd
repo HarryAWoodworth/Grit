@@ -119,6 +119,8 @@ var actor_list = []
 var map = []
 # Increasing number for actor unique id's
 var unique_actor_id = 0
+# Is the game world running?
+var world_running = false
 
 # Ready ------------------------------------------------------------------------
 
@@ -269,7 +271,7 @@ func build_chunk():
 	# Place Player
 	var player_inst = Player.instance()
 	add_child(player_inst)
-	player_inst.init(self,0,0,"identifier","Basilisk","...",false,true,false)
+	player_inst.init(self,0,0,"player","Basilisk","...",false,true,false)
 	player_inst.init_player()
 	actor_list.append(player_inst)
 	map[0][0].actors.push_front(player_inst)
@@ -287,14 +289,22 @@ func build_chunk():
 				false)
 
 	ticker.init()
-	ticker.schedule_turn(player,0)
-	for x in range(12):
-		ticker.next_turn()
+	ticker.schedule(player,0)
+	world_running = true
+	run_until_player_turn()
 	
-
 	# Init tick
 #	yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")
-	tick()
+#	tick()
+
+# Running Game -----------------------------------------------------------------
+
+# Call next_turn on the Ticker and incrememnt the ticks if it returns true.
+func run_until_player_turn():
+	while(ticker.next_turn()):
+		ticker.ticks = ticker.ticks + 1
+		print("Tick " + str(ticker.ticks))
+	player.has_turn = true
 
 # Util -------------------------------------------------------------------------
 
