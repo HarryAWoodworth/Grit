@@ -1,7 +1,6 @@
 extends "res://scripts/Actor.gd"
 	
 #onready var tween = $Sprite/Tween
-onready var sprite = $Sprite
 	
 var moveable
 	

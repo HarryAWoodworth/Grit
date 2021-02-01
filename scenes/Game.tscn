@@ -103,6 +103,7 @@ cell_size = Vector2( 32, 32 )
 format = 1
 
 [node name="ShadowMap" type="TileMap" parent="."]
+visible = false
 z_index = 1
 tile_set = SubResource( 2 )
 cell_size = Vector2( 32, 32 )

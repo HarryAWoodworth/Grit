@@ -1,8 +1,8 @@
 extends "res://scripts/Actor.gd"
 
 # Child Nodes
-# onready var tween = $Sprite/Tween
 onready var sprite = $Sprite
+# onready var tween = $Sprite/Tween
 onready var fct_manager = $FCTManager
 onready var ai_manager = $AI_Manager
 onready var detection_shape = $Visibility/DetectionShape
@@ -51,13 +51,13 @@ func init_character(health_=DEFAULT_HEALTH,ai_=DEFAULT_AI):
 	health = health_
 	
 	# Detection
-	hidden = true
+#	hidden = true
 	detect_radius = DEFAULT_DETECT_RADIUS * game.TILE_SIZE
 	var shape = CircleShape2D.new()
 	shape.radius = detect_radius
 	detection_shape.shape = shape
 #	orig_sprite = sprite.texture
-	sprite.hide()
+#	sprite.hide()
 	
 	if blocks_light:
 		self.collision_layer = 18
@@ -90,25 +90,25 @@ func take_dmg(num, crit=false):
 func die():
 	game.remove_node(self)
 
-func unshadow():
-	hidden = false
-	sprite.show()
+#func unshadow():
+#	hidden = false
+#	sprite.show()
 
-func shadow():
-	hidden = true
-	sprite.hide()
+#func shadow():
+#	hidden = true
+#	sprite.hide()
 
 # Get the actor this actor is facing, -1 if no actor is present
-func get_actor_facing():
-	match curr_tex:
-		"right":
-			return game.get_actor_at(curr_tile.x + 1, curr_tile.y)
-		"left":
-			return game.get_actor_at(curr_tile.x - 1, curr_tile.y)
-		"down":
-			return game.get_actor_at(curr_tile.x, curr_tile.y + 1)
-		"up":
-			return game.get_actor_at(curr_tile.x, curr_tile.y - 1)
+#func get_actor_facing():
+#	match curr_tex:
+#		"right":
+#			return game.get_actor_at(curr_tile.x + 1, curr_tile.y)
+#		"left":
+#			return game.get_actor_at(curr_tile.x - 1, curr_tile.y)
+#		"down":
+#			return game.get_actor_at(curr_tile.x, curr_tile.y + 1)
+#		"up":
+#			return game.get_actor_at(curr_tile.x, curr_tile.y - 1)
 
 
 # Add status to status array if status not already present
@@ -172,7 +172,7 @@ func check_los():
 # When a body enters the visibility shape, make it a target if not already
 func _on_Visibility_body_entered(body):
 	# Check that it is a targetable body
-	var arr_non_targetable = ["barrier","box"]
+	# var arr_non_targetable = ["barrier","box"]
 	if body.identifier != "player":
 		return
 	target = body

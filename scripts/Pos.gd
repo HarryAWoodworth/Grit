@@ -1,13 +1,13 @@
-extends Node
+extends Node2D
 
 var actors
 var items
 var tile
 
-func init(tile_):
+func init_pos(tile_):
+	tile = tile_
 	actors = []
 	items = []
-	tile = tile_
 	
 func add_actor(actor):
 	if actor.blocks_light:

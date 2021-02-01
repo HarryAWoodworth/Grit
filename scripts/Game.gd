@@ -83,7 +83,7 @@ const MAX_TESTLOG_LENGTH = 10000
 #const MAX_BUILDING_DIMENSION = 8
 #const MIN_BUILDING_DIMENSION = 5
 
-enum Tile { Grass, Test, Grasss }
+enum TILE { Grass, Test, Grasss }
 enum Shadow { Shadow }
 
 # Node Refs --------------------------------------------------------------------
@@ -136,22 +136,27 @@ func can_move(x, y):
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
 		return false
 	# Check if there is an actor that blocks movement in that path
-	var actor_list = map[x][y].actors
-	if actor_list.empty:
+	var actors = map[x][y].actors
+	if actors.empty():
 		return true
 	else:
-		return actor_list[0].blocks_other_actors
+		return !actors[0].blocks_other_actors
 
 # Move an actor to a coordinate
 func move_actor(actor, x ,y):
-	# Remove the actor from its previous position
-	map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
-	# Update actor's current tile
-	actor.curr_tile = Vector2(x,y)
-	# Add it to its new position
-	map[actor.curr_tile.x][actor.curr_tile.y].actors.append(actor)
-	# Update the actor's node
-	actor.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
+	if can_move(x,y):
+		# Remove the actor from its previous position
+		map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
+		# Update actor's current tile
+		actor.curr_tile = Vector2(x,y)
+		# Add it to its new position
+		map[actor.curr_tile.x][actor.curr_tile.y].actors.append(actor)
+		# Update the actor's node
+		actor.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
+	
+# Move actor using a difference vector
+func move_actor_vect(actor, vect):
+	move_actor(actor, actor.curr_tile.x + vect.x, actor.curr_tile.y + vect.y)
 	
 # Return an array of movement vectors to empty spaces around a coordinate
 func get_surrounding_empty(x,y):
@@ -212,8 +217,8 @@ func build_chunk():
 			# Instance/Init a PositionClass node
 			pos = PositionClass.instance()
 			add_child(pos)
-			pos.init(Tile.test)
-			map[x][y] = pos
+			pos.init_pos(TILE.Test)
+			map[x].append(pos)
 			# Set the tile map
 			tile_map.set_cell(x, y, map[x][y].tile)
 			# Add sight node
@@ -263,18 +268,11 @@ func build_chunk():
 	# Place Player
 	var player_inst = Player.instance()
 	add_child(player_inst)
-	player_inst.init(self,
-				0,0,
-				"player",
-				"Thunder Magee",
-				"...",
-				"none",
-				true)
-	player_inst.unique_id = get_unique_id()
+	player_inst.init(self,0,0,"identifier","Basilisk","...",false,true,false)
+	player_inst.init_player()
 	actor_list.append(player_inst)
 	map[0][0].actors.push_front(player_inst)
-	player_info.list_player_info(player_inst)
-	player_inst.init_player()
+	#player_info.list_player_info(player_inst)
 	player = player_inst
 	
 	# Place Enemy
