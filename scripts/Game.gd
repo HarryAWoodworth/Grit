@@ -1,14 +1,10 @@
 ## PATH TO BETA
 
-# WHERE YOU LEFT OFF: Fixing add_wall and add_character to fix Build_chunks
-# and run the game to see if you permanenlty broke everything :)
-
-# ? Action queue?
-
 # >>>>>>> ENEMY / PLAYER INTERACTION
-# - Make light-blocking enemies work right
-# - Attack Diagonally
-# @ A* Pathfinding for enemies
+# - Attack/Move Diagonally
+
+# Enemies detect you (broken)
+	# A* Pathfinding for enemies
 # s Stealth
 # @ Sound system
 #	- Actions make sound
@@ -231,25 +227,25 @@ func build_chunk():
 #				pass#add_wall(x, y, forest_tex,"I'm not traversing those dark woods...")
 				
 	# Extra walls for testing
-#	add_wall(6, 4, forest_tex)
-#	add_wall(8, 4, forest_tex)
-#	add_wall(6, 5, forest_tex)
-#	add_wall(8, 5, forest_tex)
-#	add_wall(6, 6, forest_tex)
-#	add_wall(8, 6, forest_tex)
-#	add_wall(6, 7, forest_tex)
-#	add_wall(8, 7, forest_tex)
-#	add_wall(6, 8, forest_tex)
-#	add_wall(8, 8, forest_tex)
-#	add_wall(5, 8, forest_tex)
-#	add_wall(4, 8, forest_tex)
-#	add_wall(3, 8, forest_tex)
-#	add_wall(9, 8, forest_tex)
-#	add_wall(10, 8, forest_tex)
-#	add_wall(11, 8, forest_tex)
-#	add_wall(5, 3, forest_tex)
-#	add_wall(6, 3, forest_tex)
-#	add_wall(6, 2, forest_tex)
+	add_wall(6, 4, forest_tex)
+	add_wall(8, 4, forest_tex)
+	add_wall(6, 5, forest_tex)
+	add_wall(8, 5, forest_tex)
+	add_wall(6, 6, forest_tex)
+	add_wall(8, 6, forest_tex)
+	add_wall(6, 7, forest_tex)
+	add_wall(8, 7, forest_tex)
+	add_wall(6, 8, forest_tex)
+	add_wall(8, 8, forest_tex)
+	add_wall(5, 8, forest_tex)
+	add_wall(4, 8, forest_tex)
+	add_wall(3, 8, forest_tex)
+	add_wall(9, 8, forest_tex)
+	add_wall(10, 8, forest_tex)
+	add_wall(11, 8, forest_tex)
+	add_wall(5, 3, forest_tex)
+	add_wall(6, 3, forest_tex)
+	add_wall(6, 2, forest_tex)
 
 	add_wall(6, 4, forest_tex)
 	add_wall(8, 4, forest_tex)

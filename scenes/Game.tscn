@@ -86,14 +86,12 @@ bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
 script = ExtResource( 1 )
 
 [node name="Background" type="Sprite" parent="."]
-visible = false
 show_behind_parent = true
-position = Vector2( 464, 112 )
+position = Vector2( 1203.7, 1316.4 )
 scale = Vector2( 117.082, 56.5674 )
 texture = ExtResource( 9 )
 
 [node name="CanvasModulate" type="CanvasModulate" parent="Background"]
-visible = false
 position = Vector2( -4.00803, -1.49048 )
 scale = Vector2( 0.008541, 0.017678 )
 color = Color( 0, 0, 0, 1 )
