@@ -1,0 +1,24 @@
+{
+	"items": [
+		{
+			"item_name": "AK-47",
+			"texture_small": "ak_47_small.png",
+			"texture_big": "ak_47_big.png",
+			"weight": 3.47,
+			"type":"ranged",
+			"ranged_accuracy_dropoff": 5,
+			"ammo_type": "7.62×39mm" 
+		},
+		{
+			"item_name": "7.62×39mm",
+			"texture_small": "7.62×39mm_small.png",
+			"texture_big": "7.62×39mm_big.png",
+			"weight": 0.0016,
+			"type": "ammo",
+			"damage_range": {
+				"low": 10,
+				"high": 40
+			}, 
+		},
+	]
+}
