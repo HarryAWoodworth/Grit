@@ -7,7 +7,7 @@
 extents = Vector2( 64, 64 )
 
 [sub_resource type="OccluderPolygon2D" id=2]
-polygon = PoolVector2Array( 0, 0, 256, 0, 256, 256, 0, 256 )
+polygon = PoolVector2Array( 0, 0, 128, 0, 128, 128, 0, 128 )
 
 [node name="Wall" type="KinematicBody2D"]
 input_pickable = true
@@ -26,7 +26,6 @@ light_mask = -2147483647
 
 [node name="Sprite" type="Sprite" parent="."]
 light_mask = -2147483646
-scale = Vector2( 2, 2 )
 z_index = 1
 texture = ExtResource( 2 )
 centered = false
