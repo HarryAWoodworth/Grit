@@ -13,7 +13,7 @@ func load_ticker(ticks_, schedule_):
 	ticks = ticks_
 	schedule = schedule_
 
-func schedule(actor, interval):
+func schedule_action(actor, interval):
 	var tick_num = ticks + interval
 	if schedule.has(tick_num):
 		schedule[tick_num].append(actor)

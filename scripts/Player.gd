@@ -137,7 +137,7 @@ func _input(event):
 	if event.is_action_pressed("ui_left"):
 		if !grabbing:
 			game.move_actor_vect(self,Vector2(-1,0))
-			game.ticker.schedule(self,speed)
+			game.ticker.schedule_action(self,speed)
 			game.run_until_player_turn()
 #		else:
 #			match curr_tex:
@@ -152,7 +152,7 @@ func _input(event):
 	elif event.is_action_pressed("ui_right"):
 		if !grabbing:
 			game.move_actor_vect(self,Vector2(1,0))
-			game.ticker.schedule(self,speed)
+			game.ticker.schedule_action(self,speed)
 			game.run_until_player_turn()
 #		else:
 #			match curr_tex:
@@ -167,7 +167,7 @@ func _input(event):
 	elif event.is_action_pressed("ui_up"):
 		if !grabbing:
 			game.move_actor_vect(self,Vector2(0,-1))
-			game.ticker.schedule(self,speed)
+			game.ticker.schedule_action(self,speed)
 			game.run_until_player_turn()
 #		else:
 #			match curr_tex:
@@ -182,7 +182,7 @@ func _input(event):
 	elif event.is_action_pressed("ui_down"):
 		if !grabbing:
 			game.move_actor_vect(self,Vector2(0,1))
-			game.ticker.schedule(self,speed)
+			game.ticker.schedule_action(self,speed)
 			game.run_until_player_turn()
 #		else:
 #			match curr_tex:

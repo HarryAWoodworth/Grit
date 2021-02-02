@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/player_left_grab.png-bcf55a7b73affe2e2a03db227c2e7095.stex"
+path="res://.import/ak_47_big.png-9cdd778aded27398e8cc152b4c022600.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/player_sprite/player_left_grab.png"
-dest_files=[ "res://.import/player_left_grab.png-bcf55a7b73affe2e2a03db227c2e7095.stex" ]
+source_file="res://assets/item_sprites/ak_47_big.png"
+dest_files=[ "res://.import/ak_47_big.png-9cdd778aded27398e8cc152b4c022600.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

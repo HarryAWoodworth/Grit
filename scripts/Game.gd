@@ -69,7 +69,7 @@ extends Node2D
 # Consts -----------------------------------------------------------------------
 
 const WINDOW_SIZE = Vector2(1920, 1080)
-const TILE_SIZE = 32
+const TILE_SIZE = 128
 const CHUNK_DIMENSION = 16
 const MAX_TESTLOG_LENGTH = 10000
 #const ANIM_SPEED = 5
@@ -79,7 +79,7 @@ const MAX_TESTLOG_LENGTH = 10000
 #const MAX_BUILDING_DIMENSION = 8
 #const MIN_BUILDING_DIMENSION = 5
 
-enum TILE { Grass, Test, Grasss }
+enum TILE { Test, Wall }
 enum Shadow { Shadow }
 
 # Node Refs --------------------------------------------------------------------
@@ -90,6 +90,7 @@ onready var shadow_map = $ShadowMap
 onready var textlog = $UI/TextLog
 onready var actor_info = $UI/ActorInfo
 onready var player_info = $UI/PlayerInfo
+onready var item_manager = $Item_Manager
 
 # Entity Preloads --------------------------------------------------------------
 
@@ -100,10 +101,10 @@ var Character = preload("res://actors/Character.tscn")
 var Player = preload("res://actors/Player.tscn")
 var Wall = preload("res://actors/Wall.tscn")
 var SightNode = preload("res://util/SightNode.tscn")
+var Item = preload("res://actors/Item.tscn")
 
 # Texture preloads
-var wall_tex = preload("res://assets/wall.png")
-var forest_tex = preload("res://assets/forest.png")
+var forest_tex = preload("res://assets/test_wall.png")
 
 # Game State -------------------------------------------------------------------
 
@@ -125,6 +126,9 @@ func _ready():
 	OS.set_window_size(WINDOW_SIZE)
 	randomize()
 	# textlog.text = "This is a test!"
+	tile_map.cell_quadrant_size = TILE_SIZE
+	item_manager.init()
+	print(str(item_manager.item_dictionary))
 	build_chunk()
 	
 # Actor Movement ------------------------------------------------------------------------
@@ -216,7 +220,7 @@ func build_chunk():
 			# Instance/Init a PositionClass node
 			pos = PositionClass.instance()
 			add_child(pos)
-			pos.init_pos(TILE.Test)
+			pos.init_pos(self, TILE.Test, Vector2(x,y))
 			map[x].append(pos)
 			# Set the tile map
 			tile_map.set_cell(x, y, map[x][y].tile)
@@ -284,8 +288,11 @@ func build_chunk():
 				true,
 				false)
 
+	add_item("ak_47",2,2)
+	map[2][2].print_pos()
+
 	ticker.init()
-	ticker.schedule(player,0)
+	ticker.schedule_action(player,0)
 	world_running = true
 	run_until_player_turn()
 	
@@ -299,7 +306,7 @@ func build_chunk():
 func run_until_player_turn():
 	while(ticker.next_turn()):
 		ticker.ticks = ticker.ticks + 1
-		print("Tick " + str(ticker.ticks))
+		#print("Tick " + str(ticker.ticks))
 	player.has_turn = true
 
 # Util -------------------------------------------------------------------------
@@ -357,6 +364,24 @@ func add_character(x,y,health=10,ai="none",identifier="...",title="...",descript
 	# Add character to map Pos
 	map[x][y].add_actor(character)
 	
+# Add item to position. Return false if it failed, true if it succeeded
+func add_item(item_name,x,y):
+	# Clone the item from the item manager
+	var item_inst = Item.instance()
+	var item_from_dict = item_manager.item_dictionary.get(item_name)
+	if item_from_dict == null:
+		print("Error: No item found in item_dictionary with name \"" + item_name + "\"")
+		return false
+	item_inst.init_clone(item_manager.item_dictionary.get(item_name))
+	
+	map[x][y].add_item(item_inst)
+	return true
+	
+func add_item_to_lootable(item_name,lootable):
+	var item_inst = Item.instance()
+	item_inst.init_clone(item_manager.item_dictionary.get(item_name))
+	#lootable.add_item(item_inst)
+
 # Return an updating unique ID value
 func get_unique_id():
 	var temp = unique_actor_id
@@ -380,4 +405,4 @@ func display_actor_data(actor):
 # Clear actor data
 func clear_actor_data():
 	actor_info.clear()
-	
+

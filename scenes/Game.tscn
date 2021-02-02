@@ -1,10 +1,9 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scripts/Game.gd" type="Script" id=1]
 [ext_resource path="res://scripts/ActorInfoContainer.gd" type="Script" id=2]
-[ext_resource path="res://assets/test.png" type="Texture" id=3]
-[ext_resource path="res://assets/grass.png" type="Texture" id=4]
-[ext_resource path="res://assets/test_grass.png" type="Texture" id=5]
+[ext_resource path="res://assets/test_floor.png" type="Texture" id=3]
+[ext_resource path="res://assets/test_wall.png" type="Texture" id=4]
 [ext_resource path="res://assets/shadow_discovered.png" type="Texture" id=6]
 [ext_resource path="res://scenes/Ticker.gd" type="Script" id=7]
 [ext_resource path="res://scripts/Actor.gd" type="Script" id=8]
@@ -13,11 +12,11 @@
 [ext_resource path="res://scripts/Item_Manager.gd" type="Script" id=11]
 
 [sub_resource type="TileSet" id=1]
-0/name = "grass.png 0"
-0/texture = ExtResource( 4 )
+0/name = "test_floor.png 0"
+0/texture = ExtResource( 3 )
 0/tex_offset = Vector2( 0, 0 )
 0/modulate = Color( 1, 1, 1, 1 )
-0/region = Rect2( 0, 0, 32, 32 )
+0/region = Rect2( 0, 0, 128, 128 )
 0/tile_mode = 0
 0/occluder_offset = Vector2( 0, 0 )
 0/navigation_offset = Vector2( 0, 0 )
@@ -27,11 +26,11 @@
 0/shape_one_way_margin = 0.0
 0/shapes = [  ]
 0/z_index = 0
-1/name = "test.png 1"
-1/texture = ExtResource( 3 )
+1/name = "test_wall.png 1"
+1/texture = ExtResource( 4 )
 1/tex_offset = Vector2( 0, 0 )
 1/modulate = Color( 1, 1, 1, 1 )
-1/region = Rect2( 0, 0, 32, 32 )
+1/region = Rect2( 0, 0, 128, 128 )
 1/tile_mode = 0
 1/occluder_offset = Vector2( 0, 0 )
 1/navigation_offset = Vector2( 0, 0 )
@@ -41,20 +40,6 @@
 1/shape_one_way_margin = 0.0
 1/shapes = [  ]
 1/z_index = 0
-2/name = "test_grass.png 2"
-2/texture = ExtResource( 5 )
-2/tex_offset = Vector2( 0, 0 )
-2/modulate = Color( 1, 1, 1, 1 )
-2/region = Rect2( 0, 9, 32, 39 )
-2/tile_mode = 0
-2/occluder_offset = Vector2( 0, 0 )
-2/navigation_offset = Vector2( 0, 0 )
-2/shape_offset = Vector2( 0, 0 )
-2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-2/shape_one_way = false
-2/shape_one_way_margin = 0.0
-2/shapes = [  ]
-2/z_index = 0
 
 [sub_resource type="TileSet" id=2]
 0/name = "shadow_discovered.png 0"
@@ -99,7 +84,8 @@ color = Color( 0, 0, 0, 1 )
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 1 )
-cell_size = Vector2( 32, 32 )
+cell_size = Vector2( 128, 128 )
+cell_custom_transform = Transform2D( 0, 0, 0, 0, 0, 0 )
 format = 1
 
 [node name="ShadowMap" type="TileMap" parent="."]

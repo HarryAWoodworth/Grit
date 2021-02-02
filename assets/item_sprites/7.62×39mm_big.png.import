@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/player_left.png-127df2e269aaabbc345c8f2cdb068a82.stex"
+path="res://.import/7.62×39mm_big.png-bdc56f35a214dc8508ca06c8821b0045.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/player_sprite/player_left.png"
-dest_files=[ "res://.import/player_left.png-127df2e269aaabbc345c8f2cdb068a82.stex" ]
+source_file="res://assets/item_sprites/7.62×39mm_big.png"
+dest_files=[ "res://.import/7.62×39mm_big.png-bdc56f35a214dc8508ca06c8821b0045.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
