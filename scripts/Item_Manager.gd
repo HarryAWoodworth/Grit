@@ -20,8 +20,10 @@ func init():
 	var items = json_result["items"]
 	for item in items:
 		var item_inst = Item.instance()
+		print(item)
+		print("IDD: " + item.id)
 		# init basic item properties
-		item_inst.init_basic(item.item_name,item.weight)
+		item_inst.init_basic(item.id,item.item_name,item.weight)
 		# Match the item type to init differently
 		var item_type = item.type
 		match item_type:
@@ -36,7 +38,7 @@ func init():
 			"ingredient":
 				item_inst.init_ingredient()
 		# Add to item dictionary
-		item_dictionary[item_inst.item_name] = item_inst
+		item_dictionary[item_inst.id] = item_inst
 
-func load_item(item_name):
-	return item_dictionary.get(item_name,null)
+func load_item(id):
+	return item_dictionary.get(id,null)

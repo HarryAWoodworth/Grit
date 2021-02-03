@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scripts/Pos.gd" type="Script" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 64, 64 )
 
 [node name="Node" type="Node2D"]
 script = ExtResource( 1 )
@@ -9,3 +12,19 @@ script = ExtResource( 1 )
 position = Vector2( 0, -2.84217e-14 )
 scale = Vector2( 1, 0.941176 )
 centered = false
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+margin_top = 128.0
+margin_right = 256.0
+margin_bottom = 384.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ClickDetector" type="Area2D" parent="."]
+position = Vector2( 64, 64 )
+gravity_vec = Vector2( 0, 0 )
+gravity = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickDetector"]
+shape = SubResource( 1 )

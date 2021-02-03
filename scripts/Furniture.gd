@@ -1,9 +1,9 @@
 extends "res://scripts/Actor.gd"
-	
+
 #onready var tween = $Sprite/Tween
-	
+
 var moveable
-	
+
 func init_furniture(moveable_=false):
 	moveable = moveable_
 
@@ -68,7 +68,6 @@ func drag(ID):
 
 func _on_Box_mouse_entered():
 	game.display_actor_data(self)
-
 
 func _on_Box_mouse_exited():
 	game.clear_actor_data()

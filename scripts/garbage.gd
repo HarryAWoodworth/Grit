@@ -91,3 +91,50 @@
 #	var _x = node.curr_tile.x
 #	var _y = node.curr_tile.y
 #	return abs(x - _x) <= 1 and abs(y - _y) <= 1
+
+# Optimizations:
+# Check after every corner raycast result
+#func check_los():
+#	update()
+#	var corner_res
+#	var space_state = get_world_2d().direct_space_state
+#	var tile_len = game.TILE_SIZE
+#	var half_tile = tile_len/2
+#	var center_of_player = Vector2(position.x + half_tile, position.y + half_tile)
+#	for target in targets:
+#		var iden = target.unique_id
+#		var sightnodeOrEnemy = target.identifier == "sightnode" or target.identifier == "enemy"
+#		var raymask = self.collision_mask
+#		var exceptarr = [self]
+#		# Floor sightnodes are onlyblocked by barriers and light-blocking actors
+#		if sightnodeOrEnemy:
+#			raymask = 20
+#		# Side 1
+#		#  and !corner_res.empty() 
+#		corner_res = space_state.intersect_ray(center_of_player, Vector2(target.position.x + half_tile, target.position.y), exceptarr, raymask)
+#		if (sightnodeOrEnemy and corner_res.empty()) or (!sightnodeOrEnemy and !corner_res.empty() and corner_res.collider.unique_id == iden):
+#			show_target(target)
+#			continue
+#		# Side 2
+#		corner_res = space_state.intersect_ray(center_of_player, Vector2(target.position.x + tile_len, target.position.y + half_tile), exceptarr, raymask)
+#		if (sightnodeOrEnemy and corner_res.empty()) or (!sightnodeOrEnemy and !corner_res.empty() and corner_res.collider.unique_id == iden):
+#			show_target(target)
+#			continue
+#		# Side 3
+#		corner_res = space_state.intersect_ray(center_of_player, Vector2(target.position.x, target.position.y + half_tile), exceptarr, raymask)
+#		if (sightnodeOrEnemy and corner_res.empty()) or (!sightnodeOrEnemy and !corner_res.empty() and corner_res.collider.unique_id == iden):
+#			show_target(target)
+#			continue
+#		# Side 4
+#		corner_res = space_state.intersect_ray(center_of_player, Vector2(target.position.x + half_tile, target.position.y + tile_len), exceptarr, raymask)
+#		if (sightnodeOrEnemy and corner_res.empty()) or (!sightnodeOrEnemy and !corner_res.empty() and corner_res.collider.unique_id == iden):
+#			show_target(target)
+#			continue
+#		hide_target(target)
+
+#func show_target(target):
+	#target.unshadow()
+	
+	
+#func hide_target(target):
+	#target.shadow()

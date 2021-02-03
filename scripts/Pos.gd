@@ -1,11 +1,11 @@
 extends Node2D
 
 onready var sprite = $Sprite
+onready var loot_menu = $PopupMenu
 
 var actors
 var items
 var tile
-var ground_texture
 var curr_tile
 
 func init_pos(game, tile_,curr_tile_):
@@ -31,8 +31,25 @@ func print_pos():
 		item.print_item()
 		
 func add_item(item):
-	print("Adding item " + item.item_name + " at position (" + str(curr_tile.x) + "," + str(curr_tile.y) + ")")
+	print("Adding item " + item.id + " at position (" + str(curr_tile.x) + "," + str(curr_tile.y) + ")")
 	if items.empty():
 		print("pos drawing item")
-		sprite.texture = load("res://assets/item_sprites/" + item.item_name + "_small.png")
+		sprite.texture = load_tex(item)
 	items.append(item)
+	
+func display_loot_menu():
+	for item in items:
+		loot_menu.add_icon_check_item(
+			load_tex(item),
+			item.item_name
+		)
+	loot_menu.show()
+	
+func load_tex(item):
+	return load("res://assets/item_sprites/" + item.id + "_small.png")
+
+
+# Double click opens loot list at pos
+#func _on_ClickDetector_input_event(_viewport, event, _shape_idx):
+#	if event is InputEventMouseButton and event.doubleclick:
+#		display_loot_menu()

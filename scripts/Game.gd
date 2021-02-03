@@ -62,7 +62,7 @@
 # - Hiding in Objects
 # - Multi-tile actors
 # - Night brings complete darkness, inhuman horrors, enemies noticing your light source...
-#  - Tile_Lit bool, if a monster sees a tile_lit then it can pathfind to the player?
+# - Tile_Lit bool, if a monster sees a tile_lit then it can pathfind to the player?
 
 extends Node2D
 
@@ -72,12 +72,6 @@ const WINDOW_SIZE = Vector2(1920, 1080)
 const TILE_SIZE = 128
 const CHUNK_DIMENSION = 16
 const MAX_TESTLOG_LENGTH = 10000
-#const ANIM_SPEED = 5
-#const CANT_MOVE_ANIM_DIST = 2
-#const ANIM_SPEED_CANT = 8
-#const FOREST_DEPTH = 2
-#const MAX_BUILDING_DIMENSION = 8
-#const MIN_BUILDING_DIMENSION = 5
 
 enum TILE { Test, Wall }
 enum Shadow { Shadow }
@@ -88,16 +82,16 @@ onready var ticker = $Ticker
 onready var tile_map = $TileMap
 onready var shadow_map = $ShadowMap
 onready var textlog = $UI/TextLog
-onready var actor_info = $UI/ActorInfo
-onready var player_info = $UI/PlayerInfo
 onready var item_manager = $Item_Manager
+onready var Inventory = $UI/HBoxContainer/Inventory
+onready var PosInventory = $UI/HBoxContainer/PosInventory
 
 # Entity Preloads --------------------------------------------------------------
 
 # Node preloads for instancing
 var Furniture = preload("res://actors/Furniture.tscn")
 var PositionClass = preload("res://scenes/Position.tscn")
-var Character = preload("res://actors/Character.tscn")
+var Monster = preload("res://actors/Monster.tscn")
 var Player = preload("res://actors/Player.tscn")
 var Wall = preload("res://actors/Wall.tscn")
 var SightNode = preload("res://util/SightNode.tscn")
@@ -125,10 +119,8 @@ var world_running = false
 func _ready():
 	OS.set_window_size(WINDOW_SIZE)
 	randomize()
-	# textlog.text = "This is a test!"
 	tile_map.cell_quadrant_size = TILE_SIZE
 	item_manager.init()
-	print(str(item_manager.item_dictionary))
 	build_chunk()
 	
 # Actor Movement ------------------------------------------------------------------------
@@ -156,11 +148,11 @@ func move_actor(actor, x ,y):
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.append(actor)
 		# Update the actor's node
 		actor.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
-	
+
 # Move actor using a difference vector
 func move_actor_vect(actor, vect):
 	move_actor(actor, actor.curr_tile.x + vect.x, actor.curr_tile.y + vect.y)
-	
+
 # Return an array of movement vectors to empty spaces around a coordinate
 func get_surrounding_empty(x,y):
 	var free_spaces = []
@@ -182,28 +174,21 @@ func get_surrounding_empty(x,y):
 		free_spaces.append(Vector2(1,-1))
 	return free_spaces
 
-# Tick -------------------------------------------------------------------------
+# UI ---------------------------------------------------------------------------
 
-# Call tick on all actors in actor_list in order
-func tick():
-	update()
-	for actor in actor_list:
-		actor.tick()
+func open_loot_tray(pos):
+	PosInventory.clear()
+	for item in pos.items:
+		PosInventory.add_item(item.item_name,load_tex(item))
 
-# Actor Combat -----------------------------------------------------------------
-	
-#func exchange_combat_damage(agressor, defender):
-#	defender.take_dmg(agressor.dmg)
-	
-# Remove an actor from the game
-func remove_actor(actor):
-	# Remove from actor list
-	actor_list.erase(actor)
-	# Remove from actor map
-	map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
-	# Remove node
-	remove_child(actor)
+# Update -----------------------------------------------------------------------
 
+# Call update on all actors in actor_list in order
+#func update():
+#	update()
+#	for actor in actor_list:
+#		actor.tick()
+		
 # Chunk Generation -------------------------------------------------------------
 
 # Build a chunk
@@ -226,10 +211,7 @@ func build_chunk():
 			tile_map.set_cell(x, y, map[x][y].tile)
 			# Add sight node
 			add_sight_node(x, y)
-#			# Set the chunk's outer edge to forest tiles
-#			if x < FOREST_DEPTH or x > CHUNK_DIMENSION-(FOREST_DEPTH+1) or y < FOREST_DEPTH or y > CHUNK_DIMENSION-(FOREST_DEPTH+1):
-#				pass#add_wall(x, y, forest_tex,"I'm not traversing those dark woods...")
-				
+
 	# Extra walls for testing
 	add_wall(6, 4, forest_tex)
 	add_wall(8, 4, forest_tex)
@@ -267,7 +249,7 @@ func build_chunk():
 	add_wall(12, 8, forest_tex)
 	add_wall(14, 8, forest_tex)
 
-	
+
 	# Place Player
 	var player_inst = Player.instance()
 	add_child(player_inst)
@@ -275,9 +257,8 @@ func build_chunk():
 	player_inst.init_player()
 	actor_list.append(player_inst)
 	map[0][0].actors.push_front(player_inst)
-	#player_info.list_player_info(player_inst)
 	player = player_inst
-	
+
 	# Place Enemy
 	add_character(0,15,10,
 				"monster_classic",
@@ -290,15 +271,13 @@ func build_chunk():
 
 	add_item("ak_47",2,2)
 	map[2][2].print_pos()
+	add_item("7.62×39mm",2,2)
+	map[2][2].print_pos()
 
 	ticker.init()
 	ticker.schedule_action(player,0)
 	world_running = true
 	run_until_player_turn()
-	
-	# Init tick
-#	yield(get_tree().create_timer(1.0/ANIM_SPEED),"timeout")
-#	tick()
 
 # Running Game -----------------------------------------------------------------
 
@@ -310,6 +289,15 @@ func run_until_player_turn():
 	player.has_turn = true
 
 # Util -------------------------------------------------------------------------
+
+# Remove an actor from the game
+func remove_actor(actor):
+	# Remove from actor list
+	actor_list.erase(actor)
+	# Remove from actor map
+	map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
+	# Remove node
+	remove_child(actor)
 
 # Returns true if an actor at the position (x,y) blocks light
 func blocksLight(x,y):
@@ -338,13 +326,13 @@ func add_sight_node(x,y):
 	
 func darken_tile(x, y):
 	shadow_map.set_cell(x, y, Shadow.Shadow)
-	
+
 func undarken_tile(x, y):
 	shadow_map.set_cell(x, y, -1)
-	
+
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)
-	
+
 func add_wall(x,y,texture,identifier="...",title="...",description="...",hidden=false,blocks_other_actors=true,blocks_light=true):
 	var wall = Wall.instance()
 	add_child(wall)
@@ -352,10 +340,10 @@ func add_wall(x,y,texture,identifier="...",title="...",description="...",hidden=
 	wall.sprite.texture = texture
 	# Add wall to map pos
 	map[x][y].add_actor(wall)
-	
+
 # init(game,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
 func add_character(x,y,health=10,ai="none",identifier="...",title="...",description="...",hidden=false,blocks_other_actors=false,blocks_light=false):
-	var character = Character.instance()
+	var character = Monster.instance()
 	add_child(character)
 	character.init(self,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
 	character.init_character(health,ai)
@@ -363,23 +351,23 @@ func add_character(x,y,health=10,ai="none",identifier="...",title="...",descript
 	actor_list.append(character)
 	# Add character to map Pos
 	map[x][y].add_actor(character)
-	
+
 # Add item to position. Return false if it failed, true if it succeeded
-func add_item(item_name,x,y):
+func add_item(id,x,y):
 	# Clone the item from the item manager
 	var item_inst = Item.instance()
-	var item_from_dict = item_manager.item_dictionary.get(item_name)
+	var item_from_dict = item_manager.item_dictionary.get(id)
 	if item_from_dict == null:
-		print("Error: No item found in item_dictionary with name \"" + item_name + "\"")
+		print("Error: No item found in item_dictionary with name \"" + id + "\"")
 		return false
-	item_inst.init_clone(item_manager.item_dictionary.get(item_name))
-	
+	item_inst.init_clone(item_manager.item_dictionary.get(id))
 	map[x][y].add_item(item_inst)
 	return true
-	
-func add_item_to_lootable(item_name,lootable):
+
+# TODO
+func add_item_to_lootable(id,lootable):
 	var item_inst = Item.instance()
-	item_inst.init_clone(item_manager.item_dictionary.get(item_name))
+	item_inst.init_clone(item_manager.item_dictionary.get(id))
 	#lootable.add_item(item_inst)
 
 # Return an updating unique ID value
@@ -387,6 +375,9 @@ func get_unique_id():
 	var temp = unique_actor_id
 	unique_actor_id = unique_actor_id + 1
 	return temp
+	
+func load_tex(item):
+	return load("res://assets/item_sprites/" + item.id + "_small.png")
 	
 # UI ---------------------------------------------------------------------------
 
@@ -397,12 +388,3 @@ func addLog(string):
 	if logLength > MAX_TESTLOG_LENGTH:
 		textlog.text = textlog.text.substr(int(MAX_TESTLOG_LENGTH - (MAX_TESTLOG_LENGTH/10.0)),logLength)
 	textlog.text = textlog.text + "\n" + string
-
-# Display actor data
-func display_actor_data(actor):
-	actor_info.list_info(actor)
-	
-# Clear actor data
-func clear_actor_data():
-	actor_info.clear()
-

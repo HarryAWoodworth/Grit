@@ -9,7 +9,7 @@ func _ready():
 	actor_sprite.hide()
 	actor_title.hide()
 	actor_description.hide()
-	
+
 # Set the info based on the actor node, show elements
 func list_info(actor):
 	#Set
@@ -20,7 +20,7 @@ func list_info(actor):
 	actor_sprite.show()
 	actor_title.show()
 	actor_description.show()
-	
+
 # Hide all UI elements
 func clear():
 	actor_sprite.hide()

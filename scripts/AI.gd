@@ -98,7 +98,7 @@ func contains(list, target_tile):
 
 func adjacent(tile, goal):
 	return abs(tile.x - goal.x) <= 1 and abs(tile.y - goal.y) <= 1
-	
+
 # Turn an array of adjacent spaces into an array of adjacent Tile objects
 func adjacentList(free_spaces, parent, target_vec):
 	var adjacent_arr = []

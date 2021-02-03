@@ -1,13 +1,15 @@
 {
 	"items": [
 		{
-			"item_name": "ak_47",
+			"id": "ak_47",
+			"item_name": "AK-47",
 			"weight": 3.47,
 			"type":"ranged",
 			"ranged_accuracy_dropoff": 5,
 			"ammo_type": "7.62×39mm"
 		},
 		{
+			"id": "7.62×39mm",
 			"item_name": "7.62×39mm",
 			"weight": 0.0016,
 			"type": "ammo",

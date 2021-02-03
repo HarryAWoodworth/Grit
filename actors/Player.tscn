@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/player_sprite/player.png" type="Texture" id=1]
 [ext_resource path="res://util/AI_Manager.tscn" type="PackedScene" id=2]
 [ext_resource path="res://util/FCTManager.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=4]
 [ext_resource path="res://assets/light.png" type="Texture" id=5]
+[ext_resource path="res://scripts/Inventory.gd" type="Script" id=6]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -55,12 +56,15 @@ position = Vector2( 64, 64 )
 shape = SubResource( 3 )
 
 [node name="Light2D" type="Light2D" parent="."]
+visible = false
 position = Vector2( 64, 64 )
 texture = ExtResource( 5 )
+offset = Vector2( 16, 0 )
 color = Color( 1, 0.952941, 0.87451, 1 )
 range_z_min = 0
 range_z_max = 0
 shadow_enabled = true
 shadow_color = Color( 0, 0, 0, 1 )
-[connection signal="body_entered" from="Visibility" to="." method="_on_Visibility_body_entered"]
-[connection signal="body_exited" from="Visibility" to="." method="_on_Visibility_body_exited"]
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource( 6 )
