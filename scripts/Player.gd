@@ -8,15 +8,17 @@ const DEFAULT_PLAYER_DETECT_RADIUS = 8
 
 # Game State -------------------------------------------------------------------
 var has_turn = false
-var inventory
 
 # Player Info ------------------------------------------------------------------
 onready var sprite = $Sprite
+onready var inventory = $Inventory
 var health: int
 var speed: int
 var grabbing = false
 var grabbed_actor
 var effects
+var current_weight = 0
+var max_weight = 100
 
 # Detection --------------------------------------------------------------------
 var targets = []
@@ -27,9 +29,9 @@ onready var visibility = $Visibility
 
 func init_player():
 	effects = []
-	inventory = game.Inventory
 	health = DEFAULT_PLAYER_MAX_HEALTH
 	speed = 5
+	inventory.init(current_weight,max_weight,game)
 
 # Tick -------------------------------------------------------------------------
 

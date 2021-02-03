@@ -20,11 +20,12 @@ var game
 #	"soda": [{soda Item Node}, 4]
 #}
 
-func init(current_weight_, item_manager_, game_):
+func init(current_weight_, max_weight_, game_):
 	bag = {}
 	current_weight = current_weight_
-	item_manager = item_manager_
+	max_weight = max_weight_
 	game = game_
+	item_manager = game.item_manager
 	player = game.player
 
 # Add item to inventory, increase weight

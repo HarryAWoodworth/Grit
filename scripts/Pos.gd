@@ -40,20 +40,28 @@ func add_item(item):
 		rarest_item_rarity = item.rarity
 		rarest_item_name = item.item_name
 		sprite.texture = load_tex(item)
+		if !sprite.visible:
+			sprite.show()
 	# Add the item to the items dict
 	if items.has(item.item_name):
 		items[item.item_name][1] += 1
 	else:
-		items[item.item_name] = [item, 0]
+		items[item.item_name] = [item, 1]
 
 func remove_item(item):
 	# Update rarest item/sprite if rarest item is removed
 	if item.item_name == rarest_item_name and items[item.item_name][1] == 1:
-		rarest_item_rarity = 0
-		for item_entry in items:
-			if rarest_item_rarity < item_entry[0].rarity:
-				rarest_item_rarity = item_entry[0].rarity
-				rarest_item_name = item_entry[0].item_name
+		rarest_item_rarity = -1
+		if !items.empty():
+			print("Items: " + str(items))
+			for item_entry in items.values():
+				if rarest_item_rarity < item_entry[0].rarity:
+					rarest_item_rarity = item_entry[0].rarity
+					rarest_item_name = item_entry[0].item_name
+			sprite.texture = load_tex(items[rarest_item_name][0])
+		else:
+			rarest_item_name = ""
+			sprite.hide()
 	# Remove item from item dict
 	if items.has(item.item_name):
 		items[item.item_name][1] -= 1
@@ -62,6 +70,7 @@ func remove_item(item):
 		items.erase(item.item_name)
 
 func loot_item(item_name):
+	print("Looting " + item_name + ": " + str(items[item_name]))
 	var item_temp = items[item_name][0]
 	remove_item(item_temp)
 	return item_temp
