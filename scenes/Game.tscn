@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scripts/Game.gd" type="Script" id=1]
+[ext_resource path="res://assets/fonts/SourceCodePro-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://assets/test_floor.png" type="Texture" id=3]
 [ext_resource path="res://assets/test_wall.png" type="Texture" id=4]
 [ext_resource path="res://assets/shadow_discovered.png" type="Texture" id=6]
@@ -60,6 +61,12 @@ bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
 corner_detail = 4
 anti_aliasing = false
 
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=5]
+font_data = ExtResource( 2 )
+
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -113,10 +120,14 @@ margin_left = 574.0
 margin_top = 225.0
 margin_right = 630.0
 margin_bottom = 351.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Inventory" type="ItemList" parent="UI/HBoxContainer"]
 margin_right = 56.0
 margin_bottom = 9.0
+custom_fonts/font = SubResource( 4 )
 auto_height = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -127,6 +138,7 @@ margin_top = 13.0
 margin_right = 56.0
 margin_bottom = 22.0
 rect_clip_content = false
+custom_fonts/font = SubResource( 5 )
 auto_height = true
 icon_scale = 0.125
 __meta__ = {

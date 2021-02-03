@@ -117,7 +117,7 @@ var world_running = false
 
 # Init the game
 func _ready():
-	OS.set_window_size(WINDOW_SIZE)
+	#OS.set_window_size(WINDOW_SIZE)
 	randomize()
 	tile_map.cell_quadrant_size = TILE_SIZE
 	item_manager.init()
