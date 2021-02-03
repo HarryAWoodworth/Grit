@@ -155,3 +155,5 @@ script = ExtResource( 7 )
 
 [node name="Item_Manager" type="Node" parent="."]
 script = ExtResource( 11 )
+[connection signal="item_activated" from="UI/HBoxContainer/Inventory" to="." method="_on_Inventory_item_activated"]
+[connection signal="item_activated" from="UI/HBoxContainer/PosInventory" to="." method="_on_PosInventory_item_activated"]

@@ -2,11 +2,14 @@ extends Node2D
 
 # All items can be combined with other items
 # All items can be used as weapons (no matter how awful)
+# !!! Add new keys to vars, clone(), init_basic()/other inits(), print_item(), and item_manager
 
 var id: String
 var item_name: String
 # Weight
 var weight: float
+# Item rarity value
+var rarity: int
 # What type of item? (Melee, ranged, ammo, item)
 var type: String
 # Damage range
@@ -25,16 +28,18 @@ func init_clone(item):
 	id = item.id
 	item_name = item.item_name
 	weight = item.weight
+	rarity = item.rarity
 	type = item.type
 	damage_range = item.damage_range
 	ranged_accuracy_dropoff = item.ranged_accuracy_dropoff
 	ammo_type = item.ammo_type
 
 # All items will have name, two textures, and a weight
-func init_basic(id_,name_,weight_):
+func init_basic(id_,name_,weight_,rarity_):
 	id = id_
 	item_name = name_
 	weight = weight_
+	rarity = rarity_
 
 # Ranged items do not do damage themselves, so have (0,0) as the damage range.
 # They also have a non-weight-based ranged_accuracy_dropoff, as well as ammo_type
@@ -92,6 +97,7 @@ func print_item():
 	print("Name: " + item_name)
 	print("Type: " + type)
 	print("Weight: " + str(weight))
+	print("Rarity: " + str(rarity))
 	print("Damage_range: (" + str(damage_range.x) + "," + str(damage_range.y) + ")")
 	print("RAD: " + str(ranged_accuracy_dropoff))
 	print("Ammo Type: " + ammo_type)

@@ -31,7 +31,6 @@ func init(current_weight_, item_manager_, game_):
 func add_item(item):
 	# Add to inventory
 	if bag.has(item.item_name):
-		if item.stacks:
 			bag[item.item_name][1] += 1
 	else:
 			bag[item.item_name] = [item, 1]

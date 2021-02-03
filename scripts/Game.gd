@@ -123,6 +123,9 @@ func _ready():
 	item_manager.init()
 	build_chunk()
 	
+	### TESTING ###
+	map[2][2].print_pos()
+	
 # Actor Movement ------------------------------------------------------------------------
 
 # Checks if an actor can move into a coordinate
@@ -176,10 +179,7 @@ func get_surrounding_empty(x,y):
 
 # UI ---------------------------------------------------------------------------
 
-func open_loot_tray(pos):
-	PosInventory.clear()
-	for item in pos.items:
-		PosInventory.add_item(item.item_name,load_tex(item))
+
 
 # Update -----------------------------------------------------------------------
 
@@ -270,9 +270,9 @@ func build_chunk():
 				false)
 
 	add_item("ak_47",2,2)
-	map[2][2].print_pos()
+#	map[2][2].print_pos()
 	add_item("7.62×39mm",2,2)
-	map[2][2].print_pos()
+#	map[2][2].print_pos()
 
 	ticker.init()
 	ticker.schedule_action(player,0)
@@ -323,12 +323,6 @@ func add_sight_node(x,y):
 	add_child(sight_node)
 	sight_node.init(x, y, self)
 	sight_node.unique_id = get_unique_id()
-	
-func darken_tile(x, y):
-	shadow_map.set_cell(x, y, Shadow.Shadow)
-
-func undarken_tile(x, y):
-	shadow_map.set_cell(x, y, -1)
 
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)
@@ -388,3 +382,23 @@ func addLog(string):
 	if logLength > MAX_TESTLOG_LENGTH:
 		textlog.text = textlog.text.substr(int(MAX_TESTLOG_LENGTH - (MAX_TESTLOG_LENGTH/10.0)),logLength)
 	textlog.text = textlog.text + "\n" + string
+
+func open_loot_tray(pos):
+	PosInventory.clear()
+	for item in pos.items.values():
+		PosInventory.add_item(item[0].item_name,load_tex(item[0]))
+
+# The user selects an item in their inventory
+func _on_Inventory_item_activated(index):
+	pass # Replace with function body.
+
+# The user selects an item from the ground
+func _on_PosInventory_item_activated(index):
+	# Add item to player inventory and remove from pos
+	player.inventory.add_item(
+		map[player.curr_tile.x][player.curr_tile.y].loot_item(
+			PosInventory.get_item_text(index)
+		)
+	)
+	# Remove item from ground
+	PosInventory.remove_item(index)
