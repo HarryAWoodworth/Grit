@@ -139,6 +139,7 @@ __meta__ = {
 }
 
 [node name="PosInventory" type="ItemList" parent="UI/HBoxContainer"]
+visible = false
 margin_top = 13.0
 margin_right = 193.0
 margin_bottom = 22.0

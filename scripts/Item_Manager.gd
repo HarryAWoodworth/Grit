@@ -23,7 +23,7 @@ func init():
 		#print(item)
 		#print("IDD: " + item.id)
 		# init basic item properties
-		item_inst.init_basic(item.id,item.item_name,item.weight,item.rarity)
+		item_inst.init_basic(item.id,item.item_name,item.weight,item.rarity,item.hand_size)
 		# Match the item type to init differently
 		var item_type = item.type
 		match item_type:

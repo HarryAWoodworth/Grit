@@ -12,6 +12,7 @@ var has_turn = false
 # Player Info ------------------------------------------------------------------
 onready var sprite = $Sprite
 onready var inventory = $Inventory
+onready var equipment = $Equipment
 var health: int
 var speed: int
 var grabbing = false
@@ -19,6 +20,7 @@ var grabbed_actor
 var effects
 var current_weight = 0
 var max_weight = 100
+var hand_space = 2
 
 # Detection --------------------------------------------------------------------
 var targets = []
@@ -32,6 +34,7 @@ func init_player():
 	health = DEFAULT_PLAYER_MAX_HEALTH
 	speed = 5
 	inventory.init(current_weight,max_weight,game)
+	equipment.init(game, hand_space)
 
 # Tick -------------------------------------------------------------------------
 

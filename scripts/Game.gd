@@ -115,6 +115,8 @@ var world_running = false
 
 # Ready ------------------------------------------------------------------------
 
+
+
 # Init the game
 func _ready():
 	#OS.set_window_size(WINDOW_SIZE)
@@ -124,7 +126,7 @@ func _ready():
 	build_chunk()
 	
 	### TESTING ###
-	map[2][2].print_pos()
+	#map[2][2].print_pos()
 	
 # Actor Movement ------------------------------------------------------------------------
 
@@ -274,6 +276,18 @@ func build_chunk():
 	add_item("7.62×39mm",2,2)
 #	map[2][2].print_pos()
 
+	### TESTING ###
+	#var item_inst1 = Item.instance()
+	#item_inst1.init_clone(item_manager.item_dictionary.get("7.62×39mm"))
+	#var item_inst2 = Item.instance()
+	#item_inst2.init_clone(item_manager.item_dictionary.get("ak_47"))
+	#player.equipment.hold_item(item_inst2)
+	#player.equipment.print_hands()
+	#player.equipment.hold_item(item_inst1)
+	#player.equipment.print_hands()
+	#player.equipment.hold_item(item_inst1)
+	#player.equipment.print_hands()
+
 	ticker.init()
 	ticker.schedule_action(player,0)
 	world_running = true
@@ -384,9 +398,14 @@ func addLog(string):
 	textlog.text = textlog.text + "\n" + string
 
 func open_loot_tray(pos):
-	PosInventory.clear()
-	for item in pos.items.values():
-		PosInventory.add_item(item[0].item_name,load_tex(item[0]))
+	if !pos.items.empty():
+		PosInventory.clear()
+		for item in pos.items.values():
+			PosInventory.add_item(item[0].item_name,load_tex(item[0]))
+		PosInventory.show()
+	else:
+		PosInventory.hide()
+
 
 # The user selects an item in their inventory
 func _on_Inventory_item_activated(index):

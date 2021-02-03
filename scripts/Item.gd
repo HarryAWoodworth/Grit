@@ -10,6 +10,8 @@ var item_name: String
 var weight: float
 # Item rarity value
 var rarity: int
+# How many hands it takes to hold this item
+var hand_size: int
 # What type of item? (Melee, ranged, ammo, item)
 var type: String
 # Damage range
@@ -29,17 +31,19 @@ func init_clone(item):
 	item_name = item.item_name
 	weight = item.weight
 	rarity = item.rarity
+	hand_size = item.hand_size
 	type = item.type
 	damage_range = item.damage_range
 	ranged_accuracy_dropoff = item.ranged_accuracy_dropoff
 	ammo_type = item.ammo_type
 
 # All items will have name, two textures, and a weight
-func init_basic(id_,name_,weight_,rarity_):
+func init_basic(id_,name_,weight_,rarity_,hand_size_):
 	id = id_
 	item_name = name_
 	weight = weight_
 	rarity = rarity_
+	hand_size = hand_size_
 
 # Ranged items do not do damage themselves, so have (0,0) as the damage range.
 # They also have a non-weight-based ranged_accuracy_dropoff, as well as ammo_type
@@ -98,6 +102,7 @@ func print_item():
 	print("Type: " + type)
 	print("Weight: " + str(weight))
 	print("Rarity: " + str(rarity))
+	print("Hand Size: " + str(hand_size))
 	print("Damage_range: (" + str(damage_range.x) + "," + str(damage_range.y) + ")")
 	print("RAD: " + str(ranged_accuracy_dropoff))
 	print("Ammo Type: " + ammo_type)
