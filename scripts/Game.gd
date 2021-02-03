@@ -83,7 +83,7 @@ onready var tile_map = $TileMap
 onready var shadow_map = $ShadowMap
 onready var textlog = $UI/TextLog
 onready var item_manager = $Item_Manager
-onready var Inventory = $UI/HBoxContainer/Inventory
+onready var Inventory_UI = $UI/HBoxContainer/Inventory
 onready var PosInventory = $UI/HBoxContainer/PosInventory
 
 # Entity Preloads --------------------------------------------------------------

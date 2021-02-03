@@ -37,7 +37,7 @@ func add_item(item):
 			bag[item.item_name] = [item, 1]
 	current_weight += item.weight
 	# Add to Inventory UI
-	game.Inventory.add_item(item.item_name,load("res://assets/item_sprites/" + item.item_name + "_small.png"))
+	game.Inventory_UI.add_item(item.item_name,load_tex(item))
 	if current_weight > max_weight and !player.has_effect("Encumbered"):
 		player.add_effect("Encumbered")
 	return true
@@ -57,3 +57,6 @@ func change_max_weight(new_weight):
 		player.remove_effect("Encumbered")
 	if !player.has_effect("Encumbered") and current_weight > max_weight:
 		player.add_effect("Encumbered")
+		
+func load_tex(item):
+	return load("res://assets/item_sprites/" + item.id + "_small.png")
