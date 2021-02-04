@@ -157,10 +157,12 @@ func move_actor(actor, x ,y):
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.append(actor)
 		# Update the actor's node
 		actor.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
+		return true
+	return false
 
 # Move actor using a difference vector
 func move_actor_vect(actor, vect):
-	move_actor(actor, actor.curr_tile.x + vect.x, actor.curr_tile.y + vect.y)
+	return move_actor(actor, actor.curr_tile.x + vect.x, actor.curr_tile.y + vect.y)
 
 # Return an array of movement vectors to empty spaces around a coordinate
 func get_surrounding_empty(x,y):
@@ -370,7 +372,7 @@ func add_item(id,x,y):
 	var item_inst = Item.instance()
 	var item_from_dict = item_manager.item_dictionary.get(id)
 	if item_from_dict == null:
-		print("Error: No item found in item_dictionary with name \"" + id + "\"")
+		print("Error: No item found in item_dictionary with ID: \"" + id + "\"")
 		return false
 	item_inst.init_clone(item_manager.item_dictionary.get(id))
 	map[x][y].add_item(item_inst)

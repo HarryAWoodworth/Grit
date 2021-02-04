@@ -64,28 +64,28 @@ func _input(event):
 	# Movement keys
 	if event.is_action_pressed("ui_left"):
 		if !grabbing:
-			game.move_actor_vect(self,Vector2(-1,0))
-			game.ticker.schedule_action(self,speed)
-			game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
-			game.run_until_player_turn()
+			if game.move_actor_vect(self,Vector2(-1,0)):
+				game.ticker.schedule_action(self,speed)
+				game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
+				game.run_until_player_turn()
 	elif event.is_action_pressed("ui_right"):
 		if !grabbing:
-			game.move_actor_vect(self,Vector2(1,0))
-			game.ticker.schedule_action(self,speed)
-			game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
-			game.run_until_player_turn()
+			if game.move_actor_vect(self,Vector2(1,0)):
+				game.ticker.schedule_action(self,speed)
+				game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
+				game.run_until_player_turn()
 	elif event.is_action_pressed("ui_up"):
 		if !grabbing:
-			game.move_actor_vect(self,Vector2(0,-1))
-			game.ticker.schedule_action(self,speed)
-			game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
-			game.run_until_player_turn()
+			if game.move_actor_vect(self,Vector2(0,-1)):
+				game.ticker.schedule_action(self,speed)
+				game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
+				game.run_until_player_turn()
 	elif event.is_action_pressed("ui_down"):
 		if !grabbing:
-			game.move_actor_vect(self,Vector2(0,1))
-			game.ticker.schedule_action(self,speed)
-			game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
-			game.run_until_player_turn()
+			if game.move_actor_vect(self,Vector2(0,1)):
+				game.ticker.schedule_action(self,speed)
+				game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
+				game.run_until_player_turn()
 
 # Game Util -------------------------------------------------------------------
 	

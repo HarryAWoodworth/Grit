@@ -82,6 +82,8 @@ func remove_item(item):
 func loot_item(item_name):
 	#print("Looting " + item_name + ": " + str(items[item_name]))
 	var item_temp = items[item_name][0]
+	if item_temp == null:
+		return false
 	remove_item(item_temp)
 	#print_pos()
 	return item_temp
