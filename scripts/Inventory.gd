@@ -46,8 +46,15 @@ func remove_item(item):
 	if bag.has(item.item_name) and !bag[item.item_name][1] > 0:
 		bag[item.item_name][1] -= 1
 		current_weight -= item.weight
-		return true
-	return false
+		return bag[item.item_name][0]
+	return null
+	
+func remove_item_by_name(item_name):
+	if bag.has(item_name) and !bag[item_name][1] > 0:
+		bag[item_name][1] -= 1
+		current_weight -= bag[item_name][0].weight
+		return bag[item_name][0]
+	return null
 
 # Change the max weight the player has
 func change_max_weight(new_weight):

@@ -409,7 +409,12 @@ func open_loot_tray(pos):
 
 # The user selects an item in their inventory
 func _on_Inventory_item_activated(index):
-	pass # Replace with function body.
+	player.equipment.hold_item(
+		player.inventory.remove_item_by_name(
+			Inventory_UI.get_item_text(index)
+		)
+	)
+	player.equipment.print_hands()
 
 # The user selects an item from the ground
 func _on_PosInventory_item_activated(index):

@@ -16,6 +16,7 @@ func init(game_, hand_space_):
 
 # Add item to hands
 func hold_item(item):
+	print("ITEM HOLD_ITEM EQUIPMENT.gd: " + str(item))
 	if hands.count(null) < item.hand_size:
 		return false
 	var ind = hands.find(null)
