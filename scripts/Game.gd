@@ -2,6 +2,10 @@
 
 # >>>>>>> ENEMY / PLAYER INTERACTION
 # - Attack/Move Diagonally
+# Display Player information/equipment
+# Remove item.id (dumb)
+# Draw item logic chart
+# Effect Manager?
 
 # Enemies detect you (broken)
 	# A* Pathfinding for enemies
@@ -400,8 +404,11 @@ func addLog(string):
 func open_loot_tray(pos):
 	if !pos.items.empty():
 		PosInventory.clear()
+		var ind = 0
 		for item in pos.items.values():
 			PosInventory.add_item(item[0].item_name,load_tex(item[0]))
+			PosInventory.set_item_metadata(ind,item[0].id)
+			ind = ind + 1
 		PosInventory.show()
 	else:
 		PosInventory.hide()
@@ -409,20 +416,25 @@ func open_loot_tray(pos):
 
 # The user selects an item in their inventory
 func _on_Inventory_item_activated(index):
-	player.equipment.hold_item(
-		player.inventory.remove_item_by_name(
-			Inventory_UI.get_item_text(index)
-		)
-	)
+	print("Adding item at index " + str(index))
+	var step1 = Inventory_UI.get_item_text(index)
+	print("Step 1: " + str(step1))
+	var step2 = player.inventory.remove_item_by_name(step1)
+	print("Step 2: " + str(step2))
+	player.equipment.hold_item(step2)
+#	player.equipment.hold_item(
+#		player.inventory.remove_item_by_name(
+#			Inventory_UI.get_item_text(index)
+#		)
+#	)
 	player.equipment.print_hands()
 
 # The user selects an item from the ground
 func _on_PosInventory_item_activated(index):
-	# Add item to player inventory and remove from pos
-	player.inventory.add_item(
-		map[player.curr_tile.x][player.curr_tile.y].loot_item(
+	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(
 			PosInventory.get_item_text(index)
 		)
-	)
+	# Add item to player inventory and remove from pos
+	player.inventory.add_item(item_to_loot)
 	# Remove item from ground
 	PosInventory.remove_item(index)

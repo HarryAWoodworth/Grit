@@ -38,6 +38,8 @@ func add_item(item):
 	current_weight += item.weight
 	# Add to Inventory UI
 	game.Inventory_UI.add_item(item.item_name,load_tex(item))
+	var index = game.Inventory_UI.get_item_count() - 1
+	game.Inventory_UI.set_item_metadata(index,item.id)
 	if current_weight > max_weight and !player.has_effect("Encumbered"):
 		player.add_effect("Encumbered")
 	return true
@@ -50,7 +52,7 @@ func remove_item(item):
 	return null
 	
 func remove_item_by_name(item_name):
-	if bag.has(item_name) and !bag[item_name][1] > 0:
+	if bag.has(item_name) and bag[item_name][1] > 0:
 		bag[item_name][1] -= 1
 		current_weight -= bag[item_name][0].weight
 		return bag[item_name][0]
