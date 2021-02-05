@@ -1,18 +1,20 @@
 extends Node2D
 
 var game
-var mouse_position = null
+var half_tile
+
+func _ready():
+	# Call _process in every frame
+	set_process(true)
 
 func init(game_):
 	game = game_
+	half_tile = game.TILE_SIZE/2
 
-func _input(event):
-	if event is InputEventMouseMotion:
-		print("Mouse motion at " + str(event.position))
-		mouse_position = event.position
+func _process(delta):
+	update()
 
 func _draw():
-	draw_line(game.player.position, mouse_position, Color(1,0,0,1))
-	draw_circle(mouse_position, 50, Color(1,0,0,1))
-	#draw_line(player.position, mouse_position, Color(1,0,0,1))
-	#draw_circle(mouse_position, 50, Color(1,0,0,1))
+	var mouse_position = get_global_mouse_position()
+	draw_line(Vector2(game.player.position.x + half_tile,game.player.position.x + half_tile), mouse_position, Color(1,0,0,1))
+	draw_circle(mouse_position, 10, Color(1,0,0,1))
