@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/player_sprite/player.png" type="Texture" id=1]
 [ext_resource path="res://util/AI_Manager.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/light.png" type="Texture" id=5]
 [ext_resource path="res://scripts/Inventory.gd" type="Script" id=6]
 [ext_resource path="res://scripts/Equipment.gd" type="Script" id=7]
+[ext_resource path="res://scripts/Combat_Manager.gd" type="Script" id=8]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -57,6 +58,8 @@ shape = SubResource( 2 )
 position = Vector2( 64, 64 )
 shape = SubResource( 3 )
 
+[node name="Center_Of_Player" type="Position2D" parent="."]
+
 [node name="Light2D" type="Light2D" parent="."]
 visible = false
 position = Vector2( 64, 64 )
@@ -73,3 +76,6 @@ script = ExtResource( 6 )
 
 [node name="Equipment" type="Node" parent="."]
 script = ExtResource( 7 )
+
+[node name="Combat_Manager" type="Node" parent="."]
+script = ExtResource( 8 )

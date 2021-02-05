@@ -13,6 +13,8 @@ var has_turn = false
 onready var sprite = $Sprite
 onready var inventory = $Inventory
 onready var equipment = $Equipment
+onready var Combat_Manager = $Combat_Manager
+onready var Center_Of_Player = $Center_Of_Player
 var health: int
 var speed: int
 var grabbing = false
@@ -35,6 +37,8 @@ func init_player():
 	speed = 5
 	inventory.init(current_weight,max_weight,game)
 	equipment.init(game, hand_space)
+	Combat_Manager.init()
+	Center_Of_Player.position = Vector2(game.TILE_SIZE/2,game.TILE_SIZE/2)
 
 # Tick -------------------------------------------------------------------------
 
@@ -61,6 +65,8 @@ func _input(event):
 	# Return if it is not the player's turn
 	if !has_turn:
 		return
+	# Shooting key
+	
 	# Movement keys
 	if event.is_action_pressed("ui_left"):
 		if !grabbing:
@@ -87,7 +93,12 @@ func _input(event):
 				game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
 				game.run_until_player_turn()
 
-# Game Util -------------------------------------------------------------------
+# Combat -----------------------------------------------------------------------
+
+func shoot():
+	Combat_Manager.shoot(get_global_mouse_position(), equipment.selected_item.ranged_accuracy_dropoff)
+
+# Game Util --------------------------------------------------------------------
 	
 func die():
 	print("Player died :C")

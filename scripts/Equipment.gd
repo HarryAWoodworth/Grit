@@ -2,6 +2,7 @@ extends Node
 
 var hand_space
 var hands
+var selected_item
 
 # Game and player ref
 var game
@@ -11,7 +12,7 @@ func init(game_, hand_space_):
 	game = game_
 	hands = []
 	hand_space = hand_space_
-	for x in range(hand_space):
+	for _x in range(hand_space):
 		hands.append(null)
 
 # Add item to hands
@@ -22,6 +23,7 @@ func hold_item(item):
 	var ind = hands.find(null)
 	for size in range(item.hand_size):
 		hands[ind + size] = item
+	selected_item = item
 	return true
 	
 func move_item_to_inventory(index):

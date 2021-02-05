@@ -283,9 +283,7 @@ func build_chunk():
 				false)
 
 	add_item("ak_47",2,2)
-#	map[2][2].print_pos()
 	add_item("7.62×39mm",2,2)
-#	map[2][2].print_pos()
 
 	### TESTING ###
 	#var item_inst1 = Item.instance()

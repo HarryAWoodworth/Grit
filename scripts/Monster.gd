@@ -199,8 +199,10 @@ func _on_Visibility_body_exited(body):
 # Mouse input data display signals ---------------------------------------------
 
 func _on_Character_mouse_entered():
-	game.display_actor_data(self)
+#	game.display_actor_data(self)
+	pass
 
 func _on_Character_mouse_exited():
-	game.clear_actor_data()
+#	game.clear_actor_data()
+	pass
 
