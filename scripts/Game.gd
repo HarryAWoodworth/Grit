@@ -89,6 +89,7 @@ onready var textlog = $UI/TextLog
 onready var item_manager = $Item_Manager
 onready var Inventory_UI = $UI/HBoxContainer/Inventory
 onready var PosInventory = $UI/HBoxContainer/PosInventory
+onready var Mouse_Detection = $Mouse_Detection
 
 # Entity Preloads --------------------------------------------------------------
 
@@ -106,7 +107,7 @@ var forest_tex = preload("res://assets/test_wall.png")
 
 # Game State -------------------------------------------------------------------
 
-var player
+var player = null
 #var anim_finished = true
 # List of actor unique_id 's 
 var actor_list = []
@@ -119,8 +120,6 @@ var world_running = false
 
 # Ready ------------------------------------------------------------------------
 
-
-
 # Init the game
 func _ready():
 	#OS.set_window_size(WINDOW_SIZE)
@@ -128,9 +127,13 @@ func _ready():
 	tile_map.cell_quadrant_size = TILE_SIZE
 	item_manager.init()
 	build_chunk()
+	Mouse_Detection.init(self)
 	
 	### TESTING ###
 	#map[2][2].print_pos()
+	
+
+		
 	
 # Actor Movement ------------------------------------------------------------------------
 
