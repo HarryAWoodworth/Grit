@@ -16,5 +16,5 @@ func _process(delta):
 
 func _draw():
 	var mouse_position = get_global_mouse_position()
-	draw_line(Vector2(game.player.position.x + half_tile,game.player.position.x + half_tile), mouse_position, Color(1,0,0,1))
+	draw_line(Vector2(game.player.position.x + half_tile,game.player.position.y + half_tile), mouse_position, Color(1,0,0,1))
 	draw_circle(mouse_position, 10, Color(1,0,0,1))

@@ -151,6 +151,7 @@ func can_move(x, y):
 
 # Move an actor to a coordinate
 func move_actor(actor, x ,y):
+	print("Moving to " + str(x) + "," + str(y))
 	if can_move(x,y):
 		# Remove the actor from its previous position
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
@@ -160,6 +161,7 @@ func move_actor(actor, x ,y):
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.append(actor)
 		# Update the actor's node
 		actor.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
+		print("Actor's new position: " + str(actor.position))
 		return true
 	return false
 
