@@ -47,3 +47,6 @@ func print_hands():
 			print(item.item_name)
 	print("]")
 	
+func empty():
+	return hands.count(null) == hands.size()
+	
