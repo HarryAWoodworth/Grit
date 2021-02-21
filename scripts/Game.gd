@@ -282,7 +282,7 @@ func build_chunk():
 				true,
 				false)
 
-	add_item("ak_47",2,2)
+	add_item("ak_47",0,0)
 	add_item("7.62×39mm",2,2)
 
 	### TESTING ###
