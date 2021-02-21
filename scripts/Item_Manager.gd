@@ -28,7 +28,7 @@ func init():
 		var item_type = item.type
 		match item_type:
 			"ranged":
-				item_inst.init_ranged(item.ranged_accuracy_dropoff,item.ammo_type)
+				item_inst.init_ranged(item.innacuracy_angle,item.ammo_type)
 			"ammo":
 				item_inst.init_ammo(Vector2(item.damage_range.low,item.damage_range.high))
 			"melee":

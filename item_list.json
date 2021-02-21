@@ -7,7 +7,7 @@
 			"rarity": 5,
 			"hand_size": 2,
 			"type":"ranged",
-			"ranged_accuracy_dropoff": 5,
+			"innacuracy_angle": 30,
 			"ammo_type": "7.62×39mm"
 		},
 		{

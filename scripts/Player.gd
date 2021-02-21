@@ -96,9 +96,9 @@ func _input(event):
 # Combat -----------------------------------------------------------------------
 
 func shoot():
-	print("HNADS: " + str(equipment.hands))
+	# print("HANDS: " + str(equipment.hands))
 	if !equipment.empty():
-		Combat_Manager.shoot(get_global_mouse_position(), equipment.selected_item.ranged_accuracy_dropoff)
+		Combat_Manager.shoot(get_global_mouse_position(), equipment.selected_item.innacuracy_angle)
 
 # Game Util --------------------------------------------------------------------
 	

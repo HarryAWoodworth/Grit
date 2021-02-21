@@ -16,8 +16,8 @@ var hand_size: int
 var type: String
 # Damage range
 var damage_range: Vector2
-# How innacurate the weapon is at further ranges
-var ranged_accuracy_dropoff: int
+# The maximum difference in angle a weapon can fire (in each direction)
+var innacuracy_angle: int
 # What type of ammo this weapon takes
 var ammo_type: String
 # Countable (do multiple instances of this item stack?)
@@ -34,7 +34,7 @@ func init_clone(item):
 	hand_size = item.hand_size
 	type = item.type
 	damage_range = item.damage_range
-	ranged_accuracy_dropoff = item.ranged_accuracy_dropoff
+	innacuracy_angle = item.innacuracy_angle
 	ammo_type = item.ammo_type
 
 # All items will have name, two textures, and a weight
@@ -47,17 +47,17 @@ func init_basic(id_,name_,weight_,rarity_,hand_size_):
 
 # Ranged items do not do damage themselves, so have (0,0) as the damage range.
 # They also have a non-weight-based ranged_accuracy_dropoff, as well as ammo_type
-func init_ranged(rad_,ammo_type_):
+func init_ranged(innacuracy_angle_,ammo_type_):
 	type = "ranged"
 	damage_range = Vector2(0,0)
-	ranged_accuracy_dropoff = rad_
+	innacuracy_angle = innacuracy_angle_
 	ammo_type = ammo_type_
 	stacks = false
 
 func init_melee(damage_range_):
 	type = "melee"
 	damage_range = damage_range_
-	ranged_accuracy_dropoff = calculate_rad_with_weight()
+	innacuracy_angle = calculate_innacuracy_angle_with_weight()
 	ammo_type = ""
 	stacks = false
 
@@ -65,7 +65,7 @@ func init_melee(damage_range_):
 func init_ammo(damage_range_):
 	type = "ammo"
 	damage_range = damage_range_
-	ranged_accuracy_dropoff = 0
+	innacuracy_angle = 0
 	ammo_type = ""
 	stacks = true
 
@@ -73,7 +73,7 @@ func init_ammo(damage_range_):
 func init_consumable():
 	type = "consumable"
 	damage_range = calculate_dmg_with_weight()
-	ranged_accuracy_dropoff = calculate_rad_with_weight()
+	innacuracy_angle = calculate_innacuracy_angle_with_weight()
 	ammo_type = ""
 	stacks = true
 	
@@ -81,13 +81,13 @@ func init_consumable():
 func init_ingredient():
 	type = "ingredient"
 	damage_range = calculate_dmg_with_weight()
-	ranged_accuracy_dropoff = calculate_rad_with_weight()
+	innacuracy_angle = calculate_innacuracy_angle_with_weight()
 	ammo_type = ""
 	stacks = true
 
 # Based on weight, calculate the ranged accuracy dropoff of the item if it is thrown
 # The bigger the item, the more innacurate it is.
-func calculate_rad_with_weight():
+func calculate_innacuracy_angle_with_weight():
 	# TODO: Weight -> Ranged Accuracy Dropoff algorithm
 	return 0
 
@@ -104,5 +104,5 @@ func print_item():
 	print("Rarity: " + str(rarity))
 	print("Hand Size: " + str(hand_size))
 	print("Damage_range: (" + str(damage_range.x) + "," + str(damage_range.y) + ")")
-	print("RAD: " + str(ranged_accuracy_dropoff))
+	print("RAD: " + str(innacuracy_angle))
 	print("Ammo Type: " + ammo_type)
