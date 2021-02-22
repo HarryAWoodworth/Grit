@@ -1,72 +1,108 @@
-## PATH TO BETA
 
-# >>>>>>> ENEMY / PLAYER INTERACTION
-# - Attack/Move Diagonally
-# Display Player information/equipment
-# Remove item.id (dumb)
-# Draw item logic chart
-# Effect Manager?
+# <<< 0.1 >>>
 
-# Enemies detect you (broken)
-	# A* Pathfinding for enemies
-# s Stealth
-# @ Sound system
-#	- Actions make sound
-#	- Sound tile circles
-#	- Player can hear sounds
-#	- Question mark from sound location
-# sl Enemies actually make sounds
-# Speed -> How many blocks they can move
-# Initiative -> What order they tick in
+## PLAYER INTERACTION
+# [ ] Test Dummy
+# [ ] Bullet Hitbox
+# [ ] Burstfire turn action
+# [ ] Reloading Gun (Ammo, removing ammo, turn action)
+# [ ] Melee Weapons
+# [ ] Melee Combat, turn action
+# [ ] Move Diagonally
+# [ ] Display Player information/equipment
+# [ ] Player armor equipment
+# [ ] Hovering mouse over tile displays information
+# [ ] Hovering mouse over tile within range displays tile actions
 
-# >>>>>> ITEMS, WEAPONS, INVENTORY
-# @ Items
-# @ Inventory System
-#   - Display
-#	- Dropping
-#	- Using
-#   - Dropping
-#   - Picking up from ground
-# s Corpses
-# m Looting furniture
-# @ Weapons (Equipping)
-#   - Custom sound and visual effects for combat
-#	- Gun raycast click and shoot
-#   - Shooting effects
-# - Crafting
+## ENVIRONMENT INTERACTION
+# [ ] Doors
+# [ ] Containers
+# [ ] Loot Tables
+# [ ] Player can loot container
+# [ ] Monster corpses
+# [ ] Morning -> Noon -> Evening Cycle
 
-# >>>>>>> ITEM COMBAT
-# - Effects
+## MONSTERS
+# [ ] Check that pathfinding still works
+# [ ] Different AI's?
+# [ ] Monster manager from json
+# [ ] Monsters Wander
+# [ ] Different Monster actions? Speed for actions?
 
-# >>>>>>> UI
-# ml Player and Enemy dictionary data
-# ml Complete Player and Enemy information
-#   sl Better, sharper fonts
-#   ml Add Color Text
-#	sl Max/min UI
+## GAME STATE
+# [ ] Save Game
+# [ ] Load Game
 
-# >>>>>>> WORLD GEN
-# - Random generation
-#   - Indoor
-#   - Outdoor
-# - Bunker
-#   - Saving
+## STEALTH SYSTEM
+# [ ] Sound ring when actions are done (based on action/container/door?)
+# [ ] Player can throw an item to make noise as a distraction
+# [ ] Monsters move towards noises
 
-# >>>>>>> CONTENT
-# - CONTENT!!!
+## ITEMS & CRAFTING
+# [ ] Food Items
+# [ ] Weapons
+# [ ] Crafting
+# [ ] Item Recipes
+# [ ] Crafting Blueprints (change recipes to need fewer items)
+# [ ] Cooking Items
+# [ ] Cooking Recipes
 
-# >>>>>>> Long Term
-# - Day/Night Cycle
-#	- Light
-#	- Logs
-#	- Spawns
-#	- Loot Rate
-# - Season Cycle
-# - Weather
-# - Hiding in Objects
-# - Multi-tile actors
-# - Night brings complete darkness, inhuman horrors, enemies noticing your light source...
-# - Tile_Lit bool, if a monster sees a tile_lit then it can pathfind to the player?
+## MAP GENERATION
+# [ ] Prefabs
+
+## AUDIO
+# [ ] Ambient music
+# [ ] Weapon sound effects
+# [ ] Bullet sound effects
+
+## VISUAL
+# [ ] Tune bullet look
+# [ ] Fancy color/fonts in logs
+
+# <<< 0.2 >>>
+
+## PLAYER AND MONSTER EFFECTS
+# [ ] Effect types
+# [ ] Effect checks
+# [ ] Effect Manager?
+
+## WEATHER
+# [ ] Weather Types
+# [ ] Seasons (winter - cold buff, etc)
+# [ ] Weather Animations
+# [ ] Weather Effects
+
+## GENERAL
+# [ ] More Prefabs
+# [ ] More Items
+# [ ] More Recipes
+# [ ] More Enemies
+
+# <<< A0.2 >>> 
+
+## FARMING
+# [ ] Seed Items
+# [ ] Farm Plots
+# [ ] Harvesting grown plants
+# [ ] Seed Splicing
+
+## FLOORS
+# [ ] Player can move between floors in buildings (transport to smaller map)
+
+## GENERAL
+# [ ] More Prefabs
+# [ ] More Items
+# [ ] More Recipes
+# [ ] More Enemies
+
+# <<< 1.3 >>>
+
+## MODULAR WEAPONS
+# [ ] Weapon mod items
+# [ ] Redesign gun item
+# [ ] Allow hotswap of mods?
+# [ ] Hotswap UI
+# [ ] Using gun takes into account mods
 
 extends Node2D
 
