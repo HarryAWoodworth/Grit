@@ -3,13 +3,13 @@ extends "res://scripts/Actor.gd"
 # Child Nodes
 onready var sprite = $Sprite
 # onready var tween = $Sprite/Tween
-onready var fct_manager = $FCTManager
+#onready var fct_manager = $FCTManager
 onready var ai_manager = $AI_Manager
 onready var detection_shape = $Visibility/DetectionShape
 
 # Preload anim
-var NoticeAnim = preload("res://util/NoticeAnimation.tscn")
-var notice_animation
+#var NoticeAnim = preload("res://util/NoticeAnimation.tscn")
+#var notice_animation
 
 # Consts
 const DEFAULT_AI = "none"
@@ -85,16 +85,16 @@ func tick():
 
 # Game util --------------------------------------------------------------------
 
-func _draw():
-	draw_circle(Vector2(game.TILE_SIZE/2,game.TILE_SIZE/2), detection_shape.shape.radius, vis_color)
-	if target:
-		draw_line(Vector2(), (hit_pos - position).rotated(-rotation), laser_color)
-		draw_circle((hit_pos - position).rotated(-rotation), 5, laser_color)
+#func _draw():
+#	draw_circle(Vector2(game.TILE_SIZE/2,game.TILE_SIZE/2), detection_shape.shape.radius, vis_color)
+#	if target:
+#		draw_line(Vector2(), (hit_pos - position).rotated(-rotation), laser_color)
+#		draw_circle((hit_pos - position).rotated(-rotation), 5, laser_color)
 
 func take_dmg(num, crit=false):
 	#var dmg_taken = (num - armor)
 	health = health - num
-	fct_manager.show_value(num, crit)
+	#fct_manager.show_value(num, crit)
 	game.logg(title + " has taken " + str(num) + " dmg.")
 	# TODO: Update UI
 	if health <= 0:

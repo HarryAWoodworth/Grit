@@ -1,0 +1,13 @@
+Creating Assets:
+1 - Save transparent image
+2 - Open in gimp
+3 - Crop canvas to image (as square as you can get)
+4 - Save as .xcf
+5 - Image > Canvas Size, make 300x300
+6 - Tools > Transform Tools > Scale, make 300x300
+7 - Center Image on Canvas, adjust to liking
+8 - Export as "<asset_name>_big.png", no compression
+9 - Repeat 5-7 but with size 128x128
+10 - Export as "<asset_name>_small.png", no compression
+11 - For convenience, don't save changes to .xcf file
+12 - Copy small and big .png to grit /assets folder

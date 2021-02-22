@@ -309,14 +309,7 @@ func build_chunk():
 	player = player_inst
 
 	# Place Enemy
-	add_character(0,15,10,
-				"monster_classic",
-				"enemy",
-				"monster",
-				"description",
-				false,
-				true,
-				false)
+	add_character(2,2)
 
 	add_item("ak_47",0,0)
 	add_item("7.62×39mm",2,2)
