@@ -20,7 +20,7 @@ extents = Vector2( 64, 64 )
 
 [node name="Player" type="KinematicBody2D"]
 input_pickable = true
-collision_mask = 20
+collision_mask = 22
 collision/safe_margin = 0.001
 script = ExtResource( 4 )
 
