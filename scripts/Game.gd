@@ -2,8 +2,6 @@
 # <<< 0.1 >>>
 
 ## PLAYER INTERACTION
-# [ ] Test Dummy
-# [ ] Bullet Hitbox
 # [ ] Burstfire turn action
 # [ ] Reloading Gun (Ammo, removing ammo, turn action)
 # [ ] Melee Weapons

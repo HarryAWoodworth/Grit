@@ -196,6 +196,9 @@ func _on_Visibility_body_exited(body):
 		target = null
 		target_aquired = false
 
+func handle_hit():
+	print("Monster hit!")
+
 # Mouse input data display signals ---------------------------------------------
 
 func _on_Character_mouse_entered():
