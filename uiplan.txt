@@ -1,0 +1,15 @@
+Player Information:
+	Health
+	Weapon
+		Ammo in mag / Ammo in pack
+	Effects?
+
+On Ground :: Inventory
+
+Hover over info:
+	Image
+	Description
+	Effects?
+	Actions (If close enough to interact with)
+
+Text Log
