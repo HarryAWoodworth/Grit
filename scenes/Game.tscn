@@ -95,7 +95,7 @@ format = 1
 anchor_right = 1.0
 margin_left = 1508.0
 margin_top = 941.0
-margin_right = -13.0
+margin_right = -12.0
 margin_bottom = 1072.0
 custom_styles/normal = SubResource( 3 )
 scroll_active = false
@@ -105,20 +105,46 @@ __meta__ = {
 }
 
 [node name="ScrollContainer" type="ScrollContainer" parent="UI"]
-margin_right = 87.0
-margin_bottom = 102.0
+margin_left = 1706.84
+margin_top = 601.0
+margin_right = 1904.84
+margin_bottom = 929.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/ScrollContainer"]
+margin_right = 378.0
 margin_bottom = 14.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="UI/ScrollContainer/HBoxContainer"]
+margin_right = 378.0
 margin_bottom = 14.0
+text = "Hello! Hi! Im an item you pick up from the ground you doof"
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="UI"]
+margin_left = 1505.19
+margin_top = 603.15
+margin_right = 1702.19
+margin_bottom = 931.15
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/ScrollContainer2"]
+margin_right = 76.0
+margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="UI/ScrollContainer2/HBoxContainer"]
+margin_right = 76.0
+margin_bottom = 14.0
+text = "Woahhhhhh"
 
 [node name="Ticker" type="Node" parent="."]
 script = ExtResource( 7 )

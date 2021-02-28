@@ -7,7 +7,7 @@
 # [ ] Melee Weapons
 # [ ] Melee Combat, turn action
 # [ ] Move Diagonally
-# [ ] Display Player information/equipment
+# [W] Display Player information/equipment/inventory
 # [ ] Player armor equipment
 # [ ] Hovering mouse over tile displays information
 # [ ] Hovering mouse over tile within range displays tile actions
@@ -56,6 +56,7 @@
 ## VISUAL
 # [ ] Tune bullet look
 # [ ] Fancy color/fonts in logs
+# [ ] Fancy color/font in inventory
 
 # <<< 0.2 >>>
 

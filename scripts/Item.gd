@@ -6,6 +6,8 @@ extends Node2D
 
 var id: String
 var item_name: String
+var name_specialized: String
+var description: String
 # Weight
 var weight: float
 # Item rarity value
@@ -29,6 +31,8 @@ func init_clone(item):
 		return
 	id = item.id
 	item_name = item.item_name
+	name_specialized = item.name_specialized
+	description = item.description
 	weight = item.weight
 	rarity = item.rarity
 	hand_size = item.hand_size
@@ -38,9 +42,11 @@ func init_clone(item):
 	ammo_type = item.ammo_type
 
 # All items will have name, two textures, and a weight
-func init_basic(id_,name_,weight_,rarity_,hand_size_):
+func init_basic(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_):
 	id = id_
 	item_name = name_
+	name_specialized = name_specialized_
+	description = description_
 	weight = weight_
 	rarity = rarity_
 	hand_size = hand_size_
@@ -99,6 +105,8 @@ func calculate_dmg_with_weight():
 func print_item():
 	print("ID: " + id)
 	print("Name: " + item_name)
+	print("Name Specialized: " + name_specialized)
+	print("Description: " + description)
 	print("Type: " + type)
 	print("Weight: " + str(weight))
 	print("Rarity: " + str(rarity))
