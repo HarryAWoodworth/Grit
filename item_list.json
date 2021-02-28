@@ -1,6 +1,15 @@
 {
 	"items": [
 		{
+			"id": "canned_tuna",
+			"item_name": "Canned Tuna",
+			"description":"A can of tuna. A little smelly.",
+			"weight": 0.3125,
+			"rarity": 1,
+			"hand_size": 1,
+			"type": "ammo",
+		},
+		{
 			"id": "ak_47",
 			"item_name": "AK-47",
 			"name_specialized":"AK-47",

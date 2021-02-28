@@ -1,5 +1,5 @@
 
-# <<< 0.1 >>>
+# <<< A0.1 >>>
 
 ## PLAYER INTERACTION
 # [ ] Burstfire turn action
@@ -11,6 +11,9 @@
 # [ ] Player armor equipment
 # [W] Hovering mouse over tile displays information
 # [W] Hovering mouse over tile within range displays tile actions
+# [ ] Double click on item in inventory to equip
+# [ ] Hovering over item in player info box opens it in info box with actions
+
 
 ## ENVIRONMENT INTERACTION
 # [ ] Doors
@@ -26,6 +29,9 @@
 # [ ] Monster manager from json file
 # [ ] Monsters Wander
 # [ ] Different Monster actions? Speed for actions?
+
+## SETTINGS
+# [ ] Set screen side of UI
 
 ## GAME STATE
 # [ ] Save Game
@@ -58,7 +64,7 @@
 # [ ] Fancy color/fonts in logs
 # [ ] Fancy color/font in inventory
 
-# <<< 0.2 >>>
+# <<< A0.2 >>>
 
 ## PLAYER AND MONSTER EFFECTS
 # [ ] Effect types
@@ -77,7 +83,7 @@
 # [ ] More Recipes
 # [ ] More Enemies
 
-# <<< A0.2 >>> 
+# <<< A0.3 >>> 
 
 ## FARMING
 # [ ] Seed Items
@@ -94,10 +100,10 @@
 # [ ] More Recipes
 # [ ] More Enemies
 
-# <<< 1.3 >>>
+# <<< A0.4 >>>
 
 ## MODULAR WEAPONS
-# [ ] Weapon mod items
+# [ ] Mod weapons with items
 # [ ] Redesign gun item
 # [ ] Allow hotswap of mods?
 # [ ] Hotswap UI
@@ -310,7 +316,9 @@ func build_chunk():
 	player = player_inst
 
 	# Place Dummy
-	add_character(2,2)
+	#x,y,health=10,ai="none",identifier="...",title="...",description="..."
+	add_character(2,1,1,"none","enemy","Hay Bale 1","A orange haybale.")
+	add_character(2,2,1,"none","enemy","Hay Bale 2","A yellow hay bale.")
 
 	add_item("ak_47",0,1)
 	add_item("7.62×39mm",0,1)
@@ -489,3 +497,6 @@ func ground_item_selected(item_name, invslot):
 
 func display_actor_data(actor):
 	InfoPanel.Icon.texture = actor.sprite.texture
+	InfoPanel.Description.text = actor.description
+	InfoPanel.show()
+	

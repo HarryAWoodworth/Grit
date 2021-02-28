@@ -204,3 +204,5 @@ func handle_hit():
 func _on_Character_mouse_entered():
 	game.display_actor_data(self)
 
+func _on_Monster_mouse_exited():
+	game.clear_actor_data()

@@ -2,6 +2,7 @@ extends ColorRect
 
 onready var Icon = $TextureRect
 onready var ActionGrid = $GridContainer
+onready var Description = $Label
 
 var ActionLabel = preload("res://scenes/ActionLabel.tscn")
 

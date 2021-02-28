@@ -42,7 +42,7 @@ func init_clone(item):
 	ammo_type = item.ammo_type
 
 # All items will have name, two textures, and a weight
-func init_basic(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_):
+func init_basic(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_):
 	id = id_
 	item_name = name_
 	name_specialized = name_specialized_
@@ -50,18 +50,17 @@ func init_basic(id_,name_,name_specialized_,description_,weight_,rarity_,hand_si
 	weight = weight_
 	rarity = rarity_
 	hand_size = hand_size_
+	type = type_
 
 # Ranged items do not do damage themselves, so have (0,0) as the damage range.
 # They also have a non-weight-based ranged_accuracy_dropoff, as well as ammo_type
 func init_ranged(innacuracy_angle_,ammo_type_):
-	type = "ranged"
 	damage_range = Vector2(0,0)
 	innacuracy_angle = innacuracy_angle_
 	ammo_type = ammo_type_
 	stacks = false
 
 func init_melee(damage_range_):
-	type = "melee"
 	damage_range = damage_range_
 	innacuracy_angle = calculate_innacuracy_angle_with_weight()
 	ammo_type = ""
@@ -69,7 +68,6 @@ func init_melee(damage_range_):
 
 # Ammo has its own damage range, and no ranged accuracy dropoff/ammo type itself 
 func init_ammo(damage_range_):
-	type = "ammo"
 	damage_range = damage_range_
 	innacuracy_angle = 0
 	ammo_type = ""
@@ -77,15 +75,6 @@ func init_ammo(damage_range_):
 
 # Consumables got nothing
 func init_consumable():
-	type = "consumable"
-	damage_range = calculate_dmg_with_weight()
-	innacuracy_angle = calculate_innacuracy_angle_with_weight()
-	ammo_type = ""
-	stacks = true
-	
-# Ingredients got nothing
-func init_ingredient():
-	type = "ingredient"
 	damage_range = calculate_dmg_with_weight()
 	innacuracy_angle = calculate_innacuracy_angle_with_weight()
 	ammo_type = ""

@@ -24,11 +24,15 @@ func init():
 		var item_inst = Item.instance()
 		#print(item)
 		#print("IDD: " + item.id)
+		var nsp
+		if "name_specialized" in item:
+			nsp = item.name_specialized
+		else:
+			nsp = item.name
 		# init basic item properties
-		item_inst.init_basic(item.id,item.item_name,item.name_specialized,item.description,item.weight,item.rarity,item.hand_size)
+		item_inst.init_basic(item.id,item.item_name,nsp,item.description,item.weight,item.rarity,item.hand_size,item.type)
 		# Match the item type to init differently
-		var item_type = item.type
-		match item_type:
+		match item_inst.type:
 			"ranged":
 				item_inst.init_ranged(item.innacuracy_angle,item.ammo_type)
 			"ammo":
@@ -37,8 +41,6 @@ func init():
 				item_inst.init_melee()
 			"consumable":
 				item_inst.init_consumable()
-			"ingredient":
-				item_inst.init_ingredient()
 		# Add to item dictionary
 		item_dictionary[item_inst.id] = item_inst
 
