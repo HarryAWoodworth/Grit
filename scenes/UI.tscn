@@ -1,0 +1,70 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/InfoPanel.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
+corner_detail = 4
+anti_aliasing = false
+
+[node name="UI" type="CanvasLayer"]
+
+[node name="TextLog" type="RichTextLabel" parent="."]
+anchor_right = 1.0
+margin_top = 940.0
+margin_right = -1510.0
+margin_bottom = 1071.0
+custom_styles/normal = SubResource( 1 )
+scroll_active = false
+scroll_following = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InventoryScroller" type="ScrollContainer" parent="."]
+margin_top = 600.0
+margin_right = 200.0
+margin_bottom = 930.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InventoryScroller"]
+
+[node name="GroundScroller" type="ScrollContainer" parent="."]
+margin_left = 210.0
+margin_top = 600.0
+margin_right = 410.0
+margin_bottom = 930.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GroundScroller"]
+
+[node name="InfoPanel" type="ColorRect" parent="."]
+margin_top = 285.0
+margin_right = 410.0
+margin_bottom = 590.0
+color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="InfoPanel"]
+margin_left = 141.0
+margin_right = 269.0
+margin_bottom = 128.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="InfoPanel"]
+margin_top = 128.0
+margin_right = 408.0
+margin_bottom = 305.0
+columns = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}

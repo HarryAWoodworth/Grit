@@ -1,6 +1,7 @@
 [gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/Game.gd" type="Script" id=1]
+[ext_resource path="res://scenes/UI.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/test_floor.png" type="Texture" id=3]
 [ext_resource path="res://assets/test_wall.png" type="Texture" id=4]
 [ext_resource path="res://scripts/Mouse_Detection.gd" type="Script" id=5]
@@ -55,11 +56,6 @@
 0/shapes = [  ]
 0/z_index = 0
 
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
-corner_detail = 4
-anti_aliasing = false
-
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -89,42 +85,7 @@ tile_set = SubResource( 2 )
 cell_size = Vector2( 32, 32 )
 format = 1
 
-[node name="UI" type="CanvasLayer" parent="."]
-
-[node name="TextLog" type="RichTextLabel" parent="UI"]
-anchor_right = 1.0
-margin_left = 1508.0
-margin_top = 941.0
-margin_right = -12.0
-margin_bottom = 1072.0
-custom_styles/normal = SubResource( 3 )
-scroll_active = false
-scroll_following = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="InventoryScroller" type="ScrollContainer" parent="UI"]
-margin_left = 1706.84
-margin_top = 601.0
-margin_right = 1906.84
-margin_bottom = 929.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/InventoryScroller"]
-
-[node name="GroundScroller" type="ScrollContainer" parent="UI"]
-margin_left = 1505.0
-margin_top = 603.0
-margin_right = 1705.0
-margin_bottom = 931.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/GroundScroller"]
+[node name="UI" parent="." instance=ExtResource( 2 )]
 
 [node name="Ticker" type="Node" parent="."]
 script = ExtResource( 7 )

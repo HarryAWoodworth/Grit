@@ -39,6 +39,5 @@ shape = SubResource( 2 )
 position = Vector2( 64, 64 )
 shape = SubResource( 3 )
 [connection signal="mouse_entered" from="." to="." method="_on_Character_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_Character_mouse_exited"]
 [connection signal="body_entered" from="Visibility" to="." method="_on_Visibility_body_entered"]
 [connection signal="body_exited" from="Visibility" to="." method="_on_Visibility_body_exited"]

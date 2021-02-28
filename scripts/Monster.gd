@@ -202,10 +202,5 @@ func handle_hit():
 # Mouse input data display signals ---------------------------------------------
 
 func _on_Character_mouse_entered():
-#	game.display_actor_data(self)
-	pass
-
-func _on_Character_mouse_exited():
-#	game.clear_actor_data()
-	pass
+	game.display_actor_data(self)
 

@@ -9,8 +9,8 @@
 # [ ] Move Diagonally
 # [W] Display Player information/equipment/inventory
 # [ ] Player armor equipment
-# [ ] Hovering mouse over tile displays information
-# [ ] Hovering mouse over tile within range displays tile actions
+# [W] Hovering mouse over tile displays information
+# [W] Hovering mouse over tile within range displays tile actions
 
 ## ENVIRONMENT INTERACTION
 # [ ] Doors
@@ -22,7 +22,7 @@
 
 ## MONSTERS
 # [ ] Check that pathfinding still works
-# [ ] Different AI's?
+# [ ] Different AI's? (check out bookmarked rougelike AI article)
 # [ ] Monster manager from json file
 # [ ] Monsters Wander
 # [ ] Different Monster actions? Speed for actions?
@@ -124,6 +124,7 @@ onready var textlog = $UI/TextLog
 onready var item_manager = $Item_Manager
 onready var GroundScroller = $UI/GroundScroller
 onready var InventoryScroller = $UI/InventoryScroller
+onready var InfoPanel = $UI/InfoPanel
 onready var Mouse_Detection = $Mouse_Detection
 
 # Entity Preloads --------------------------------------------------------------
@@ -259,7 +260,7 @@ func build_chunk():
 			# Set the tile map
 			tile_map.set_cell(x, y, map[x][y].tile)
 			# Add sight node
-			add_sight_node(x, y)
+			# add_sight_node(x, y)
 
 	# Extra walls for testing
 	add_wall(6, 4, forest_tex)
@@ -353,12 +354,12 @@ func remove_actor(actor):
 	remove_child(actor)
 
 # Returns true if an actor at the position (x,y) blocks light
-func blocksLight(x,y):
-	var pos = map[x][y]
-	if pos.actors.empty:
-		return false
-	else:
-		return pos.actors[0].blocks_light
+#func blocksLight(x,y):
+#	var pos = map[x][y]
+#	if pos.actors.empty:
+#		return false
+#	else:
+#		return pos.actors[0].blocks_light
 
 # Get actors at position (x,y)
 func get_actors_at(x,y):
@@ -371,11 +372,11 @@ func set_tile(x, y, type):
 	map[x][y].tile = type
 	tile_map.set_cell(x, y, type)
 
-func add_sight_node(x,y):
-	var sight_node = SightNode.instance()
-	add_child(sight_node)
-	sight_node.init(x, y, self)
-	sight_node.unique_id = get_unique_id()
+#func add_sight_node(x,y):
+#	var sight_node = SightNode.instance()
+#	add_child(sight_node)
+#	sight_node.init(x, y, self)
+#	sight_node.unique_id = get_unique_id()
 
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)
@@ -470,8 +471,10 @@ func _on_Inventory_item_activated(index):
 	pass
 
 func ground_item_selected(item_name, invslot):
+	# Get the item to loot (and remove the item from Pos)
 	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(item_name, invslot.num)
 	if item_to_loot != null:
+		# Add to player's Inventory
 		player.inventory.add_item(item_to_loot, invslot.num)
 		# Remove from Ground UI
 		GroundScroller.get_node("VBoxContainer").remove_child(invslot)
@@ -479,6 +482,10 @@ func ground_item_selected(item_name, invslot):
 		var newinvslot = InventorySlot.instance()
 		InventoryScroller.get_node("VBoxContainer").add_child(newinvslot)
 		newinvslot.init(invslot.item,invslot.num,self,false)
+		# Free the inventory node
 		invslot.queue_free()
 	else:
 		print("ERROR: Attempted to loot item " + item_name + " but it was not found!")
+
+func display_actor_data(actor):
+	InfoPanel.Icon.texture = actor.sprite.texture

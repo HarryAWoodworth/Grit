@@ -13,4 +13,5 @@ func shadow():
 	#sprite.modulate = Color( 0.31, 0.31, 0.31, 1)
 
 func handle_hit():
-	print("Wall hit!")
+	pass
+	#print("Wall hit!")
