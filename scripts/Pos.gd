@@ -54,12 +54,16 @@ func add_item(item):
 	else:
 		items[item.item_name] = [item, 1]
 
-func remove_item(item):
+func remove_item(item, num=1):
+	
 	# Remove item from item dict
 	if items.has(item.item_name):
-		items[item.item_name][1] = items[item.item_name][1] - 1
+		if (items[item.item_name][1] - num) < 0:
+			print("ERROR: Removing too many items: " + item.item_name + " Num: " + str(num) + " Actual: " + str(items[item.item_name][1]))
+		items[item.item_name][1] = items[item.item_name][1] - num
 	# Remove entry from dict if count is 0
-	if items[item.item_name][1] == 0:
+	
+	if items[item.item_name][1] <= 0:
 		items.erase(item.item_name)
 		# Update rarest item/sprite if rarest item is removed
 		if item.item_name == rarest_item_name:
@@ -76,15 +80,15 @@ func remove_item(item):
 			else:
 				rarest_item_name = ""
 				sprite.hide()
-	if items.empty():
-		game.PosInventory.hide()
 
-func loot_item(item_name):
-	#print("Looting " + item_name + ": " + str(items[item_name]))
+func loot_item(item_name, num):
+	#print("Looting " + str(num) + " " + item_name + "(s): " + str(items[item_name]))
+	# Get the item from Pos items dict
 	var item_temp = items[item_name][0]
 	if item_temp == null:
-		return false
-	remove_item(item_temp)
+		return null
+	# Remove the item(s)
+	remove_item(item_temp, num)
 	#print_pos()
 	return item_temp
 

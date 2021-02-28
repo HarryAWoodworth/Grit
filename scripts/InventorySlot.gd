@@ -6,11 +6,19 @@ onready var count = $Label
 onready var rect = $ColorRect
 
 var num: int
+var item_name: String
+var item
+var onGround: bool
+var game
 
-func init(item, num_):
+func init(item_, num_, game_, onGround_=true):
+	item = item_
 	icon.texture = load("res://assets/item_sprites/" + item.id + "_small.png")
 	text.text = item.name_specialized
+	item_name = item.item_name
 	num = num_
+	game = game_
+	onGround = onGround_
 	count.text = "x" + str(num)
 	
 func dec_count(dec):
@@ -26,3 +34,11 @@ func _on_InventorySlot_mouse_entered():
 
 func _on_InventorySlot_mouse_exited():
 	rect.color = Color(0.37,0.37,0.37)
+
+# If double clicked, call ground_item_selected() in game 
+func _on_InventorySlot_gui_input(event):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed and event.doubleclick:
+		if onGround:
+			game.ground_item_selected(item_name,self)
+		else:
+			print("Clicked in inventory!!!")

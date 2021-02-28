@@ -446,7 +446,7 @@ func open_loot_tray(pos):
 			# item[0] is the item, item[1] is the count
 			var invslot = InventorySlot.instance()
 			GroundScroller.get_node("VBoxContainer").add_child(invslot)
-			invslot.init(item[0],item[1])
+			invslot.init(item[0],item[1], self)
 		GroundScroller.show()
 	# Otherwise hide the scroller
 	else:
@@ -469,13 +469,16 @@ func _on_Inventory_item_activated(index):
 #	player.equipment.print_hands()
 	pass
 
-# The user selects an item from the ground
-func _on_PosInventory_item_activated(index):
-#	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(
-#			PosInventory.get_item_text(index)
-#		)
-#	# Add item to player inventory and remove from pos
-#	player.inventory.add_item(item_to_loot)
-#	# Remove item from ground
-#	PosInventory.remove_item(index)
-	pass
+func ground_item_selected(item_name, invslot):
+	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(item_name, invslot.num)
+	if item_to_loot != null:
+		player.inventory.add_item(item_to_loot, invslot.num)
+		# Remove from Ground UI
+		GroundScroller.get_node("VBoxContainer").remove_child(invslot)
+		# Add to Inventory UI
+		var newinvslot = InventorySlot.instance()
+		InventoryScroller.get_node("VBoxContainer").add_child(newinvslot)
+		newinvslot.init(invslot.item,invslot.num,self,false)
+		invslot.queue_free()
+	else:
+		print("ERROR: Attempted to loot item " + item_name + " but it was not found!")

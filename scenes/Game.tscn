@@ -107,7 +107,7 @@ __meta__ = {
 [node name="InventoryScroller" type="ScrollContainer" parent="UI"]
 margin_left = 1706.84
 margin_top = 601.0
-margin_right = 1904.84
+margin_right = 1906.84
 margin_bottom = 929.0
 __meta__ = {
 "_edit_use_anchors_": false

@@ -29,19 +29,17 @@ func init(current_weight_, max_weight_, game_):
 	player = game.player
 
 # Add item to inventory, increase weight
-func add_item(item):
+func add_item(item, num=1):
 	# Add to inventory
 	if bag.has(item.item_name):
-			bag[item.item_name][1] += 1
+			bag[item.item_name][1] += num
 	else:
-			bag[item.item_name] = [item, 1]
-	current_weight += item.weight
-	# Add to Inventory UI
-	game.Inventory_UI.add_item(item.item_name,load_tex(item))
-	var index = game.Inventory_UI.get_item_count() - 1
-	game.Inventory_UI.set_item_metadata(index,item.id)
-	if current_weight > max_weight and !player.has_effect("Encumbered"):
-		player.add_effect("Encumbered")
+			bag[item.item_name] = [item, num]
+	current_weight += (item.weight * num)
+	# Adjust weight
+	#if current_weight > max_weight and !player.has_effect("Encumbered"):
+#		pass
+		#player.add_effect("Encumbered")
 	return true
 
 func remove_item(item):
