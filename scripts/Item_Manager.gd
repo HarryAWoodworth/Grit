@@ -13,7 +13,9 @@ func init():
 	var file = File.new()
 	file.open("res://item_list.json", file.READ)
 	var json = file.get_as_text()
-	var json_result = JSON.parse(json).result
+	var json_parse = JSON.parse(json)
+	#print(json_parse.error_string)
+	var json_result = json_parse.result
 	file.close()
 	
 	# Parse JSON into Item nodes

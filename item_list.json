@@ -3,14 +3,14 @@
 		{
 			"id": "ak_47",
 			"item_name": "AK-47",
-			"name_specialized":,
+			"name_specialized":"AK-47",
 			"description": "An old rifle.",
 			"weight": 3.47,
 			"rarity": 5,
 			"hand_size": 2,
 			"type":"ranged",
 			"innacuracy_angle": 5,
-			"ammo_type": "7.62×39mm"
+			"ammo_type": "7.62×39mm",
 		},
 		{
 			"id": "7.62×39mm",

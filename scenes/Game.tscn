@@ -104,7 +104,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScrollContainer" type="ScrollContainer" parent="UI"]
+[node name="InventoryScroller" type="ScrollContainer" parent="UI"]
 margin_left = 1706.84
 margin_top = 601.0
 margin_right = 1904.84
@@ -113,38 +113,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/ScrollContainer"]
-margin_right = 378.0
-margin_bottom = 14.0
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/InventoryScroller"]
+
+[node name="GroundScroller" type="ScrollContainer" parent="UI"]
+margin_left = 1505.0
+margin_top = 603.0
+margin_right = 1705.0
+margin_bottom = 931.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="UI/ScrollContainer/HBoxContainer"]
-margin_right = 378.0
-margin_bottom = 14.0
-text = "Hello! Hi! Im an item you pick up from the ground you doof"
-
-[node name="ScrollContainer2" type="ScrollContainer" parent="UI"]
-margin_left = 1505.19
-margin_top = 603.15
-margin_right = 1702.19
-margin_bottom = 931.15
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/ScrollContainer2"]
-margin_right = 76.0
-margin_bottom = 14.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="UI/ScrollContainer2/HBoxContainer"]
-margin_right = 76.0
-margin_bottom = 14.0
-text = "Woahhhhhh"
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/GroundScroller"]
 
 [node name="Ticker" type="Node" parent="."]
 script = ExtResource( 7 )

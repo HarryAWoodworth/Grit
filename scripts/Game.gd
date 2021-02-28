@@ -23,7 +23,7 @@
 ## MONSTERS
 # [ ] Check that pathfinding still works
 # [ ] Different AI's?
-# [ ] Monster manager from json
+# [ ] Monster manager from json file
 # [ ] Monsters Wander
 # [ ] Different Monster actions? Speed for actions?
 
@@ -122,8 +122,8 @@ onready var tile_map = $TileMap
 onready var shadow_map = $ShadowMap
 onready var textlog = $UI/TextLog
 onready var item_manager = $Item_Manager
-onready var Inventory_UI = $UI/HBoxContainer/Inventory
-onready var PosInventory = $UI/HBoxContainer/PosInventory
+onready var GroundScroller = $UI/GroundScroller
+onready var InventoryScroller = $UI/InventoryScroller
 onready var Mouse_Detection = $Mouse_Detection
 
 # Entity Preloads --------------------------------------------------------------
@@ -136,6 +136,7 @@ var Player = preload("res://actors/Player.tscn")
 var Wall = preload("res://actors/Wall.tscn")
 var SightNode = preload("res://util/SightNode.tscn")
 var Item = preload("res://actors/Item.tscn")
+var InventorySlot = preload("res://scenes/InventorySlot.tscn")
 
 # Texture preloads
 var forest_tex = preload("res://assets/test_wall.png")
@@ -186,7 +187,7 @@ func can_move(x, y):
 
 # Move an actor to a coordinate
 func move_actor(actor, x ,y):
-	print("Moving to " + str(x) + "," + str(y))
+	#print("Moving to " + str(x) + "," + str(y))
 	if can_move(x,y):
 		# Remove the actor from its previous position
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
@@ -196,7 +197,7 @@ func move_actor(actor, x ,y):
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.append(actor)
 		# Update the actor's node
 		actor.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
-		print("Actor's new position: " + str(actor.position))
+		#print("Actor's new position: " + str(actor.position))
 		return true
 	return false
 
@@ -307,11 +308,12 @@ func build_chunk():
 	map[0][0].actors.push_front(player_inst)
 	player = player_inst
 
-	# Place Enemy
+	# Place Dummy
 	add_character(2,2)
 
-	add_item("ak_47",0,0)
-	add_item("7.62×39mm",2,2)
+	add_item("ak_47",0,1)
+	add_item("7.62×39mm",0,1)
+	add_item("7.62×39mm",0,1)
 
 	### TESTING ###
 	#var item_inst1 = Item.instance()
@@ -435,39 +437,45 @@ func addLog(string):
 	textlog.text = textlog.text + "\n" + string
 
 func open_loot_tray(pos):
+	# If there are items on the ground, display them in the scroller
 	if !pos.items.empty():
-		PosInventory.clear()
-		var ind = 0
+		for n in GroundScroller.get_node("VBoxContainer").get_children():
+			GroundScroller.get_node("VBoxContainer").remove_child(n)
+			n.queue_free()
 		for item in pos.items.values():
-			PosInventory.add_item(item[0].item_name,load_tex(item[0]))
-			PosInventory.set_item_metadata(ind,item[0].id)
-			ind = ind + 1
-		PosInventory.show()
+			# item[0] is the item, item[1] is the count
+			var invslot = InventorySlot.instance()
+			GroundScroller.get_node("VBoxContainer").add_child(invslot)
+			invslot.init(item[0],item[1])
+		GroundScroller.show()
+	# Otherwise hide the scroller
 	else:
-		PosInventory.hide()
+		GroundScroller.hide()
 
 
 # The user selects an item in their inventory
 func _on_Inventory_item_activated(index):
-	print("Adding item at index " + str(index))
-	var step1 = Inventory_UI.get_item_text(index)
-	print("Step 1: " + str(step1))
-	var step2 = player.inventory.remove_item_by_name(step1)
-	print("Step 2: " + str(step2))
-	player.equipment.hold_item(step2)
+#	print("Adding item at index " + str(index))
+#	var step1 = Inventory_UI.get_item_text(index)
+#	print("Step 1: " + str(step1))
+#	var step2 = player.inventory.remove_item_by_name(step1)
+#	print("Step 2: " + str(step2))
+#	player.equipment.hold_item(step2)
 #	player.equipment.hold_item(
 #		player.inventory.remove_item_by_name(
 #			Inventory_UI.get_item_text(index)
 #		)
 #	)
-	player.equipment.print_hands()
+#	player.equipment.print_hands()
+	pass
 
 # The user selects an item from the ground
 func _on_PosInventory_item_activated(index):
-	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(
-			PosInventory.get_item_text(index)
-		)
-	# Add item to player inventory and remove from pos
-	player.inventory.add_item(item_to_loot)
-	# Remove item from ground
-	PosInventory.remove_item(index)
+#	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(
+#			PosInventory.get_item_text(index)
+#		)
+#	# Add item to player inventory and remove from pos
+#	player.inventory.add_item(item_to_loot)
+#	# Remove item from ground
+#	PosInventory.remove_item(index)
+	pass
