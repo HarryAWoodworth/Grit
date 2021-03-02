@@ -28,7 +28,7 @@ func init():
 		if "name_specialized" in item:
 			nsp = item.name_specialized
 		else:
-			nsp = item.name
+			nsp = item.item_name
 		# init basic item properties
 		item_inst.init_basic(item.id,item.item_name,nsp,item.description,item.weight,item.rarity,item.hand_size,item.type)
 		# Match the item type to init differently
