@@ -11,10 +11,10 @@ anti_aliasing = false
 [node name="UI" type="CanvasLayer"]
 
 [node name="PlayerInfo" type="ColorRect" parent="."]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 420.0
-margin_bottom = 275.0
+margin_left = 11.0
+margin_top = 10.1141
+margin_right = 421.0
+margin_bottom = 275.114
 color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -22,17 +22,17 @@ __meta__ = {
 
 [node name="HealthRect" type="ColorRect" parent="PlayerInfo"]
 margin_left = 1.0
-margin_top = 51.0
 margin_right = 87.0
-margin_bottom = 157.0
+margin_bottom = 158.0
+size_flags_vertical = 9
 color = Color( 0.733333, 0.121569, 0.121569, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="healthbody" type="Sprite" parent="PlayerInfo/HealthRect"]
-position = Vector2( 42.5312, 27.8024 )
-scale = Vector2( 0.177423, 0.176431 )
+[node name="healthbody" type="Sprite" parent="PlayerInfo"]
+position = Vector2( 43.5312, 79.0571 )
+scale = Vector2( 0.177423, 0.177002 )
 texture = ExtResource( 2 )
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo"]

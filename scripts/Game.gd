@@ -132,6 +132,7 @@ onready var GroundScroller = $UI/GroundScroller
 onready var InventoryScroller = $UI/InventoryScroller
 onready var InfoPanel = $UI/InfoPanel
 onready var Mouse_Detection = $Mouse_Detection
+onready var HealthBar = $UI/PlayerInfo/HealthRect
 
 # Entity Preloads --------------------------------------------------------------
 
@@ -161,6 +162,9 @@ var unique_actor_id = 0
 # Is the game world running?
 var world_running = false
 
+## UI
+var health_bar_max
+
 # Ready ------------------------------------------------------------------------
 
 # Init the game
@@ -171,7 +175,7 @@ func _ready():
 	item_manager.init()
 	build_chunk()
 	Mouse_Detection.init(self)
-	
+	health_bar_max = HealthBar.rect_size.y
 	### TESTING ###
 	#map[2][2].print_pos()
 	
@@ -500,3 +504,9 @@ func display_actor_data(actor):
 	InfoPanel.Description.text = actor.description
 	InfoPanel.show()
 	
+func player_health_update_ui(ratio):
+	print("Ratio: " + str(ratio))
+	HealthBar.rect_size.y = ratio * health_bar_max
+	print("New Y: " + str(HealthBar.rect_size.y))
+	HealthBar.rect_position.y = health_bar_max - HealthBar.rect_size.y
+	print("New Pos: " + str(HealthBar.rect_position.y))
