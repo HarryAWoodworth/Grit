@@ -7,7 +7,7 @@
 			"weight": 0.3125,
 			"rarity": 1,
 			"hand_size": 1,
-			"type": "ammo",
+			"type": "consumable",
 		},
 		{
 			"id": "ak_47",

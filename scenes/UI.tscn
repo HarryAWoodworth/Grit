@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/InfoPanel.gd" type="Script" id=1]
+[ext_resource path="res://assets/user_interface/healthbody.png" type="Texture" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
@@ -9,12 +10,73 @@ anti_aliasing = false
 
 [node name="UI" type="CanvasLayer"]
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="PlayerInfo" type="ColorRect" parent="."]
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 420.0
 margin_bottom = 275.0
 color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HealthRect" type="ColorRect" parent="PlayerInfo"]
+margin_left = 1.0
+margin_top = 51.0
+margin_right = 87.0
+margin_bottom = 157.0
+color = Color( 0.733333, 0.121569, 0.121569, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="healthbody" type="Sprite" parent="PlayerInfo/HealthRect"]
+position = Vector2( 42.5312, 27.8024 )
+scale = Vector2( 0.177423, 0.176431 )
+texture = ExtResource( 2 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo"]
+margin_left = 93.0
+margin_top = 6.0
+margin_right = 206.0
+margin_bottom = 19.0
+text = "HEAD"
+scroll_active = false
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="PlayerInfo"]
+margin_left = 93.0
+margin_top = 110.5
+margin_right = 206.0
+margin_bottom = 123.5
+text = "LEGS"
+scroll_active = false
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="PlayerInfo"]
+margin_left = 93.0
+margin_top = 76.5
+margin_right = 206.0
+margin_bottom = 89.5
+text = "HANDS"
+scroll_active = false
+
+[node name="RichTextLabel4" type="RichTextLabel" parent="PlayerInfo"]
+margin_left = 93.0
+margin_top = 42.5
+margin_right = 206.0
+margin_bottom = 55.5
+text = "TORSO"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel5" type="RichTextLabel" parent="PlayerInfo"]
+margin_left = 93.0
+margin_top = 144.0
+margin_right = 206.0
+margin_bottom = 157.0
+text = "FEET"
+scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false
 }

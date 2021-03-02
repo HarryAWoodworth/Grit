@@ -89,7 +89,7 @@ func calculate_innacuracy_angle_with_weight():
 # Based on weight calculate 
 func calculate_dmg_with_weight():
 	# TODO: Weight -> Damage Range algorithm
-	return 0
+	return Vector2(0,0)
 
 func print_item():
 	print("ID: " + id)

@@ -14,7 +14,7 @@ var description
 # Does this actor block light?
 var blocks_light := false
 # Does this actor block other actors?
-var blocks_other_actors := false
+var blocks_other_actors := true
 # Is this actor hidden?
 var hidden := false
 
@@ -26,7 +26,7 @@ func player_distance():
 	var player_pos = game.player.curr_tile
 	return player_pos - curr_tile
 
-func init(game_,x,y,identifier_="...",title_="...",description_="...",hidden_=false,blocks_other_actors_=false,blocks_light_=false):
+func init(game_,x,y,identifier_="...",title_="...",description_="...",hidden_=false,blocks_other_actors_=true,blocks_light_=false):
 	game = game_
 	curr_tile = Vector2(x,y)
 	position = curr_tile * game.TILE_SIZE

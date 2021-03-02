@@ -41,4 +41,4 @@ func _on_InventorySlot_gui_input(event):
 		if onGround:
 			game.ground_item_selected(item_name,self)
 		else:
-			print("Clicked in inventory!!!")
+			print("Clicked in inventory!!! - InventorySlot class")

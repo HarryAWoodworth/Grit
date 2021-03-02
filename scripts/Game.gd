@@ -185,7 +185,7 @@ func can_move(x, y):
 	# Return false if coordinates are off the map
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
 		return false
-	# Check if there is an actor that blocks movement in that path
+	# Check if thwwre is an actor that blocks movement in that path
 	var actors = map[x][y].actors
 	if actors.empty():
 		return true
@@ -398,7 +398,7 @@ func add_wall(x,y,texture,identifier="...",title="...",description="...",hidden=
 	map[x][y].add_actor(wall)
 
 # init(game,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
-func add_character(x,y,health=10,ai="none",identifier="...",title="...",description="...",hidden=false,blocks_other_actors=false,blocks_light=false):
+func add_character(x,y,health=10,ai="none",identifier="...",title="...",description="...",hidden=false,blocks_other_actors=true,blocks_light=false):
 	var character = Monster.instance()
 	add_child(character)
 	character.init(self,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
