@@ -34,7 +34,7 @@ func init():
 		# Match the item type to init differently
 		match item_inst.type:
 			"ranged":
-				item_inst.init_ranged(item.innacuracy_angle,item.ammo_type)
+				item_inst.init_ranged(item.innacuracy_angle,item.ammo_type,item.max_ammo,item.burst_size)
 			"ammo":
 				item_inst.init_ammo(Vector2(item.damage_range.low,item.damage_range.high))
 			"melee":

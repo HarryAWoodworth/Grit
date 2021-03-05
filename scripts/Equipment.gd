@@ -1,52 +1,57 @@
 extends Node
 
-var hand_space
-var hands
-var selected_item
+var right_hand
+var left_hand
+var both_hands
 
 # Game and player ref
 var game
 var player
 
-func init(game_, hand_space_):
+func init(game_):
 	game = game_
-	hands = []
-	hand_space = hand_space_
-	for _x in range(hand_space):
-		hands.append(null)
+	right_hand = null
+	left_hand = null
 
-# Add item to hands
+# Add item to hands (first empty hand, or default swap right)
 func hold_item(item):
-	print("ITEM HOLD_ITEM EQUIPMENT.gd: " + str(item))
-	if hands.count(null) < item.hand_size:
-		return false
-	var ind = hands.find(null)
-	for size in range(item.hand_size):
-		hands[ind + size] = item
-	selected_item = item
-	return true
-	
-func move_item_to_inventory(index):
-	var size = hands[index].hand_size
-	# Remove item in hand
-	for x in range(size):
-		hands[index + x] = null
-	# Move all nulls to right side
-	hands.sort_custom(NullSorter,"sort_nulls_right")
+	# print("HOLD ITEM EQUIPMENT.gd: " + str(item))
+	if item.hand_size == 1:
+		if right_hand == null:
+			right_hand = item
+			return
+		elif left_hand == null:
+			left_hand = item
+			return
+		else:
+			# Always swap right hand if both hands are full
+			empty_hand("right")
+			right_hand = item
+			return
+	else:
+		empty_hand("right")
+		empty_hand("left")
+		both_hands = item
 		
-class NullSorter:
-	static func sort_nulls_right(a, b):
-		if a == null and b != null:
-			return false
-		return true
-		
-func print_hands():
-	print("HANDS: [")
-	for item in hands:
-		if item != null:
-			print(item.item_name)
-	print("]")
-	
+	game.update_equipment_ui()
+
+# Empty input hand to inventory, or both hands
+func empty_hand(hand):
+	if hand == "right":
+		if right_hand == null:
+			return
+		game.player.inventory.add_item_no_weight_change(right_hand)
+		right_hand = null
+	elif hand == "left":
+		if left_hand == null:
+			return
+		game.player.inventory.add_item_no_weight_change(left_hand)
+	else:
+		if right_hand != null:
+			empty_hand("right")
+		if left_hand != null:
+			empty_hand("left")
+			
 func empty():
-	return hands.count(null) == hands.size()
+	return right_hand == null and left_hand == null
 	

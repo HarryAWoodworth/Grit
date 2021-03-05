@@ -31,20 +31,34 @@ func init(current_weight_, max_weight_, game_):
 # Add item to inventory, increase weight
 func add_item(item, num=1):
 	# Add to inventory
+	# Probably implement item.stacks here, make unique key with unique id?
 	if bag.has(item.item_name):
 			bag[item.item_name][1] += num
+			game.update_invslot_count(item.item_name, num)
 	else:
 			bag[item.item_name] = [item, num]
+			game.add_new_invslot(item,num)
 	current_weight += (item.weight * num)
 	# Adjust weight
 	#if current_weight > max_weight and !player.has_effect("Encumbered"):
 #		pass
 		#player.add_effect("Encumbered")
-	return true
+
+# Add item to inventory
+func add_item_no_weight_change(item, num=1):
+	# Add to inventory
+	# Probably implement item.stacks here, make unique key with unique id?
+	if bag.has(item.item_name):
+			bag[item.item_name][1] += num
+			game.update_invslot_count(item.item_name,num)
+	else:
+			bag[item.item_name] = [item, num]
+			game.add_new_invslot(item,num)
 
 func remove_item(item):
 	if bag.has(item.item_name) and !bag[item.item_name][1] > 0:
 		bag[item.item_name][1] -= 1
+		game.update_invslot_count(item.item_name, -1)
 		current_weight -= item.weight
 		return bag[item.item_name][0]
 	return null
@@ -52,6 +66,7 @@ func remove_item(item):
 func remove_item_by_name(item_name):
 	if bag.has(item_name) and bag[item_name][1] > 0:
 		bag[item_name][1] -= 1
+		game.update_invslot_count(item_name, -1)
 		current_weight -= bag[item_name][0].weight
 		return bag[item_name][0]
 	return null

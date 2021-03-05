@@ -20,11 +20,15 @@ func init(item_, num_, game_, onGround_=true):
 	game = game_
 	onGround = onGround_
 	count.text = "x" + str(num)
-	
+
 func dec_count(dec):
 	num -= dec
+	# Delete if no more items
+	if num <= 0:
+		queue_free()
 	count.text = "x" + str(num)
 	
+
 func inc_count(inc):
 	num += inc
 	count.text = "x" + str(num)
@@ -39,6 +43,6 @@ func _on_InventorySlot_mouse_exited():
 func _on_InventorySlot_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed and event.doubleclick:
 		if onGround:
-			game.ground_item_selected(item_name,self)
+			game.ground_item_double_clicked(item_name,self)
 		else:
-			print("Clicked in inventory!!! - InventorySlot class")
+			game.inventory_item_double_clicked(self)

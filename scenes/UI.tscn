@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/InfoPanel.gd" type="Script" id=1]
 [ext_resource path="res://assets/user_interface/healthbody.png" type="Texture" id=2]
+[ext_resource path="res://assets/item_sprites/ak_47_big.png" type="Texture" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
@@ -21,8 +22,8 @@ __meta__ = {
 }
 
 [node name="HealthRect" type="ColorRect" parent="PlayerInfo"]
-margin_left = 1.0
-margin_right = 87.0
+margin_left = 11.0
+margin_right = 97.0
 margin_bottom = 158.0
 size_flags_vertical = 9
 color = Color( 0.733333, 0.121569, 0.121569, 1 )
@@ -31,38 +32,25 @@ __meta__ = {
 }
 
 [node name="healthbody" type="Sprite" parent="PlayerInfo"]
-position = Vector2( 43.5312, 79.0571 )
+position = Vector2( 53.5313, 79.0571 )
 scale = Vector2( 0.177423, 0.177002 )
 texture = ExtResource( 2 )
 
-[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo"]
-margin_left = 93.0
+[node name="HeadEquip" type="RichTextLabel" parent="PlayerInfo"]
+margin_left = 103.0
 margin_top = 6.0
-margin_right = 206.0
+margin_right = 216.0
 margin_bottom = 19.0
 text = "HEAD"
 scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="PlayerInfo"]
-margin_left = 93.0
-margin_top = 110.5
-margin_right = 206.0
-margin_bottom = 123.5
-text = "LEGS"
-scroll_active = false
-
-[node name="RichTextLabel3" type="RichTextLabel" parent="PlayerInfo"]
-margin_left = 93.0
-margin_top = 76.5
-margin_right = 206.0
-margin_bottom = 89.5
-text = "HANDS"
-scroll_active = false
-
-[node name="RichTextLabel4" type="RichTextLabel" parent="PlayerInfo"]
-margin_left = 93.0
+[node name="TorsoEquip" type="RichTextLabel" parent="PlayerInfo"]
+margin_left = 103.0
 margin_top = 42.5
-margin_right = 206.0
+margin_right = 216.0
 margin_bottom = 55.5
 text = "TORSO"
 scroll_active = false
@@ -70,13 +58,150 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RichTextLabel5" type="RichTextLabel" parent="PlayerInfo"]
-margin_left = 93.0
+[node name="HandsEquip" type="RichTextLabel" parent="PlayerInfo"]
+margin_left = 103.0
+margin_top = 76.5
+margin_right = 216.0
+margin_bottom = 89.5
+text = "HANDS"
+scroll_active = false
+
+[node name="LegsEquip" type="RichTextLabel" parent="PlayerInfo"]
+margin_left = 103.0
+margin_top = 110.5
+margin_right = 216.0
+margin_bottom = 123.5
+text = "LEGS"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FeetEquip" type="RichTextLabel" parent="PlayerInfo"]
+margin_left = 102.0
 margin_top = 144.0
-margin_right = 206.0
+margin_right = 215.0
 margin_bottom = 157.0
 text = "FEET"
 scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EquippedWeapon" type="Control" parent="PlayerInfo"]
+visible = false
+margin_left = 10.0
+margin_top = 174.667
+margin_right = 400.0
+margin_bottom = 214.667
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EquippedWeaponImage" type="TextureRect" parent="PlayerInfo/EquippedWeapon"]
+margin_left = 19.0
+margin_top = -0.332581
+margin_right = 319.0
+margin_bottom = 88.6674
+rect_min_size = Vector2( 0.5, 0.5 )
+rect_scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HandUseLabel" type="Label" parent="PlayerInfo/EquippedWeapon"]
+margin_top = 10.638
+margin_right = 15.0
+margin_bottom = 24.638
+text = "LR"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EquippedWeaponName" type="RichTextLabel" parent="PlayerInfo/EquippedWeapon"]
+margin_left = 151.0
+margin_top = 8.0
+margin_right = 344.0
+margin_bottom = 28.0
+bbcode_enabled = true
+bbcode_text = "[b]AK-47[/b]"
+text = "AK-47"
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": "
+"
+}
+
+[node name="CurrentAmmo" type="Label" parent="PlayerInfo/EquippedWeapon"]
+margin_left = 330.0
+margin_top = 8.0
+margin_right = 390.0
+margin_bottom = 22.0
+text = "30/30"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EquippedWeapon2" type="Control" parent="PlayerInfo"]
+visible = false
+margin_left = 10.0
+margin_top = 215.054
+margin_right = 400.0
+margin_bottom = 255.054
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EquippedWeaponImage" type="TextureRect" parent="PlayerInfo/EquippedWeapon2"]
+margin_left = 19.0
+margin_top = -0.332581
+margin_right = 319.0
+margin_bottom = 88.6674
+rect_min_size = Vector2( 0.5, 0.5 )
+rect_scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HandUseLabel" type="Label" parent="PlayerInfo/EquippedWeapon2"]
+margin_top = 10.638
+margin_right = 15.0
+margin_bottom = 24.638
+text = "LR"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EquippedWeaponName" type="RichTextLabel" parent="PlayerInfo/EquippedWeapon2"]
+margin_left = 151.0
+margin_top = 8.0
+margin_right = 344.0
+margin_bottom = 28.0
+bbcode_enabled = true
+bbcode_text = "[b]AK-47[/b]"
+text = "AK-47"
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": "
+"
+}
+
+[node name="CurrentAmmo" type="Label" parent="PlayerInfo/EquippedWeapon2"]
+margin_left = 330.0
+margin_top = 8.0
+margin_right = 390.0
+margin_bottom = 22.0
+text = "30/30"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }

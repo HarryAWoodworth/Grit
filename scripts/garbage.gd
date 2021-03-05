@@ -138,3 +138,23 @@
 	
 #func hide_target(target):
 	#target.shadow()
+	
+	#	var size = hands[index].hand_size
+#	# Remove item in hand
+#	for x in range(size):
+#		hands[index + x] = null
+#	# Move all nulls to right side
+#	hands.sort_custom(NullSorter,"sort_nulls_right")
+		
+#class NullSorter:
+#	static func sort_nulls_right(a, b):
+#		if a == null and b != null:
+#			return false
+#		return true
+
+#func print_hands():
+#	print("HANDS: [")
+#	for item in hands:
+#		if item != null:
+#			print(item.item_name)
+#	print("]")

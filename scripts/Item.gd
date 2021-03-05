@@ -16,15 +16,24 @@ var rarity: int
 var hand_size: int
 # What type of item? (Melee, ranged, ammo, item)
 var type: String
+# Countable (do multiple instances of this item stack?)
+var stacks: bool
+###### WEAPONS
 # Damage range
 var damage_range: Vector2
 # The maximum difference in angle a weapon can fire (in each direction)
+###### RANGED WEAPONS
 var innacuracy_angle: int
 # What type of ammo this weapon takes
 var ammo_type: String
-# Countable (do multiple instances of this item stack?)
-var stacks: bool
+# How many bullets go into the weapon clip
+var max_ammo: int
+# How many bullets are fired per weapon firing action
+var burst_size: int
+# Current Ammunition Amount
+var current_ammo: int
 
+# Init this item based on another item (cloning it)
 func init_clone(item):
 	if item == null:
 		print("Error: Attempting to clone a NULL item.")
@@ -37,11 +46,16 @@ func init_clone(item):
 	rarity = item.rarity
 	hand_size = item.hand_size
 	type = item.type
+	stacks = item.stacks
 	damage_range = item.damage_range
 	innacuracy_angle = item.innacuracy_angle
 	ammo_type = item.ammo_type
+	max_ammo = item.max_ammo
+	burst_size = item.burst_size
+	current_ammo = item.current_ammo
 
-# All items will have name, two textures, and a weight
+# All items will have these fields
+# (Stacks determined by item type)
 func init_basic(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_):
 	id = id_
 	item_name = name_
@@ -54,11 +68,14 @@ func init_basic(id_,name_,name_specialized_,description_,weight_,rarity_,hand_si
 
 # Ranged items do not do damage themselves, so have (0,0) as the damage range.
 # They also have a non-weight-based ranged_accuracy_dropoff, as well as ammo_type
-func init_ranged(innacuracy_angle_,ammo_type_):
+func init_ranged(innacuracy_angle_,ammo_type_,max_ammo_,burst_size_):
 	damage_range = Vector2(0,0)
 	innacuracy_angle = innacuracy_angle_
 	ammo_type = ammo_type_
+	max_ammo = max_ammo_
+	burst_size = burst_size_
 	stacks = false
+	current_ammo = 0
 
 func init_melee(damage_range_):
 	damage_range = damage_range_
@@ -97,9 +114,14 @@ func print_item():
 	print("Name Specialized: " + name_specialized)
 	print("Description: " + description)
 	print("Type: " + type)
+	print("Stacks?: " + str(stacks))
 	print("Weight: " + str(weight))
 	print("Rarity: " + str(rarity))
 	print("Hand Size: " + str(hand_size))
 	print("Damage_range: (" + str(damage_range.x) + "," + str(damage_range.y) + ")")
-	print("RAD: " + str(innacuracy_angle))
-	print("Ammo Type: " + ammo_type)
+	print("Innacuracy Angle: " + str(innacuracy_angle))
+	if type == "ranged":
+		print("Ammo Type: " + ammo_type)
+		print("Max Ammo: " + str(max_ammo))
+		print("Burst Size: " + str(burst_size))
+		print("Current Ammo: " + str(current_ammo))

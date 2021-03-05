@@ -38,7 +38,7 @@ func init_player():
 	health = max_health
 	speed = 5
 	inventory.init(current_weight,max_weight,game)
-	equipment.init(game, hand_space)
+	equipment.init(game)
 	Combat_Manager.init()
 	Center_Of_Player.position = Vector2(game.TILE_SIZE/2,game.TILE_SIZE/2)
 
@@ -63,6 +63,8 @@ func _input(event):
 		return
 	## YOUR DEBUG KEY IS }
 	if Input.is_action_just_pressed("debug"):
+		#for child in game.InventoryScroller.get_node("VBoxContainer").get_children():
+		#	print("Child: " + str(child.item))
 		take_damage(5)
 		#game.darken_tile(curr_tile.x,curr_tile.y)
 		#game.ticker.print_ticker()
@@ -101,8 +103,9 @@ func _input(event):
 
 func shoot():
 	# print("HANDS: " + str(equipment.hands))
-	if !equipment.empty():
-		Combat_Manager.shoot(get_global_mouse_position(), equipment.selected_item.innacuracy_angle)
+	#if !equipment.empty():
+	#	Combat_Manager.shoot(get_global_mouse_position(), equipment.selected_item.innacuracy_angle)
+	pass
 		
 func take_damage(dmg):
 	health -= dmg

@@ -7,13 +7,18 @@
 # [ ] Melee Weapons
 # [ ] Melee Combat, turn action
 # [ ] Move Diagonally
+# [W] Player armor equipment
+# [?] What if you made each bullet 1 smal action and kept the aim state? (Would be like shooting moving targets coming at you)
+
+## PLAYER UI
 # [W] Display Player information/equipment/inventory
-# [ ] Player armor equipment
-# [W] Hovering mouse over tile displays information
+#	{ } Weapon
+#   { } Armor 
 # [W] Hovering mouse over tile within range displays tile actions
 # [ ] Double click on item in inventory to equip
 # [ ] Hovering over item in player info box opens it in info box with actions
-
+# [ ] Hovering over item in inventory/ground opens it in info box with actions
+# [ ] Implements Item.stacks (in Inventory.gd)
 
 ## ENVIRONMENT INTERACTION
 # [ ] Doors
@@ -133,6 +138,9 @@ onready var InventoryScroller = $UI/InventoryScroller
 onready var InfoPanel = $UI/InfoPanel
 onready var Mouse_Detection = $Mouse_Detection
 onready var HealthBar = $UI/PlayerInfo/HealthRect
+onready var EquippedWeapon1 = $UI/PlayerInfo/EquippedWeapon
+onready var EquippedWeapon2 = $UI/PlayerInfo/EquippedWeapon2
+
 
 # Entity Preloads --------------------------------------------------------------
 
@@ -327,6 +335,10 @@ func build_chunk():
 	add_item("ak_47",0,1)
 	add_item("7.62×39mm",0,1)
 	add_item("7.62×39mm",0,1)
+	
+	add_item("ak_47",0,2)
+	add_item("7.62×39mm",0,2)
+	add_item("7.62×39mm",0,2)
 
 	### TESTING ###
 	#var item_inst1 = Item.instance()
@@ -439,6 +451,9 @@ func get_unique_id():
 func load_tex(item):
 	return load("res://assets/item_sprites/" + item.id + "_small.png")
 	
+func load_big_tex(item):
+	return load("res://assets/item_sprites/" + item.id + "_big.png")
+	
 # UI ---------------------------------------------------------------------------
 
 # Log string to textlog
@@ -466,38 +481,61 @@ func open_loot_tray(pos):
 		GroundScroller.hide()
 
 
-# The user selects an item in their inventory
-func _on_Inventory_item_activated(index):
-#	print("Adding item at index " + str(index))
-#	var step1 = Inventory_UI.get_item_text(index)
-#	print("Step 1: " + str(step1))
-#	var step2 = player.inventory.remove_item_by_name(step1)
-#	print("Step 2: " + str(step2))
-#	player.equipment.hold_item(step2)
-#	player.equipment.hold_item(
-#		player.inventory.remove_item_by_name(
-#			Inventory_UI.get_item_text(index)
-#		)
-#	)
-#	player.equipment.print_hands()
-	pass
+func inventory_item_double_clicked(invslot):
+	player.equipment.hold_item(invslot.item)
+	invslot.dec_count(1)
 
-func ground_item_selected(item_name, invslot):
+# When the user double clicks an item in the ground list, move it to the player
+# inventory and add it as an invslot in the UI
+func ground_item_double_clicked(item_name, invslot):
 	# Get the item to loot (and remove the item from Pos)
 	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(item_name, invslot.num)
 	if item_to_loot != null:
-		# Add to player's Inventory
+		# Add to player's Inventory and add to Inventory UI
 		player.inventory.add_item(item_to_loot, invslot.num)
 		# Remove from Ground UI
 		GroundScroller.get_node("VBoxContainer").remove_child(invslot)
 		# Add to Inventory UI
-		var newinvslot = InventorySlot.instance()
-		InventoryScroller.get_node("VBoxContainer").add_child(newinvslot)
-		newinvslot.init(invslot.item,invslot.num,self,false)
+		# add_new_invslot(invslot.item,invslot.num)
+		# var newinvslot = InventorySlot.instance()
+		# InventoryScroller.get_node("VBoxContainer").add_child(newinvslot)
+		# newinvslot.init(invslot.item,invslot.num,self,false)
 		# Free the inventory node
 		invslot.queue_free()
 	else:
 		print("ERROR: Attempted to loot item " + item_name + " but it was not found!")
+
+# Add a new invslot item to the UI inventory list
+func add_new_invslot(item, num):
+	var newinvslot = InventorySlot.instance()
+	InventoryScroller.get_node("VBoxContainer").add_child(newinvslot)
+	newinvslot.init(item,num,self,false)
+
+func update_invslot_count(item_name,num):
+	pass
+
+func update_equipment_ui():
+	var both_hands = player.equipment.both_hands
+	if both_hands != null:
+		EquippedWeapon2.hide()
+		EquippedWeapon1.get_node("EquippedWeaponImage").texture = load_big_tex(both_hands)
+		EquippedWeapon1.get_node("HandUseLabel").text = "LR"
+		EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = both_hands.name_specialized
+		EquippedWeapon1.get_node("CurrentAmmo").text = str(both_hands.current_ammo) + "/" + str(both_hands.max_ammo)
+		EquippedWeapon1.show()
+	else:
+		var right_item = player.equipment.right_hand
+		var left_item = player.equipment.left_hand
+		EquippedWeapon1.get_node("EquippedWeaponImage").texture = right_item.sprite.texture
+		EquippedWeapon1.get_node("HandUseLabel").text = "R"
+		EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = right_item.name_specialized
+		EquippedWeapon1.get_node("CurrentAmmo").text = str(right_item.current_ammo) + "/" + str(right_item.max_ammo)
+		EquippedWeapon2.get_node("EquippedWeaponImage").texture = left_item.sprite.texture
+		EquippedWeapon2.get_node("HandUseLabel").text = "L"
+		EquippedWeapon2.get_node("EquippedWeaponName").bbcode_text = left_item.name_specialized
+		EquippedWeapon2.get_node("CurrentAmmo").text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
+		EquippedWeapon1.show()
+		EquippedWeapon2.show()
 
 func display_actor_data(actor):
 	InfoPanel.Icon.texture = actor.sprite.texture

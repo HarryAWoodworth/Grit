@@ -62,7 +62,6 @@ func remove_item(item, num=1):
 			print("ERROR: Removing too many items: " + item.item_name + " Num: " + str(num) + " Actual: " + str(items[item.item_name][1]))
 		items[item.item_name][1] = items[item.item_name][1] - num
 	# Remove entry from dict if count is 0
-	
 	if items[item.item_name][1] <= 0:
 		items.erase(item.item_name)
 		# Update rarest item/sprite if rarest item is removed

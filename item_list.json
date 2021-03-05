@@ -20,6 +20,8 @@
 			"type":"ranged",
 			"innacuracy_angle": 5,
 			"ammo_type": "7.62×39mm",
+			"max_ammo": 30,
+			"burst_size": 5,
 		},
 		{
 			"id": "7.62×39mm",
