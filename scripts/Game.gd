@@ -491,6 +491,7 @@ func ground_item_double_clicked(item_name, invslot):
 	# Get the item to loot (and remove the item from Pos)
 	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(item_name, invslot.num)
 	if item_to_loot != null:
+		print("Looting item " + item_to_loot.item_name)
 		# Add to player's Inventory and add to Inventory UI
 		player.inventory.add_item(item_to_loot, invslot.num)
 		# Remove from Ground UI
