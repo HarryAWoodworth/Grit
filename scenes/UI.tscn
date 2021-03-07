@@ -91,9 +91,12 @@ __meta__ = {
 [node name="EquippedWeapon" type="Control" parent="PlayerInfo"]
 visible = false
 margin_left = 10.0
-margin_top = 174.667
+margin_top = 175.0
 margin_right = 400.0
-margin_bottom = 214.667
+margin_bottom = 215.0
+rect_clip_content = true
+size_flags_horizontal = 4
+size_flags_vertical = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -103,17 +106,21 @@ margin_left = 19.0
 margin_top = -0.332581
 margin_right = 319.0
 margin_bottom = 88.6674
-rect_min_size = Vector2( 0.5, 0.5 )
+rect_min_size = Vector2( 40, 40 )
 rect_scale = Vector2( 0.4, 0.4 )
+rect_clip_content = true
+size_flags_horizontal = 5
+size_flags_vertical = 5
 texture = ExtResource( 3 )
+stretch_mode = 6
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HandUseLabel" type="Label" parent="PlayerInfo/EquippedWeapon"]
-margin_top = 10.638
+margin_top = 12.638
 margin_right = 15.0
-margin_bottom = 24.638
+margin_bottom = 26.638
 text = "LR"
 align = 1
 valign = 1
@@ -123,9 +130,9 @@ __meta__ = {
 
 [node name="EquippedWeaponName" type="RichTextLabel" parent="PlayerInfo/EquippedWeapon"]
 margin_left = 151.0
-margin_top = 8.0
+margin_top = 11.0
 margin_right = 344.0
-margin_bottom = 28.0
+margin_bottom = 31.0
 bbcode_enabled = true
 bbcode_text = "[b]AK-47[/b]"
 text = "AK-47"
@@ -137,9 +144,9 @@ __meta__ = {
 
 [node name="CurrentAmmo" type="Label" parent="PlayerInfo/EquippedWeapon"]
 margin_left = 330.0
-margin_top = 8.0
+margin_top = 11.0
 margin_right = 390.0
-margin_bottom = 22.0
+margin_bottom = 25.0
 text = "30/30"
 align = 1
 valign = 1
@@ -149,10 +156,13 @@ __meta__ = {
 
 [node name="EquippedWeapon2" type="Control" parent="PlayerInfo"]
 visible = false
-margin_left = 10.0
-margin_top = 215.054
-margin_right = 400.0
-margin_bottom = 255.054
+margin_left = 10.4142
+margin_top = 215.0
+margin_right = 400.414
+margin_bottom = 255.0
+rect_clip_content = true
+size_flags_horizontal = 4
+size_flags_vertical = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -162,17 +172,19 @@ margin_left = 19.0
 margin_top = -0.332581
 margin_right = 319.0
 margin_bottom = 88.6674
-rect_min_size = Vector2( 0.5, 0.5 )
+rect_min_size = Vector2( 40, 40 )
 rect_scale = Vector2( 0.4, 0.4 )
+rect_clip_content = true
 texture = ExtResource( 3 )
+stretch_mode = 6
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HandUseLabel" type="Label" parent="PlayerInfo/EquippedWeapon2"]
-margin_top = 10.638
+margin_top = 11.638
 margin_right = 15.0
-margin_bottom = 24.638
+margin_bottom = 25.638
 text = "LR"
 align = 1
 valign = 1
@@ -182,9 +194,9 @@ __meta__ = {
 
 [node name="EquippedWeaponName" type="RichTextLabel" parent="PlayerInfo/EquippedWeapon2"]
 margin_left = 151.0
-margin_top = 8.0
+margin_top = 11.0
 margin_right = 344.0
-margin_bottom = 28.0
+margin_bottom = 31.0
 bbcode_enabled = true
 bbcode_text = "[b]AK-47[/b]"
 text = "AK-47"
@@ -196,9 +208,9 @@ __meta__ = {
 
 [node name="CurrentAmmo" type="Label" parent="PlayerInfo/EquippedWeapon2"]
 margin_left = 330.0
-margin_top = 8.0
+margin_top = 11.0
 margin_right = 390.0
-margin_bottom = 22.0
+margin_bottom = 25.0
 text = "30/30"
 align = 1
 valign = 1
@@ -237,9 +249,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="InfoPanel"]
-margin_left = 148.0
+margin_left = 150.0
 margin_top = 10.0
-margin_right = 400.0
+margin_right = 402.0
 margin_bottom = 128.0
 
 [node name="InventoryScroller" type="ScrollContainer" parent="."]

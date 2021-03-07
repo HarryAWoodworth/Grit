@@ -1,6 +1,12 @@
 
 # <<< A0.1 >>>
 
+## TODO:
+
+## BUGS:
+# [ ] Giant texture in bullet equip
+# [ ] Re-equipping 1 bullet after 2 bullet -> ak swap shows second bullet
+
 ## PLAYER INTERACTION
 # [ ] Burstfire turn action
 # [ ] Reloading Gun (Ammo, removing ammo, turn action)
@@ -188,8 +194,6 @@ func _ready():
 	#map[2][2].print_pos()
 	
 
-		
-	
 # Actor Movement ------------------------------------------------------------------------
 
 # Checks if an actor can move into a coordinate
@@ -244,10 +248,6 @@ func get_surrounding_empty(x,y):
 	if can_move(x+1,y-1):
 		free_spaces.append(Vector2(1,-1))
 	return free_spaces
-
-# UI ---------------------------------------------------------------------------
-
-
 
 # Update -----------------------------------------------------------------------
 
@@ -481,11 +481,11 @@ func open_loot_tray(pos):
 	else:
 		GroundScroller.hide()
 
-
+# Equip item from inventory
 func inventory_item_double_clicked(invslot):
 	# print("Inventory item " + invslot.item.item_name + " double clicked")
-	player.equipment.hold_item(invslot.item)
-	invslot.dec_count(1)
+	player.equipment.hold_item(player.inventory.remove_item(invslot.item))
+	
 
 # When the user double clicks an item in the ground list, move it to the player
 # inventory and add it as an invslot in the UI
@@ -514,37 +514,56 @@ func add_new_invslot(item, num):
 	InventoryScroller.get_node("VBoxContainer").add_child(newinvslot)
 	newinvslot.init(item,num,self,false)
 
+# Update the count in invslot
 func update_invslot_count(item_name,num):
-	pass
+	var invslot = null
+	for slot in InventoryScroller.get_node("VBoxContainer").get_children():
+		if slot.item.item_name == item_name:
+			invslot = slot
+			break
+	if invslot == null:
+		print("ERROR: Attempting to update invslot of item " + item_name + ", but no Invslot found!")
+		return
+	invslot.change_count(num)
 
 func update_equipment_ui():
-	var both_hands = player.equipment.both_hands
-	if both_hands != null:
+	var both_item = player.equipment.both_hands
+	if both_item != null:
 		EquippedWeapon2.hide()
-		EquippedWeapon1.get_node("EquippedWeaponImage").texture = load_big_tex(both_hands)
-		EquippedWeapon1.get_node("EquippedWeaponImage").set_scale(Vector2(0.4,0.4))
+		EquippedWeapon1.hide()
+		EquippedWeapon1.get_node("EquippedWeaponImage").texture = load_big_tex(both_item)
+		EquippedWeapon1.get_node("EquippedWeaponImage")
 		EquippedWeapon1.get_node("HandUseLabel").text = "LR"
-		EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = both_hands.name_specialized
-		EquippedWeapon1.get_node("CurrentAmmo").text = str(both_hands.current_ammo) + "/" + str(both_hands.max_ammo)
+		EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = both_item.name_specialized
+		if both_item.type == "ranged":
+			EquippedWeapon1.get_node("CurrentAmmo").text = str(both_item.current_ammo) + "/" + str(both_item.max_ammo)
+		else:
+			EquippedWeapon1.get_node("CurrentAmmo").text = ""
 		EquippedWeapon1.show()
 	else:
 		var right_item = player.equipment.right_hand
 		var left_item = player.equipment.left_hand
+		EquippedWeapon1.hide()
+		EquippedWeapon2.hide()
 		if right_item != null:
-			EquippedWeapon1.hide()
 			EquippedWeapon1.get_node("EquippedWeaponImage").texture = load_big_tex(right_item)
-			EquippedWeapon1.get_node("EquippedWeaponImage").set_scale(Vector2(0.4,0.4))
+			EquippedWeapon1.get_node("EquippedWeaponImage")
 			EquippedWeapon1.get_node("HandUseLabel").text = "R"
 			EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = right_item.name_specialized
-			EquippedWeapon1.get_node("CurrentAmmo").text = str(right_item.current_ammo) + "/" + str(right_item.max_ammo)
+			if right_item.type == "ranged":
+				EquippedWeapon1.get_node("CurrentAmmo").text = str(right_item.current_ammo) + "/" + str(right_item.max_ammo)
+			else:
+				EquippedWeapon1.get_node("CurrentAmmo").text = ""
 			EquippedWeapon1.show()
 		if left_item != null:
-			EquippedWeapon1.hide()
 			EquippedWeapon2.get_node("EquippedWeaponImage").texture = load_big_tex(left_item)
-			EquippedWeapon1.get_node("EquippedWeaponImage").set_scale(Vector2(0.4,0.4))
+			EquippedWeapon2.get_node("EquippedWeaponImage")
 			EquippedWeapon2.get_node("HandUseLabel").text = "L"
 			EquippedWeapon2.get_node("EquippedWeaponName").bbcode_text = left_item.name_specialized
-			EquippedWeapon2.get_node("CurrentAmmo").text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
+			if left_item.type == "ranged":
+				EquippedWeapon2.get_node("CurrentAmmo").text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
+			else:
+				EquippedWeapon2.get_node("CurrentAmmo").text = ""
 			EquippedWeapon2.show()
 
 func display_actor_data(actor):
@@ -553,8 +572,5 @@ func display_actor_data(actor):
 	InfoPanel.show()
 	
 func player_health_update_ui(ratio):
-	print("Ratio: " + str(ratio))
 	HealthBar.rect_size.y = ratio * health_bar_max
-	print("New Y: " + str(HealthBar.rect_size.y))
 	HealthBar.rect_position.y = health_bar_max - HealthBar.rect_size.y
-	print("New Pos: " + str(HealthBar.rect_position.y))
