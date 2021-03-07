@@ -522,6 +522,7 @@ func update_equipment_ui():
 	if both_hands != null:
 		EquippedWeapon2.hide()
 		EquippedWeapon1.get_node("EquippedWeaponImage").texture = load_big_tex(both_hands)
+		EquippedWeapon1.get_node("EquippedWeaponImage").set_scale(Vector2(0.4,0.4))
 		EquippedWeapon1.get_node("HandUseLabel").text = "LR"
 		EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = both_hands.name_specialized
 		EquippedWeapon1.get_node("CurrentAmmo").text = str(both_hands.current_ammo) + "/" + str(both_hands.max_ammo)
@@ -532,6 +533,7 @@ func update_equipment_ui():
 		if right_item != null:
 			EquippedWeapon1.hide()
 			EquippedWeapon1.get_node("EquippedWeaponImage").texture = load_big_tex(right_item)
+			EquippedWeapon1.get_node("EquippedWeaponImage").set_scale(Vector2(0.4,0.4))
 			EquippedWeapon1.get_node("HandUseLabel").text = "R"
 			EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = right_item.name_specialized
 			EquippedWeapon1.get_node("CurrentAmmo").text = str(right_item.current_ammo) + "/" + str(right_item.max_ammo)
@@ -539,6 +541,7 @@ func update_equipment_ui():
 		if left_item != null:
 			EquippedWeapon1.hide()
 			EquippedWeapon2.get_node("EquippedWeaponImage").texture = load_big_tex(left_item)
+			EquippedWeapon1.get_node("EquippedWeaponImage").set_scale(Vector2(0.4,0.4))
 			EquippedWeapon2.get_node("HandUseLabel").text = "L"
 			EquippedWeapon2.get_node("EquippedWeaponName").bbcode_text = left_item.name_specialized
 			EquippedWeapon2.get_node("CurrentAmmo").text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
