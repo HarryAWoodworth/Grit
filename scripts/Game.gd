@@ -452,6 +452,7 @@ func load_tex(item):
 	return load("res://assets/item_sprites/" + item.id + "_small.png")
 	
 func load_big_tex(item):
+	# print("Loading texture from " + item.item_name)
 	return load("res://assets/item_sprites/" + item.id + "_big.png")
 	
 # UI ---------------------------------------------------------------------------
@@ -482,6 +483,7 @@ func open_loot_tray(pos):
 
 
 func inventory_item_double_clicked(invslot):
+	# print("Inventory item " + invslot.item.item_name + " double clicked")
 	player.equipment.hold_item(invslot.item)
 	invslot.dec_count(1)
 
@@ -491,7 +493,7 @@ func ground_item_double_clicked(item_name, invslot):
 	# Get the item to loot (and remove the item from Pos)
 	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(item_name, invslot.num)
 	if item_to_loot != null:
-		print("Looting item " + item_to_loot.item_name)
+		# print("Looting item " + item_to_loot.item_name)
 		# Add to player's Inventory and add to Inventory UI
 		player.inventory.add_item(item_to_loot, invslot.num)
 		# Remove from Ground UI
@@ -527,16 +529,20 @@ func update_equipment_ui():
 	else:
 		var right_item = player.equipment.right_hand
 		var left_item = player.equipment.left_hand
-		EquippedWeapon1.get_node("EquippedWeaponImage").texture = right_item.sprite.texture
-		EquippedWeapon1.get_node("HandUseLabel").text = "R"
-		EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = right_item.name_specialized
-		EquippedWeapon1.get_node("CurrentAmmo").text = str(right_item.current_ammo) + "/" + str(right_item.max_ammo)
-		EquippedWeapon2.get_node("EquippedWeaponImage").texture = left_item.sprite.texture
-		EquippedWeapon2.get_node("HandUseLabel").text = "L"
-		EquippedWeapon2.get_node("EquippedWeaponName").bbcode_text = left_item.name_specialized
-		EquippedWeapon2.get_node("CurrentAmmo").text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
-		EquippedWeapon1.show()
-		EquippedWeapon2.show()
+		if right_item != null:
+			EquippedWeapon1.hide()
+			EquippedWeapon1.get_node("EquippedWeaponImage").texture = load_big_tex(right_item)
+			EquippedWeapon1.get_node("HandUseLabel").text = "R"
+			EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = right_item.name_specialized
+			EquippedWeapon1.get_node("CurrentAmmo").text = str(right_item.current_ammo) + "/" + str(right_item.max_ammo)
+			EquippedWeapon1.show()
+		if left_item != null:
+			EquippedWeapon1.hide()
+			EquippedWeapon2.get_node("EquippedWeaponImage").texture = load_big_tex(left_item)
+			EquippedWeapon2.get_node("HandUseLabel").text = "L"
+			EquippedWeapon2.get_node("EquippedWeaponName").bbcode_text = left_item.name_specialized
+			EquippedWeapon2.get_node("CurrentAmmo").text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
+			EquippedWeapon2.show()
 
 func display_actor_data(actor):
 	InfoPanel.Icon.texture = actor.sprite.texture

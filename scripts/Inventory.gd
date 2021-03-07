@@ -30,15 +30,15 @@ func init(current_weight_, max_weight_, game_):
 
 # Add item to inventory, increase weight
 func add_item(item, num=1):
-	print("Adding item " + item.item_name + "to player inventory")
+	# print("Adding item " + item.item_name + "to player inventory")
 	# Add to inventory
 	# Probably implement item.stacks here, make unique key with unique id?
 	if bag.has(item.item_name):
 			bag[item.item_name][1] += num
-			print("Incrementing invslot count to " + str(bag[item.item_name][1]))
+			# print("Incrementing invslot count to " + str(bag[item.item_name][1]))
 			game.update_invslot_count(item.item_name, num)
 	else:
-			print("Creating new invslot")
+			# print("Creating new invslot")
 			bag[item.item_name] = [item, num]
 			game.add_new_invslot(item,num)
 	current_weight += (item.weight * num)
