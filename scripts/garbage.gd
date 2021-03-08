@@ -83,6 +83,11 @@
 #	anim_finished = true
 
 
+#func add_sight_node(x,y):
+#	var sight_node = SightNode.instance()
+#	add_child(sight_node)
+#	sight_node.init(x, y, self)
+#	sight_node.unique_id = get_unique_id()
 	
 # Return true if nodes are adjacent (including diagonal)
 #func adjacent(node):

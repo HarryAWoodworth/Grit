@@ -2,7 +2,6 @@
 # <<< A0.1 >>>
 
 ## TODO:
-# [ ] Don't stack unstackable items
 # [ ] Implement actions
 # [ ] Change Equip from double click to action
 
@@ -340,7 +339,7 @@ func build_chunk():
 	add_item("7.62×39mm",0,1)
 	add_item("7.62×39mm",0,1)
 	
-	add_item("ak_47",0,2,"debug")
+	add_item("ak_47",0,1,"debug")
 	add_item("7.62×39mm",0,2)
 	add_item("7.62×39mm",0,2)
 	add_item("7.62×39mm",0,2)
@@ -409,12 +408,6 @@ func get_actors_at(x,y):
 func set_tile(x, y, type):
 	map[x][y].tile = type
 	tile_map.set_cell(x, y, type)
-
-#func add_sight_node(x,y):
-#	var sight_node = SightNode.instance()
-#	add_child(sight_node)
-#	sight_node.init(x, y, self)
-#	sight_node.unique_id = get_unique_id()
 
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)
