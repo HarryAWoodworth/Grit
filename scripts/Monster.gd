@@ -2,14 +2,8 @@ extends "res://scripts/Actor.gd"
 
 # Child Nodes
 onready var sprite = $Sprite
-# onready var tween = $Sprite/Tween
-#onready var fct_manager = $FCTManager
 onready var ai_manager = $AI_Manager
 onready var detection_shape = $Visibility/DetectionShape
-
-# Preload anim
-#var NoticeAnim = preload("res://util/NoticeAnimation.tscn")
-#var notice_animation
 
 # Consts
 const DEFAULT_AI = "none"
@@ -169,17 +163,9 @@ func check_los():
 		var result = space_state.intersect_ray(center, target_center, [self], self.collision_mask)
 		if result:
 			hit_pos = result.position
-			# If the enemy sees a player for the first time, show a notice animation
 			if result.collider.identifier == "player" and !target_aquired:
 				target_aquired = true
 				target_just_aquired = true
-				#notice_animation = NoticeAnim.instance()
-				#add_child(notice_animation)
-				#var quarter_tile = (game.TILE_SIZE/4)
-				#notice_animation.sprite.offset = position
-				#notice_animation.sprite.offset.x -= quarter_tile
-				#notice_animation.sprite.offset.y += quarter_tile
-				#notice_animation.play("NoticeAnim")
 #			elif target_aquired:
 #				target_aquired = false
 

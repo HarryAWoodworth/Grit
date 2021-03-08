@@ -1,5 +1,5 @@
 Creating Assets:
-1 - Save transparent image
+1 - Save transparent image into new folder under grit_assets
 2 - Open in gimp
 3 - Crop canvas to image (as square as you can get)
 4 - Save as .xcf

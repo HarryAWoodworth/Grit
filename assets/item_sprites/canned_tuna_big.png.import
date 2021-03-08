@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ak_47_big.png-9cdd778aded27398e8cc152b4c022600.stex"
+path="res://.import/canned_tuna_big.png-36adfbf0dde344e703fbdc3140894a93.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/item_sprites/ak_47_big.png"
-dest_files=[ "res://.import/ak_47_big.png-9cdd778aded27398e8cc152b4c022600.stex" ]
+source_file="res://assets/item_sprites/canned_tuna_big.png"
+dest_files=[ "res://.import/canned_tuna_big.png-36adfbf0dde344e703fbdc3140894a93.stex" ]
 
 [params]
 

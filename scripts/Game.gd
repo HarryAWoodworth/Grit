@@ -2,10 +2,12 @@
 # <<< A0.1 >>>
 
 ## TODO:
+# [ ] Don't stack unstackable items
+# [ ] Implement actions
+# [ ] Change Equip from double click to action
 
 ## BUGS:
 # [ ] Giant texture in bullet equip
-# [ ] Re-equipping 1 bullet after 2 bullet -> ak swap shows second bullet
 
 ## PLAYER INTERACTION
 # [ ] Burstfire turn action
@@ -25,6 +27,7 @@
 # [ ] Hovering over item in player info box opens it in info box with actions
 # [ ] Hovering over item in inventory/ground opens it in info box with actions
 # [ ] Implements Item.stacks (in Inventory.gd)
+# [ ] Add Weight to UI somewhere (Info box)
 
 ## ENVIRONMENT INTERACTION
 # [ ] Doors
@@ -59,6 +62,7 @@
 # [ ] Crafting
 # [ ] Item Recipes
 # [ ] Crafting Blueprints (change recipes to need fewer items)
+# [ ] Books?
 # [ ] Cooking Items
 # [ ] Cooking Recipes
 
@@ -339,6 +343,16 @@ func build_chunk():
 	add_item("ak_47",0,2)
 	add_item("7.62×39mm",0,2)
 	add_item("7.62×39mm",0,2)
+	add_item("7.62×39mm",0,2)
+	add_item("7.62×39mm",0,2)
+	add_item("7.62×39mm",0,2)
+	add_item("7.62×39mm",0,2)
+	add_item("7.62×39mm",0,2)
+	add_item("7.62×39mm",0,2)
+	add_item("7.62×39mm",0,2)
+	add_item("7.62×39mm",0,2)
+	
+	add_item("canned_tuna",0,3)
 
 	### TESTING ###
 	#var item_inst1 = Item.instance()
@@ -485,7 +499,6 @@ func open_loot_tray(pos):
 func inventory_item_double_clicked(invslot):
 	# print("Inventory item " + invslot.item.item_name + " double clicked")
 	player.equipment.hold_item(player.inventory.remove_item(invslot.item))
-	
 
 # When the user double clicks an item in the ground list, move it to the player
 # inventory and add it as an invslot in the UI
@@ -513,6 +526,42 @@ func add_new_invslot(item, num):
 	var newinvslot = InventorySlot.instance()
 	InventoryScroller.get_node("VBoxContainer").add_child(newinvslot)
 	newinvslot.init(item,num,self,false)
+
+# When an invslot is hovered over, show its info and action list
+func show_invslot_info_ui(invslot):
+	InfoPanel.hide()
+	clearInfoPanel()
+	InfoPanel.Icon.texture = load_tex(invslot.item)
+	InfoPanel.Icon.show()
+	InfoPanel.Description.text = invslot.item.description
+	addActionsInfoPanel(invslot)
+	# Equip
+	# Drop
+	# Use
+	InfoPanel.show()
+
+func clearInfoPanel():
+	InfoPanel.Icon.hide()
+	InfoPanel.Description.text = ""
+	for child in InfoPanel.ActionGrid.get_children():
+		child.queue_free()
+
+func addActionsInfoPanel(invslot):
+	var item = invslot.item
+	if !invslot.onGround:
+		if invslot.num > 1:
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Drop All")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ]: Drop 1")
+		else:
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Drop")
+	else:
+		if invslot.num > 1:
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Pick Up All")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ]: Pick Up 1")
+		else:
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Pick Up")
+	if item.type == "consumable":
+		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use")[0].as_text() + " ]: Eat")
 
 # Update the count in invslot
 func update_invslot_count(item_name,num):
@@ -567,7 +616,10 @@ func update_equipment_ui():
 			EquippedWeapon2.show()
 
 func display_actor_data(actor):
+	InfoPanel.hide()
+	clearInfoPanel()
 	InfoPanel.Icon.texture = actor.sprite.texture
+	InfoPanel.Icon.show()
 	InfoPanel.Description.text = actor.description
 	InfoPanel.show()
 	

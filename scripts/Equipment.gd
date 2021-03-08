@@ -15,7 +15,7 @@ func init(game_):
 
 # Add item to hands (first empty hand, or default swap right)
 func hold_item(item):
-	print("HOLD ITEM EQUIPMENT.gd: " + item.item_name)
+	#print("HOLD ITEM EQUIPMENT.gd: " + item.item_name)
 	if item.hand_size == 1:
 		if both_hands != null:
 			#print("Swapping both hands, putting item in right hand")
@@ -33,11 +33,11 @@ func hold_item(item):
 			empty_hand("right")
 			right_hand = item
 	else:
-		print("Putting in both hands")
+		#print("Putting in both hands")
 		if both_hands != null:
 			empty_hand("both")
 		else:
-			print("Emptying both hands first")
+			#print("Emptying both hands first")
 			empty_hand("right")
 			empty_hand("left")
 		both_hands = item
@@ -48,13 +48,13 @@ func empty_hand(hand):
 	if hand == "right":
 		if right_hand == null:
 			return
-		print("Emptying right hand: " + right_hand.item_name)
+		#print("Emptying right hand: " + right_hand.item_name)
 		game.player.inventory.add_item_no_weight_change(right_hand)
 		right_hand = null
 	elif hand == "left":
 		if left_hand == null:
 			return
-		print("Emptying left hand: " + left_hand.item_name)
+		#print("Emptying left hand: " + left_hand.item_name)
 		game.player.inventory.add_item_no_weight_change(left_hand)
 		left_hand = null
 	else:

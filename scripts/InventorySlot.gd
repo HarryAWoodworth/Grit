@@ -30,6 +30,7 @@ func change_count(dec):
 
 func _on_InventorySlot_mouse_entered():
 	rect.color = Color(0.30,0.30,0.50)
+	game.show_invslot_info_ui(self)
 
 func _on_InventorySlot_mouse_exited():
 	rect.color = Color(0.37,0.37,0.37)
