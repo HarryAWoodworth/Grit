@@ -4,6 +4,9 @@ extends Node2D
 # All items can be used as weapons (no matter how awful)
 # !!! Add new keys to vars, clone(), init_basic()/other inits(), print_item(), and item_manager
 
+var uid_counter
+
+var uid: String
 var id: String
 var item_name: String
 var name_specialized: String
@@ -34,10 +37,11 @@ var burst_size: int
 var current_ammo: int
 
 # Init this item based on another item (cloning it)
-func init_clone(item):
+func init_clone(item, uid_):
 	if item == null:
 		print("Error: Attempting to clone a NULL item.")
 		return
+	uid = uid_
 	id = item.id
 	item_name = item.item_name
 	name_specialized = item.name_specialized
@@ -109,6 +113,7 @@ func calculate_dmg_with_weight():
 	return Vector2(0,0)
 
 func print_item():
+	print("UID: " + uid)
 	print("ID: " + id)
 	print("Name: " + item_name)
 	print("Name Specialized: " + name_specialized)

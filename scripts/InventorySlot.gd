@@ -15,7 +15,10 @@ func init(item_, num_, game_, onGround_=true):
 	item = item_
 	icon.texture = load("res://assets/item_sprites/" + item.id + "_small.png")
 	text.text = item.name_specialized
-	item_name = item.item_name
+	if item.stacks:
+		item_name = item.item_name
+	else:
+		item_name = item.item_name + item.uid
 	num = num_
 	game = game_
 	onGround = onGround_

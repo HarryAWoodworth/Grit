@@ -49,21 +49,30 @@ func add_item(item):
 		if !sprite.visible:
 			sprite.show()
 	# Add the item to the items dict
-	if items.has(item.item_name):
-		items[item.item_name][1] += 1
+	if item.stacks:
+		if items.has(item.item_name):
+			items[item.item_name][1] += 1
+		else:
+			items[item.item_name] = [item, 1]
 	else:
-		items[item.item_name] = [item, 1]
+		items[item.item_name + item.uid] = [item, 1]
 
 func remove_item(item, num=1):
 	
+	var item_name
+	if item.stacks:
+		item_name = item.item_name
+	else:
+		item_name = item.item_name + item.uid
+	
 	# Remove item from item dict
-	if items.has(item.item_name):
-		if (items[item.item_name][1] - num) < 0:
-			print("ERROR: Removing too many items: " + item.item_name + " Num: " + str(num) + " Actual: " + str(items[item.item_name][1]))
-		items[item.item_name][1] = items[item.item_name][1] - num
+	if items.has(item_name):
+		if (items[item_name][1] - num) < 0:
+			print("ERROR: Removing too many items: " + item_name + " Num: " + str(num) + " Actual: " + str(items[item_name][1]))
+		items[item_name][1] = items[item_name][1] - num
 	# Remove entry from dict if count is 0
-	if items[item.item_name][1] <= 0:
-		items.erase(item.item_name)
+	if items[item_name][1] <= 0:
+		items.erase(item_name)
 		# Update rarest item/sprite if rarest item is removed
 		if item.item_name == rarest_item_name:
 			#print("Readjusting rarity after " + item.item_name + "/" + rarest_item_name + " removed...")
@@ -85,6 +94,7 @@ func loot_item(item_name, num):
 	# Get the item from Pos items dict
 	var item_temp = items[item_name][0]
 	if item_temp == null:
+		print("ERROR (Pos.gd, loot_item): No item found at pos with name " + item_name)
 		return null
 	# Remove the item(s)
 	remove_item(item_temp, num)

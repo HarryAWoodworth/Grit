@@ -5,8 +5,11 @@ extends Node
 var Item = preload("res://actors/Item.tscn")
 
 var item_dictionary
+var uid_counter
 
-func init():
+func init(uid_counter_=0):
+	
+	uid_counter = uid_counter_
 	item_dictionary = {}
 	
 	# Read item_list JSON file contents
@@ -23,7 +26,7 @@ func init():
 	for item in items:
 		var item_inst = Item.instance()
 		#print(item)
-		#print("IDD: " + item.id)
+		#print("ID: " + item.id)
 		var nsp
 		if "name_specialized" in item:
 			nsp = item.name_specialized
@@ -46,3 +49,8 @@ func init():
 
 func load_item(id):
 	return item_dictionary.get(id,null)
+	
+func new_uid():
+	var temp = uid_counter
+	uid_counter += 1
+	return str(temp)

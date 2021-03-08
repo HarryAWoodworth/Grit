@@ -340,7 +340,7 @@ func build_chunk():
 	add_item("7.62×39mm",0,1)
 	add_item("7.62×39mm",0,1)
 	
-	add_item("ak_47",0,2)
+	add_item("ak_47",0,2,"debug")
 	add_item("7.62×39mm",0,2)
 	add_item("7.62×39mm",0,2)
 	add_item("7.62×39mm",0,2)
@@ -439,14 +439,16 @@ func add_character(x,y,health=10,ai="none",identifier="...",title="...",descript
 	map[x][y].add_actor(character)
 
 # Add item to position. Return false if it failed, true if it succeeded
-func add_item(id,x,y):
+func add_item(id,x,y,debug=null):
 	# Clone the item from the item manager
 	var item_inst = Item.instance()
 	var item_from_dict = item_manager.item_dictionary.get(id)
 	if item_from_dict == null:
 		print("Error: No item found in item_dictionary with ID: \"" + id + "\"")
 		return false
-	item_inst.init_clone(item_manager.item_dictionary.get(id))
+	item_inst.init_clone(item_manager.item_dictionary.get(id),item_manager.new_uid())
+	if debug != null:
+		item_inst.description = "Volcano!"
 	map[x][y].add_item(item_inst)
 	return true
 
@@ -497,8 +499,10 @@ func open_loot_tray(pos):
 
 # Equip item from inventory
 func inventory_item_double_clicked(invslot):
-	# print("Inventory item " + invslot.item.item_name + " double clicked")
-	player.equipment.hold_item(player.inventory.remove_item(invslot.item))
+	print("Inventory item " + invslot.item.item_name + " with uid " + str(invslot.item.uid) + " double clicked")
+	var removed_item = player.inventory.remove_item(invslot.item)
+	print("Removed item " + removed_item.item_name + " with uid " + str(removed_item.uid))
+	player.equipment.hold_item(removed_item)
 
 # When the user double clicks an item in the ground list, move it to the player
 # inventory and add it as an invslot in the UI
@@ -506,7 +510,7 @@ func ground_item_double_clicked(item_name, invslot):
 	# Get the item to loot (and remove the item from Pos)
 	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(item_name, invslot.num)
 	if item_to_loot != null:
-		# print("Looting item " + item_to_loot.item_name)
+		print("Looting item " + item_to_loot.item_name + " with uid " + str(item_to_loot.uid))
 		# Add to player's Inventory and add to Inventory UI
 		player.inventory.add_item(item_to_loot, invslot.num)
 		# Remove from Ground UI
@@ -519,7 +523,7 @@ func ground_item_double_clicked(item_name, invslot):
 		# Free the inventory node
 		invslot.queue_free()
 	else:
-		print("ERROR: Attempted to loot item " + item_name + " but it was not found!")
+		print("ERROR (Game.gd, ground_item_double_clicked): Attempted to loot item " + item_name + " but it was not found!")
 
 # Add a new invslot item to the UI inventory list
 func add_new_invslot(item, num):
@@ -535,9 +539,6 @@ func show_invslot_info_ui(invslot):
 	InfoPanel.Icon.show()
 	InfoPanel.Description.text = invslot.item.description
 	addActionsInfoPanel(invslot)
-	# Equip
-	# Drop
-	# Use
 	InfoPanel.show()
 
 func clearInfoPanel():
@@ -567,11 +568,11 @@ func addActionsInfoPanel(invslot):
 func update_invslot_count(item_name,num):
 	var invslot = null
 	for slot in InventoryScroller.get_node("VBoxContainer").get_children():
-		if slot.item.item_name == item_name:
+		if slot.item_name == item_name:
 			invslot = slot
 			break
 	if invslot == null:
-		print("ERROR: Attempting to update invslot of item " + item_name + ", but no Invslot found!")
+		print("ERROR (Game.gd, update_invslot_count): Attempting to update invslot of item " + item_name + ", but no Invslot found!")
 		return
 	invslot.change_count(num)
 
