@@ -101,6 +101,9 @@ func init_consumable():
 	ammo_type = ""
 	stacks = true
 
+func init_ingredient():
+	pass
+
 # Based on weight, calculate the ranged accuracy dropoff of the item if it is thrown
 # The bigger the item, the more innacurate it is.
 func calculate_innacuracy_angle_with_weight():

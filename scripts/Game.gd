@@ -4,16 +4,15 @@
 ## TODO:
 # [ ] Implement actions
 # [ ] Change Equip from double click to action
+# [ ] Implement custom texture scaling in equip ui
 
 ## BUGS:
-# [ ] Giant texture in bullet equip
 
 ## PLAYER INTERACTION
 # [ ] Burstfire turn action
 # [ ] Reloading Gun (Ammo, removing ammo, turn action)
 # [ ] Melee Weapons
 # [ ] Melee Combat, turn action
-# [ ] Move Diagonally
 # [W] Player armor equipment
 # [?] What if you made each bullet 1 smal action and kept the aim state? (Would be like shooting moving targets coming at you)
 
@@ -146,6 +145,7 @@ onready var GroundScroller = $UI/GroundScroller
 onready var InventoryScroller = $UI/InventoryScroller
 onready var InfoPanel = $UI/InfoPanel
 onready var Mouse_Detection = $Mouse_Detection
+onready var Input_Manager = $Input_Manager
 onready var HealthBar = $UI/PlayerInfo/HealthRect
 onready var EquippedWeapon1 = $UI/PlayerInfo/EquippedWeapon
 onready var EquippedWeapon2 = $UI/PlayerInfo/EquippedWeapon2
@@ -178,6 +178,9 @@ var map = []
 var unique_actor_id = 0
 # Is the game world running?
 var world_running = false
+# What invslot is focused
+var focused_slot
+var focused_action
 
 ## UI
 var health_bar_max
@@ -192,7 +195,10 @@ func _ready():
 	item_manager.init()
 	build_chunk()
 	Mouse_Detection.init(self)
+	Input_Manager.init(self)
 	health_bar_max = HealthBar.rect_size.y
+	focused_slot = null
+	focused_action = []
 	### TESTING ###
 	#map[2][2].print_pos()
 	
@@ -541,21 +547,42 @@ func clearInfoPanel():
 		child.queue_free()
 
 func addActionsInfoPanel(invslot):
+	focused_slot = invslot
+	focused_action.clear()
 	var item = invslot.item
 	if !invslot.onGround:
 		if invslot.num > 1:
 			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Drop All")
 			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ]: Drop 1")
+			focused_action.append("action_button_move_inv")
+			focused_action.append("action_button_move_inv_spec")
 		else:
 			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Drop")
+			focused_action.append("action_button_move_inv")
 	else:
 		if invslot.num > 1:
 			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Pick Up All")
 			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ]: Pick Up 1")
+			focused_action.append("action_button_move_inv")
+			focused_action.append("action_button_move_inv_spec")
 		else:
 			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Pick Up")
+			focused_action.append("action_button_move_inv")
 	if item.type == "consumable":
 		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use")[0].as_text() + " ]: Eat")
+		focused_action.append("action_button_use")
+
+func do_action(action):
+	if focused_slot != null and focused_slot.contains(action):
+		match action:
+			"action_button_use":
+				if use_item_action(focused_slot.item):
+					focused_slot.change_count(-1)
+				
+	return false
+	
+func use_item_action(item):
+	if item.
 
 # Update the count in invslot
 func update_invslot_count(item_name,num):

@@ -50,55 +50,6 @@ func take_turn():
 func tick():
 	pass
 
-
-# Raycasting -------------------------------------------------------------------
-
-
-		
-# Input ------------------------------------------------------------------------
-
-func _input(event):
-	# Return if it is not a press event
-	if !event.is_pressed():
-		return
-	## YOUR DEBUG KEY IS }
-	if Input.is_action_just_pressed("debug"):
-		#for child in game.InventoryScroller.get_node("VBoxContainer").get_children():
-		#	print("Child: " + str(child.item))
-		take_damage(5)
-		#game.darken_tile(curr_tile.x,curr_tile.y)
-		#game.ticker.print_ticker()
-	# Return if it is not the player's turn
-	if !has_turn:
-		return
-	# Shooting key
-	
-	# Movement keys
-	if event.is_action_pressed("ui_left"):
-		if !grabbing:
-			if game.move_actor_vect(self,Vector2(-1,0)):
-				game.ticker.schedule_action(self,speed)
-				game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
-				game.run_until_player_turn()
-	elif event.is_action_pressed("ui_right"):
-		if !grabbing:
-			if game.move_actor_vect(self,Vector2(1,0)):
-				game.ticker.schedule_action(self,speed)
-				game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
-				game.run_until_player_turn()
-	elif event.is_action_pressed("ui_up"):
-		if !grabbing:
-			if game.move_actor_vect(self,Vector2(0,-1)):
-				game.ticker.schedule_action(self,speed)
-				game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
-				game.run_until_player_turn()
-	elif event.is_action_pressed("ui_down"):
-		if !grabbing:
-			if game.move_actor_vect(self,Vector2(0,1)):
-				game.ticker.schedule_action(self,speed)
-				game.open_loot_tray(game.map[curr_tile.x][curr_tile.y])
-				game.run_until_player_turn()
-
 # Combat -----------------------------------------------------------------------
 
 func shoot():

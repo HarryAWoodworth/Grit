@@ -8,6 +8,7 @@
 			"rarity": 1,
 			"hand_size": 1,
 			"type": "consumable",
+			"effect": "hunger+5"
 		},
 		{
 			"id": "ak_47",

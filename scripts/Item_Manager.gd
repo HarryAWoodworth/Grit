@@ -44,6 +44,8 @@ func init(uid_counter_=0):
 				item_inst.init_melee()
 			"consumable":
 				item_inst.init_consumable()
+			"ingredient":
+				item_inst.init_ingredient()
 		# Add to item dictionary
 		item_dictionary[item_inst.id] = item_inst
 
