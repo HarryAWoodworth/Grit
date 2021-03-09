@@ -21,10 +21,13 @@ var hand_size: int
 var type: String
 # Countable (do multiple instances of this item stack?)
 var stacks: bool
+
 ###### WEAPONS
+
 # Damage range
 var damage_range: Vector2
 # The maximum difference in angle a weapon can fire (in each direction)
+
 ###### RANGED WEAPONS
 var innacuracy_angle: int
 # What type of ammo this weapon takes
@@ -35,6 +38,13 @@ var max_ammo: int
 var burst_size: int
 # Current Ammunition Amount
 var current_ammo: int
+
+##### CONSUMABLE
+var effect: String
+var reusable: bool
+
+##### INGREDIENT
+var scrap_type: String
 
 # Init this item based on another item (cloning it)
 func init_clone(item, uid_):
@@ -57,6 +67,9 @@ func init_clone(item, uid_):
 	max_ammo = item.max_ammo
 	burst_size = item.burst_size
 	current_ammo = item.current_ammo
+	effect = item.effect
+	reusable = item.reusable
+	scrap_type = item.scrap_type
 
 # All items will have these fields
 # (Stacks determined by item type)
@@ -84,25 +97,28 @@ func init_ranged(innacuracy_angle_,ammo_type_,max_ammo_,burst_size_):
 func init_melee(damage_range_):
 	damage_range = damage_range_
 	innacuracy_angle = calculate_innacuracy_angle_with_weight()
-	ammo_type = ""
 	stacks = false
 
 # Ammo has its own damage range, and no ranged accuracy dropoff/ammo type itself 
 func init_ammo(damage_range_):
 	damage_range = damage_range_
-	innacuracy_angle = 0
-	ammo_type = ""
+	innacuracy_angle = calculate_innacuracy_angle_with_weight()
 	stacks = true
 
-# Consumables got nothing
-func init_consumable():
+# Consumables have a reusable bool and an effect string for what happens when it's used
+func init_consumable(effect_,reusable_):
 	damage_range = calculate_dmg_with_weight()
 	innacuracy_angle = calculate_innacuracy_angle_with_weight()
-	ammo_type = ""
+	effect = effect_
+	reusable = reusable_
 	stacks = true
 
-func init_ingredient():
-	pass
+# Ingredients aren't useable, they turn into scrap later
+func init_ingredient(scrap_type_):
+	damage_range = calculate_dmg_with_weight()
+	innacuracy_angle = calculate_innacuracy_angle_with_weight()
+	scrap_type = scrap_type_
+	stacks = true
 
 # Based on weight, calculate the ranged accuracy dropoff of the item if it is thrown
 # The bigger the item, the more innacurate it is.
@@ -133,3 +149,6 @@ func print_item():
 		print("Max Ammo: " + str(max_ammo))
 		print("Burst Size: " + str(burst_size))
 		print("Current Ammo: " + str(current_ammo))
+	if type == "consumable":
+		print("Reusable: " + str(reusable))
+		print("Effect: " + effect)
