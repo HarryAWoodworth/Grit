@@ -16,35 +16,35 @@ var weight: float
 # Item rarity value
 var rarity: int
 # How many hands it takes to hold this item
-var hand_size: int
+var hand_size #int, defaults to 1
 # What type of item? (Melee, ranged, ammo, item)
 var type: String
 # Countable (do multiple instances of this item stack?)
-var stacks: bool
+var stacks #bool, defaults to FALSE
 
 ###### WEAPONS
 
 # Damage range
-var damage_range: Vector2
+var damage_range #Vector2
 # The maximum difference in angle a weapon can fire (in each direction)
 
 ###### RANGED WEAPONS
-var innacuracy_angle: int
+var innacuracy_angle #int
 # What type of ammo this weapon takes
-var ammo_type: String
+var ammo_type #String
 # How many bullets go into the weapon clip
-var max_ammo: int
+var max_ammo #int
 # How many bullets are fired per weapon firing action
-var burst_size: int
+var burst_size #int
 # Current Ammunition Amount
-var current_ammo: int
+var current_ammo #int
 
 ##### CONSUMABLE
-var effect: String
-var reusable: bool
+var effect #String
+var reusable #bool, defaults to false
 
 ##### INGREDIENT
-var scrap: String
+var scrap #String
 
 # Init this item based on another item (cloning it)
 func init_clone(item, uid_):
@@ -70,10 +70,14 @@ func init_clone(item, uid_):
 	effect = item.effect
 	reusable = item.reusable
 	scrap = item.scrap
+	
+	# Create a unique ID for non-stacking items
+	if !stacks:
+		id = id + "-" + uid
 
 # All items will have these fields
 # (Stacks determined by item type)
-func init(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_,damage_range_,innacuracy_angle_,ammo_type_,max_ammo_,burst_size_,stacks_,effect_,reusable_,scrap_):
+func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_,damage_range_,innacuracy_angle_,ammo_type_,max_ammo_,burst_size_,stacks_,effect_,reusable_,scrap_):
 	id = id_
 	item_name = name_
 	name_specialized = name_specialized_
@@ -83,11 +87,7 @@ func init(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,ty
 	hand_size = hand_size_
 	type = type_
 	damage_range = damage_range_
-	if damage_range == null:
-		damage_range = calculate_dmg_with_weight()
 	innacuracy_angle = innacuracy_angle_
-	if innacuracy_angle == null:
-		innacuracy_angle = calculate_innacuracy_angle_with_weight()
 	ammo_type = ammo_type_
 	max_ammo = max_ammo_
 	burst_size = burst_size_
@@ -96,17 +96,6 @@ func init(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,ty
 	effect = effect_
 	reusable = reusable_
 	scrap = scrap_
-
-# Based on weight, calculate the ranged accuracy dropoff of the item if it is thrown
-# The bigger the item, the more innacurate it is.
-func calculate_innacuracy_angle_with_weight():
-	# TODO: Weight -> Ranged Accuracy Dropoff algorithm
-	return 0
-
-# Based on weight calculate 
-func calculate_dmg_with_weight():
-	# TODO: Weight -> Damage Range algorithm
-	return Vector2(0,0)
 
 func print_item():
 	print("UID: " + uid)

@@ -6,7 +6,6 @@
 			"description":"A can of tuna. A little smelly.",
 			"weight": 0.3125,
 			"rarity": 1,
-			"hand_size": 1,
 			"type": "consumable",
 			"effect": "hunger+5,create(metal_can)",
 			"reusable": false
@@ -17,13 +16,11 @@
 			"description":"An empty metal can.",
 			"weight": 0.07,
 			"rarity": 0,
-			"hand_size": 1,
 			"type": "ingredient",
 		},
 		{
 			"id": "ak_47",
 			"item_name": "AK-47",
-			"name_specialized":"AK-47",
 			"description": "An old rifle.",
 			"weight": 3.47,
 			"rarity": 5,
@@ -33,15 +30,14 @@
 			"ammo_type": "7.62×39mm",
 			"max_ammo": 30,
 			"burst_size": 5,
+			"stacks": false
 		},
 		{
 			"id": "7.62×39mm",
 			"item_name": "7.62×39mm",
-			"name_specialized":"7.62×39mm",
 			"description":"Big bullets.",
 			"weight": 0.0016,
 			"rarity": 1,
-			"hand_size": 1,
 			"type": "ammo",
 			"damage_range": {
 				"low": 10,

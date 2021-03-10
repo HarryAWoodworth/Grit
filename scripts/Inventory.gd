@@ -33,22 +33,18 @@ func add_item(item, num=1):
 	#print("Adding item " + item.item_name + " to player inventory")
 	# Add to inventory
 	# Probably implement item.stacks here, make unique key with unique id?
-	if item.stacks:
-		if bag.has(item.item_name):
-				bag[item.item_name][1] += num
-				# print("Incrementing invslot count to " + str(bag[item.item_name][1]))
-				game.update_invslot_count(item.item_name, num)
-		else:
-				# print("Creating new invslot")
-				bag[item.item_name] = [item, num]
-				game.add_new_invslot(item,num)
+	if bag.has(item.id):
+			bag[item.id][1] += num
+			# print("Incrementing invslot count to " + str(bag[item.item_name][1]))
+			game.update_invslot_count(item.id, num)
 	else:
-		bag[item.item_name + item.uid] = [item, 1]
-		game.add_new_invslot(item,1)
+			# print("Creating new invslot")
+			bag[item.id] = [item, num]
+			game.add_new_invslot(item,num)
 	current_weight += (item.weight * num)
-	# Adjust weight
+	# Encumberance
 	#if current_weight > max_weight and !player.has_effect("Encumbered"):
-#		pass
+		#pass
 		#player.add_effect("Encumbered")
 
 # Add item to inventory
@@ -56,49 +52,26 @@ func add_item_no_weight_change(item, num=1):
 	#print("Adding item " + item.item_name + " to player inventory (no weight change)")
 	# Add to inventory
 	# Probably implement item.stacks here, make unique key with unique id?
-	if item.stacks:
-		if bag.has(item.item_name):
-			#print("Bag has item, updating count")
-			bag[item.item_name][1] += num
-			game.update_invslot_count(item.item_name,num)
-		else:
-			#print("Bag doesn't have item, creating new invslot")
-			bag[item.item_name] = [item, num]
-			game.add_new_invslot(item,num)
+	if bag.has(item.id):
+		#print("Bag has item, updating count")
+		bag[item.id][1] += num
+		game.update_invslot_count(item.id,num)
 	else:
-		bag[item.item_name + item.uid] = [item, 1]
-		game.add_new_invslot(item,1)
+		#print("Bag doesn't have item, creating new invslot")
+		bag[item.id] = [item, num]
+		game.add_new_invslot(item,num)
 
 func remove_item(item):
-	if item.stacks:
-		if bag.has(item.item_name) and bag[item.item_name][1] > 0:
-			bag[item.item_name][1] -= 1
-			var tempitem = bag[item.item_name][0]
-			if bag[item.item_name][1] == 0:
-				bag.erase(item.item_name)
-			game.update_invslot_count(item.item_name, -1)
-			current_weight -= item.weight
-			return tempitem
-	else:
-		var uniqueID = item.item_name + item.uid
-		print("removing non stacking item with name: " + uniqueID)
-		if bag.has(uniqueID) and bag[uniqueID][1] == 1:
-			var tempitem = bag[uniqueID][0]
-			bag.erase(uniqueID)
-			game.update_invslot_count(uniqueID, -1)
-			current_weight -= item.weight
-			print("returning removed item: " + tempitem.item_name)
-			return tempitem
-	return null
-	
-func remove_item_by_name(item_name):
-	if bag.has(item_name) and bag[item_name][1] > 0:
-		bag[item_name][1] -= 1
-		var tempitem = bag[item_name][0]
-		if bag[item_name][1] == 0:
-			bag.erase(item_name)
-		game.update_invslot_count(item_name, -1)
-		current_weight -= bag[item_name][0].weight
+	return remove_item_by_id(item.id)
+
+func remove_item_by_id(id):
+	if bag.has(id) and bag[id][1] > 0:
+		bag[id][1] -= 1
+		current_weight -= bag[id][0].weight
+		var tempitem = bag[id][0]
+		if bag[id][1] == 0:
+			bag.erase(id)
+		game.update_invslot_count(id, -1)
 		return tempitem
 	return null
 

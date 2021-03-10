@@ -464,11 +464,12 @@ func get_unique_id():
 	return temp
 	
 func load_tex(item):
-	return load("res://assets/item_sprites/" + item.id + "_small.png")
+	var tex_id = item.id.split("-")[0]
+	return load("res://assets/item_sprites/" + tex_id + "_small.png")
 	
 func load_big_tex(item):
-	# print("Loading texture from " + item.item_name)
-	return load("res://assets/item_sprites/" + item.id + "_big.png")
+	var tex_id = item.id.split("-")[0]
+	return load("res://assets/item_sprites/" + tex_id + "_big.png")
 	
 # UI ---------------------------------------------------------------------------
 
@@ -505,24 +506,19 @@ func inventory_item_double_clicked(invslot):
 
 # When the user double clicks an item in the ground list, move it to the player
 # inventory and add it as an invslot in the UI
-func ground_item_double_clicked(item_name, invslot):
+func ground_item_double_clicked(id, invslot):
 	# Get the item to loot (and remove the item from Pos)
-	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(item_name, invslot.num)
+	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(id, invslot.num)
 	if item_to_loot != null:
-		print("Looting item " + item_to_loot.item_name + " with uid " + str(item_to_loot.uid))
+		print("Looting item " + item_to_loot.id)
 		# Add to player's Inventory and add to Inventory UI
 		player.inventory.add_item(item_to_loot, invslot.num)
 		# Remove from Ground UI
 		GroundScroller.get_node("VBoxContainer").remove_child(invslot)
-		# Add to Inventory UI
-		# add_new_invslot(invslot.item,invslot.num)
-		# var newinvslot = InventorySlot.instance()
-		# InventoryScroller.get_node("VBoxContainer").add_child(newinvslot)
-		# newinvslot.init(invslot.item,invslot.num,self,false)
 		# Free the inventory node
 		invslot.queue_free()
 	else:
-		print("ERROR (Game.gd, ground_item_double_clicked): Attempted to loot item " + item_name + " but it was not found!")
+		print("ERROR (Game.gd, ground_item_double_clicked): Attempted to loot item " + id + " but it was not found!")
 
 # Add a new invslot item to the UI inventory list
 func add_new_invslot(item, num):
@@ -572,6 +568,7 @@ func addActionsInfoPanel(invslot):
 		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use")[0].as_text() + " ]: Eat")
 		focused_action.append("action_button_use")
 
+# TODO
 func do_action(action):
 	if focused_slot != null and focused_slot.contains(action):
 		match action:
@@ -580,19 +577,20 @@ func do_action(action):
 					focused_slot.change_count(-1)
 				
 	return false
-	
+
+# TODO
 func use_item_action(item):
 	pass
 
 # Update the count in invslot
-func update_invslot_count(item_name,num):
+func update_invslot_count(id,num):
 	var invslot = null
 	for slot in InventoryScroller.get_node("VBoxContainer").get_children():
-		if slot.item_name == item_name:
+		if slot.item.id == id:
 			invslot = slot
 			break
 	if invslot == null:
-		print("ERROR (Game.gd, update_invslot_count): Attempting to update invslot of item " + item_name + ", but no Invslot found!")
+		print("ERROR (Game.gd, update_invslot_count): Attempting to update invslot of item " + id + ", but no Invslot found!")
 		return
 	invslot.change_count(num)
 

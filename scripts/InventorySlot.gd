@@ -6,19 +6,15 @@ onready var count = $Label
 onready var rect = $ColorRect
 
 var num: int
-var item_name: String
 var item
 var onGround: bool
 var game
 
 func init(item_, num_, game_, onGround_=true):
 	item = item_
-	icon.texture = load("res://assets/item_sprites/" + item.id + "_small.png")
+	var tex_id = item.id.split("-")[0]
+	icon.texture = load("res://assets/item_sprites/" + tex_id + "_small.png")
 	text.text = item.name_specialized
-	if item.stacks:
-		item_name = item.item_name
-	else:
-		item_name = item.item_name + item.uid
 	num = num_
 	game = game_
 	onGround = onGround_
@@ -42,6 +38,6 @@ func _on_InventorySlot_mouse_exited():
 func _on_InventorySlot_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed and event.doubleclick:
 		if onGround:
-			game.ground_item_double_clicked(item_name,self)
+			game.ground_item_double_clicked(item.id,self)
 		else:
 			game.inventory_item_double_clicked(self)
