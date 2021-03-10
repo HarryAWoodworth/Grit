@@ -32,20 +32,9 @@ func init(uid_counter_=0):
 			nsp = item.name_specialized
 		else:
 			nsp = item.item_name
-		# init basic item properties
-		item_inst.init_basic(item.id,item.item_name,nsp,item.description,item.weight,item.rarity,item.hand_size,item.type)
-		# Match the item type to init differently
-		match item_inst.type:
-			"ranged":
-				item_inst.init_ranged(item.innacuracy_angle,item.ammo_type,item.max_ammo,item.burst_size)
-			"ammo":
-				item_inst.init_ammo(Vector2(item.damage_range.low,item.damage_range.high))
-			"melee":
-				item_inst.init_melee()
-			"consumable":
-				item_inst.init_consumable()
-			"ingredient":
-				item_inst.init_ingredient()
+		# Init item properties
+		if "damage_range" 
+		item_inst.init_basic(item.id,item.item_name,nsp,item.description,item.weight,item.rarity,item.hand_size,item.type,item.damage_range,item.innacuracy_angle,item.ammo_type,item.burst_size,item.stacks,item.effect,item.reusable,item.scrap)
 		# Add to item dictionary
 		item_dictionary[item_inst.id] = item_inst
 

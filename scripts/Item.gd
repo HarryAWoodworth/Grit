@@ -44,7 +44,7 @@ var effect: String
 var reusable: bool
 
 ##### INGREDIENT
-var scrap_type: String
+var scrap: String
 
 # Init this item based on another item (cloning it)
 func init_clone(item, uid_):
@@ -69,11 +69,11 @@ func init_clone(item, uid_):
 	current_ammo = item.current_ammo
 	effect = item.effect
 	reusable = item.reusable
-	scrap_type = item.scrap_type
+	scrap = item.scrap
 
 # All items will have these fields
 # (Stacks determined by item type)
-func init_basic(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_):
+func init(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_,damage_range_,innacuracy_angle_,ammo_type_,max_ammo_,burst_size_,stacks_,effect_,reusable_,scrap_):
 	id = id_
 	item_name = name_
 	name_specialized = name_specialized_
@@ -82,43 +82,20 @@ func init_basic(id_,name_,name_specialized_,description_,weight_,rarity_,hand_si
 	rarity = rarity_
 	hand_size = hand_size_
 	type = type_
-
-# Ranged items do not do damage themselves, so have (0,0) as the damage range.
-# They also have a non-weight-based ranged_accuracy_dropoff, as well as ammo_type
-func init_ranged(innacuracy_angle_,ammo_type_,max_ammo_,burst_size_):
-	damage_range = Vector2(0,0)
+	damage_range = damage_range_
+	if damage_range == null:
+		damage_range = calculate_dmg_with_weight()
 	innacuracy_angle = innacuracy_angle_
+	if innacuracy_angle == null:
+		innacuracy_angle = calculate_innacuracy_angle_with_weight()
 	ammo_type = ammo_type_
 	max_ammo = max_ammo_
 	burst_size = burst_size_
-	stacks = false
+	stacks = stacks_
 	current_ammo = 0
-
-func init_melee(damage_range_):
-	damage_range = damage_range_
-	innacuracy_angle = calculate_innacuracy_angle_with_weight()
-	stacks = false
-
-# Ammo has its own damage range, and no ranged accuracy dropoff/ammo type itself 
-func init_ammo(damage_range_):
-	damage_range = damage_range_
-	innacuracy_angle = calculate_innacuracy_angle_with_weight()
-	stacks = true
-
-# Consumables have a reusable bool and an effect string for what happens when it's used
-func init_consumable(effect_,reusable_):
-	damage_range = calculate_dmg_with_weight()
-	innacuracy_angle = calculate_innacuracy_angle_with_weight()
 	effect = effect_
 	reusable = reusable_
-	stacks = true
-
-# Ingredients aren't useable, they turn into scrap later
-func init_ingredient(scrap_type_):
-	damage_range = calculate_dmg_with_weight()
-	innacuracy_angle = calculate_innacuracy_angle_with_weight()
-	scrap_type = scrap_type_
-	stacks = true
+	scrap = scrap_
 
 # Based on weight, calculate the ranged accuracy dropoff of the item if it is thrown
 # The bigger the item, the more innacurate it is.
@@ -144,6 +121,7 @@ func print_item():
 	print("Hand Size: " + str(hand_size))
 	print("Damage_range: (" + str(damage_range.x) + "," + str(damage_range.y) + ")")
 	print("Innacuracy Angle: " + str(innacuracy_angle))
+	print("Scrap: " + scrap)
 	if type == "ranged":
 		print("Ammo Type: " + ammo_type)
 		print("Max Ammo: " + str(max_ammo))

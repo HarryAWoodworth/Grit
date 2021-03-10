@@ -582,7 +582,7 @@ func do_action(action):
 	return false
 	
 func use_item_action(item):
-	if item.
+	pass
 
 # Update the count in invslot
 func update_invslot_count(item_name,num):
