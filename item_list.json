@@ -7,7 +7,7 @@
 			"weight": 0.3125,
 			"rarity": 1,
 			"type": "consumable",
-			"effect": "hunger+5,create(metal_can)",
+			"effect": "hunger+5&create:metal_can",
 			"reusable": false
 		},
 		{
@@ -31,6 +31,16 @@
 			"max_ammo": 30,
 			"burst_size": 5,
 			"stacks": false
+		},
+		{
+			"id": "hunting_knife",
+			"item_name": "Hunting Knife",
+			"description":"A can of tuna. A little smelly.",
+			"weight": 0.3125,
+			"rarity": 1,
+			"type": "consumable",
+			"effect": "if(effect fungus_leech):remove_effect fungus_leech&if(effect schrapnel):remove_effect schrapnel",
+			"reusable": false
 		},
 		{
 			"id": "7.62×39mm",

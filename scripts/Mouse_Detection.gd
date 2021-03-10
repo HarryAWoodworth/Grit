@@ -20,5 +20,6 @@ func _draw():
 	draw_circle(mouse_position, 10, Color(1,0,0,1))
 
 func _input(event):
-   if event is InputEventMouseButton and event.pressed:
-	   game.player.shoot()
+	pass   
+	#if event is InputEventMouseButton and event.pressed:
+	   #game.player.shoot()

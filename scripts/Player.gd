@@ -10,7 +10,7 @@ const DEFAULT_PLAYER_DETECT_RADIUS = 8
 var has_turn = false
 
 # Player Info ------------------------------------------------------------------
-onready var sprite = $Sprite
+onready var sprite = $AnimatedSprite
 onready var inventory = $Inventory
 onready var equipment = $Equipment
 onready var Combat_Manager = $Combat_Manager
@@ -53,10 +53,11 @@ func tick():
 # Combat -----------------------------------------------------------------------
 
 func shoot():
-	# print("HANDS: " + str(equipment.hands))
-	#if !equipment.empty():
-	#	Combat_Manager.shoot(get_global_mouse_position(), equipment.selected_item.innacuracy_angle)
-	pass
+	print("HANDS: " + str(equipment.both_hands))
+	
+	if !equipment.empty() and equipment.both_hands.type == "ranged":
+		Combat_Manager.shoot(get_global_mouse_position(), equipment.both_hands.innacuracy_angle)
+		
 		
 func take_damage(dmg):
 	health -= dmg

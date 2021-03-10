@@ -62,5 +62,5 @@ func empty_hand(hand):
 		both_hands = null
 			
 func empty():
-	return right_hand == null and left_hand == null
+	return right_hand == null and left_hand == null and both_hands == null
 	

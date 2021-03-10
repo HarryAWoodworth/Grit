@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/InfoPanel.gd" type="Script" id=1]
 [ext_resource path="res://assets/user_interface/healthbody.png" type="Texture" id=2]
-[ext_resource path="res://assets/item_sprites/ak_47_big.png" type="Texture" id=3]
+[ext_resource path="res://scenes/UI.gd" type="Script" id=4]
+[ext_resource path="res://scenes/EquippedWeapon.gd" type="Script" id=5]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
@@ -10,6 +11,7 @@ corner_detail = 4
 anti_aliasing = false
 
 [node name="UI" type="CanvasLayer"]
+script = ExtResource( 4 )
 
 [node name="PlayerInfo" type="ColorRect" parent="."]
 margin_left = 11.0
@@ -89,7 +91,6 @@ __meta__ = {
 }
 
 [node name="EquippedWeapon" type="Control" parent="PlayerInfo"]
-visible = false
 margin_left = 10.0
 margin_top = 175.0
 margin_right = 400.0
@@ -97,21 +98,19 @@ margin_bottom = 215.0
 rect_clip_content = true
 size_flags_horizontal = 4
 size_flags_vertical = 4
+script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="EquippedWeaponImage" type="TextureRect" parent="PlayerInfo/EquippedWeapon"]
 margin_left = 19.0
-margin_top = -0.332581
-margin_right = 319.0
-margin_bottom = 88.6674
-rect_min_size = Vector2( 40, 40 )
-rect_scale = Vector2( 0.4, 0.4 )
+margin_right = 149.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 130, 40 )
 rect_clip_content = true
-size_flags_horizontal = 5
-size_flags_vertical = 5
-texture = ExtResource( 3 )
+mouse_filter = 2
+expand = true
 stretch_mode = 6
 __meta__ = {
 "_edit_use_anchors_": false
@@ -133,6 +132,7 @@ margin_left = 151.0
 margin_top = 11.0
 margin_right = 344.0
 margin_bottom = 31.0
+mouse_filter = 2
 bbcode_enabled = true
 bbcode_text = "[b]AK-47[/b]"
 text = "AK-47"
@@ -155,7 +155,6 @@ __meta__ = {
 }
 
 [node name="EquippedWeapon2" type="Control" parent="PlayerInfo"]
-visible = false
 margin_left = 10.4142
 margin_top = 215.0
 margin_right = 400.414
@@ -163,19 +162,19 @@ margin_bottom = 255.0
 rect_clip_content = true
 size_flags_horizontal = 4
 size_flags_vertical = 4
+script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="EquippedWeaponImage" type="TextureRect" parent="PlayerInfo/EquippedWeapon2"]
 margin_left = 19.0
-margin_top = -0.332581
-margin_right = 319.0
-margin_bottom = 88.6674
-rect_min_size = Vector2( 40, 40 )
-rect_scale = Vector2( 0.4, 0.4 )
+margin_right = 149.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 130, 40 )
 rect_clip_content = true
-texture = ExtResource( 3 )
+mouse_filter = 2
+expand = true
 stretch_mode = 6
 __meta__ = {
 "_edit_use_anchors_": false
@@ -197,6 +196,7 @@ margin_left = 151.0
 margin_top = 11.0
 margin_right = 344.0
 margin_bottom = 31.0
+mouse_filter = 2
 bbcode_enabled = true
 bbcode_text = "[b]AK-47[/b]"
 text = "AK-47"
@@ -234,6 +234,7 @@ margin_left = 20.0
 margin_top = 10.0
 margin_right = 148.0
 margin_bottom = 138.0
+stretch_mode = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -287,3 +288,5 @@ scroll_following = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="mouse_entered" from="PlayerInfo/EquippedWeapon" to="." method="_on_EquippedWeapon_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/EquippedWeapon2" to="." method="_on_EquippedWeapon2_mouse_entered"]

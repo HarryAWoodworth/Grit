@@ -16,7 +16,8 @@ func _input(event):
 	if Input.is_action_just_pressed("debug"):
 		#for child in game.InventoryScroller.get_node("VBoxContainer").get_children():
 		#	print("Child: " + str(child.item))
-		player.take_damage(5)
+		player.shoot()
+		#player.take_damage(5)
 		#game.darken_tile(curr_tile.x,curr_tile.y)
 		#game.ticker.print_ticker()
 	# Return if it is not the player's turn

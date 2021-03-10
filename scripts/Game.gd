@@ -4,7 +4,6 @@
 ## TODO:
 # [ ] Implement actions
 # [ ] Change Equip from double click to action
-# [ ] Implement custom texture scaling in equip ui
 
 ## BUGS:
 
@@ -14,11 +13,10 @@
 # [ ] Melee Weapons
 # [ ] Melee Combat, turn action
 # [W] Player armor equipment
-# [?] What if you made each bullet 1 smal action and kept the aim state? (Would be like shooting moving targets coming at you)
+# [?] What if you made each bullet 1 small action and kept the aim state? (Would be like shooting moving targets coming at you)
 
 ## PLAYER UI
 # [W] Display Player information/equipment/inventory
-#	{ } Weapon
 #   { } Armor 
 # [W] Hovering mouse over tile within range displays tile actions
 # [ ] Double click on item in inventory to equip
@@ -39,7 +37,7 @@
 # [ ] Check that pathfinding still works
 # [ ] Different AI's? (check out bookmarked rougelike AI article)
 # [ ] Monster manager from json file
-# [ ] Monsters Wander
+
 # [ ] Different Monster actions? Speed for actions?
 
 ## SETTINGS
@@ -96,6 +94,9 @@
 # [ ] More Recipes
 # [ ] More Enemies
 
+## Monsters
+# [ ] Monsters Wander
+
 # <<< A0.3 >>> 
 
 ## FARMING
@@ -146,6 +147,7 @@ onready var InventoryScroller = $UI/InventoryScroller
 onready var InfoPanel = $UI/InfoPanel
 onready var Mouse_Detection = $Mouse_Detection
 onready var Input_Manager = $Input_Manager
+onready var UI = $UI
 onready var HealthBar = $UI/PlayerInfo/HealthRect
 onready var EquippedWeapon1 = $UI/PlayerInfo/EquippedWeapon
 onready var EquippedWeapon2 = $UI/PlayerInfo/EquippedWeapon2
@@ -179,8 +181,8 @@ var unique_actor_id = 0
 # Is the game world running?
 var world_running = false
 # What invslot is focused
-var focused_slot
-var focused_action
+var focus
+var focused_actions
 
 ## UI
 var health_bar_max
@@ -195,10 +197,11 @@ func _ready():
 	item_manager.init()
 	build_chunk()
 	Mouse_Detection.init(self)
+	UI.init(self)
 	Input_Manager.init(self)
 	health_bar_max = HealthBar.rect_size.y
-	focused_slot = null
-	focused_action = []
+	focus = null
+	focused_actions = []
 	### TESTING ###
 	#map[2][2].print_pos()
 	
@@ -535,6 +538,15 @@ func show_invslot_info_ui(invslot):
 	InfoPanel.Description.text = invslot.item.description
 	addActionsInfoPanel(invslot)
 	InfoPanel.show()
+	
+func show_equipment_info_ui(invslot):
+	InfoPanel.hide()
+	clearInfoPanel()
+	InfoPanel.Icon.texture = load_tex(invslot.item)
+	InfoPanel.Icon.show()
+	InfoPanel.Description.text = invslot.item.description
+	addActionsInfoPanel(invslot)
+	InfoPanel.show()
 
 func clearInfoPanel():
 	InfoPanel.Icon.hide()
@@ -542,39 +554,40 @@ func clearInfoPanel():
 	for child in InfoPanel.ActionGrid.get_children():
 		child.queue_free()
 
-func addActionsInfoPanel(invslot):
-	focused_slot = invslot
-	focused_action.clear()
-	var item = invslot.item
-	if !invslot.onGround:
-		if invslot.num > 1:
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Drop All")
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ]: Drop 1")
-			focused_action.append("action_button_move_inv")
-			focused_action.append("action_button_move_inv_spec")
+func addActionsInfoPanel(ui):
+	focus = ui
+	focused_actions.clear()
+	var item = focus.item
+	if "onGround" in focus:
+		if !focus.onGround:
+			if focus.num > 1:
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Drop All")
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ]: Drop 1")
+				focused_actions.append("action_button_move_inv")
+				focused_actions.append("action_button_move_inv_spec")
+			else:
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Drop")
+				focused_actions.append("action_button_move_inv")
 		else:
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Drop")
-			focused_action.append("action_button_move_inv")
-	else:
-		if invslot.num > 1:
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Pick Up All")
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ]: Pick Up 1")
-			focused_action.append("action_button_move_inv")
-			focused_action.append("action_button_move_inv_spec")
-		else:
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Pick Up")
-			focused_action.append("action_button_move_inv")
+			if focus.num > 1:
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Pick Up All")
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ]: Pick Up 1")
+				focused_actions.append("action_button_move_inv")
+				focused_actions.append("action_button_move_inv_spec")
+			else:
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Pick Up")
+				focused_actions.append("action_button_move_inv")
 	if item.type == "consumable":
 		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use")[0].as_text() + " ]: Eat")
-		focused_action.append("action_button_use")
+		focused_actions.append("action_button_use")
 
 # TODO
 func do_action(action):
-	if focused_slot != null and focused_slot.contains(action):
+	if focus != null and focus.contains(action):
 		match action:
 			"action_button_use":
-				if use_item_action(focused_slot.item):
-					focused_slot.change_count(-1)
+				if use_item_action(focus.item):
+					focus.change_count(-1)
 				
 	return false
 
@@ -601,8 +614,10 @@ func update_equipment_ui():
 		EquippedWeapon1.hide()
 		EquippedWeapon1.get_node("EquippedWeaponImage").texture = load_big_tex(both_item)
 		EquippedWeapon1.get_node("EquippedWeaponImage")
+		EquippedWeapon1.get_node("EquippedWeaponImage")
 		EquippedWeapon1.get_node("HandUseLabel").text = "LR"
 		EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = both_item.name_specialized
+		EquippedWeapon1.set_item(both_item)
 		if both_item.type == "ranged":
 			EquippedWeapon1.get_node("CurrentAmmo").text = str(both_item.current_ammo) + "/" + str(both_item.max_ammo)
 		else:
@@ -618,6 +633,7 @@ func update_equipment_ui():
 			EquippedWeapon1.get_node("EquippedWeaponImage")
 			EquippedWeapon1.get_node("HandUseLabel").text = "R"
 			EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = right_item.name_specialized
+			EquippedWeapon1.set_item(right_item)
 			if right_item.type == "ranged":
 				EquippedWeapon1.get_node("CurrentAmmo").text = str(right_item.current_ammo) + "/" + str(right_item.max_ammo)
 			else:
@@ -628,11 +644,15 @@ func update_equipment_ui():
 			EquippedWeapon2.get_node("EquippedWeaponImage")
 			EquippedWeapon2.get_node("HandUseLabel").text = "L"
 			EquippedWeapon2.get_node("EquippedWeaponName").bbcode_text = left_item.name_specialized
+			EquippedWeapon2.set_item(left_item)
 			if left_item.type == "ranged":
 				EquippedWeapon2.get_node("CurrentAmmo").text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
 			else:
 				EquippedWeapon2.get_node("CurrentAmmo").text = ""
 			EquippedWeapon2.show()
+
+func display_equipment_data(item):
+	pass
 
 func display_actor_data(actor):
 	InfoPanel.hide()
