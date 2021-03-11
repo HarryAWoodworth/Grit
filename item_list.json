@@ -6,8 +6,7 @@
 			"description":"A can of tuna. A little smelly.",
 			"weight": 0.3125,
 			"rarity": 1,
-			"type": "consumable",
-			"effect": "hunger+5&create:metal_can",
+			"effect": "[Eat>HU+5&Cmetal_can]",
 			"reusable": false
 		},
 		{
@@ -16,7 +15,6 @@
 			"description":"An empty metal can.",
 			"weight": 0.07,
 			"rarity": 0,
-			"type": "ingredient",
 		},
 		{
 			"id": "ak_47",
@@ -38,8 +36,8 @@
 			"description":"A can of tuna. A little smelly.",
 			"weight": 0.3125,
 			"rarity": 1,
-			"type": "consumable",
-			"effect": "if(effect fungus_leech):remove_effect fungus_leech&if(effect schrapnel):remove_effect schrapnel",
+			"type": "melee",
+			"effect": "?Efungus_leech:[Remove Spores>REfungus_leech]&?schrapnel:[Remove Schrapnel>REschrapnel]",
 			"reusable": false
 		},
 		{

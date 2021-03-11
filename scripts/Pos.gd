@@ -63,9 +63,12 @@ func remove_item(item, num=1):
 		if (items[item_id][1] - num) < 0:
 			print("ERROR: Removing too many items: " + item_id + " Num: " + str(num) + " Actual: " + str(items[item_id][1]))
 		items[item_id][1] = items[item_id][1] - num
+	# Update invslot
+	game.update_invslot_count(item.id,num)
 	# Remove entry from dict if count is 0
 	if items[item_id][1] <= 0:
 		items.erase(item_id)
+		
 		# Update rarest item/sprite if rarest item is removed
 		if item.id == rarest_item_id:
 			print("Readjusting rarity after " + item.id + "/" + rarest_item_id + " removed...")

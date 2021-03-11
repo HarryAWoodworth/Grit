@@ -27,6 +27,8 @@ func init(uid_counter_=0):
 		var item_inst = Item.instance()
 		if !("name_specialized" in item):
 			item.name_specialized = item.item_name
+		if !("type" in item):
+			item.type = null
 		if !("hand_size" in item):
 			item.hand_size = 1
 		if !("damage_range" in item):

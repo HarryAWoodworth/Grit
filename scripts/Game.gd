@@ -9,20 +9,17 @@
 
 ## PLAYER INTERACTION
 # [ ] Burstfire turn action
+#	{?} What if each bullet is 1 small action and kept the aim state? (Would be like shooting moving targets coming at you)
 # [ ] Reloading Gun (Ammo, removing ammo, turn action)
 # [ ] Melee Weapons
 # [ ] Melee Combat, turn action
 # [W] Player armor equipment
-# [?] What if you made each bullet 1 small action and kept the aim state? (Would be like shooting moving targets coming at you)
 
 ## PLAYER UI
 # [W] Display Player information/equipment/inventory
 #   { } Armor 
 # [W] Hovering mouse over tile within range displays tile actions
-# [ ] Double click on item in inventory to equip
-# [ ] Hovering over item in player info box opens it in info box with actions
-# [ ] Hovering over item in inventory/ground opens it in info box with actions
-# [ ] Implements Item.stacks (in Inventory.gd)
+# [W] Hovering over item in player info box opens it in info box with actions
 # [ ] Add Weight to UI somewhere (Info box)
 
 ## ENVIRONMENT INTERACTION
@@ -67,6 +64,8 @@
 
 ## AUDIO
 # [ ] Ambient music
+# [ ] Monster sound effects
+# [ ] POI sound effects (falling off with distance)
 # [ ] Weapon sound effects
 # [ ] Bullet sound effects
 
@@ -502,26 +501,28 @@ func open_loot_tray(pos):
 
 # Equip item from inventory
 func inventory_item_double_clicked(invslot):
-	print("Inventory item " + invslot.item.item_name + " with uid " + str(invslot.item.uid) + " double clicked")
-	var removed_item = player.inventory.remove_item(invslot.item)
-	print("Removed item " + removed_item.item_name + " with uid " + str(removed_item.uid))
-	player.equipment.hold_item(removed_item)
+	#print("Inventory item " + invslot.item.item_name + " with uid " + str(invslot.item.uid) + " double clicked")
+	#var removed_item = player.inventory.remove_item(invslot.item)
+	#print("Removed item " + removed_item.item_name + " with uid " + str(removed_item.uid))
+	#player.equipment.hold_item(removed_item)
+	pass
 
 # When the user double clicks an item in the ground list, move it to the player
 # inventory and add it as an invslot in the UI
 func ground_item_double_clicked(id, invslot):
 	# Get the item to loot (and remove the item from Pos)
-	var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(id, invslot.num)
-	if item_to_loot != null:
-		print("Looting item " + item_to_loot.id)
+	#var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(id, invslot.num)
+	#if item_to_loot != null:
+		#print("Looting item " + item_to_loot.id)
 		# Add to player's Inventory and add to Inventory UI
-		player.inventory.add_item(item_to_loot, invslot.num)
+		#player.inventory.add_item(item_to_loot, invslot.num)
 		# Remove from Ground UI
-		GroundScroller.get_node("VBoxContainer").remove_child(invslot)
+		#GroundScroller.get_node("VBoxContainer").remove_child(invslot)
 		# Free the inventory node
-		invslot.queue_free()
-	else:
-		print("ERROR (Game.gd, ground_item_double_clicked): Attempted to loot item " + id + " but it was not found!")
+		#invslot.queue_free()
+	#else:
+		#print("ERROR (Game.gd, ground_item_double_clicked): Attempted to loot item " + id + " but it was not found!")
+	pass
 
 # Add a new invslot item to the UI inventory list
 func add_new_invslot(item, num):
@@ -554,40 +555,41 @@ func clearInfoPanel():
 	for child in InfoPanel.ActionGrid.get_children():
 		child.queue_free()
 
+# Bring the added ui class into "focus", so it's item has actions attached to it
 func addActionsInfoPanel(ui):
+	# Set focus and clear actions, grab the focused item
 	focus = ui
 	focused_actions.clear()
 	var item = focus.item
+	# If the focus is from an inventory...
 	if "onGround" in focus:
+		# Add Equip action
+		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Equip")
+		focused_actions.append("action_button_equip")
+		# Add pick up/drop actions
+		var action_str
 		if !focus.onGround:
-			if focus.num > 1:
-				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Drop All")
-				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ]: Drop 1")
-				focused_actions.append("action_button_move_inv")
-				focused_actions.append("action_button_move_inv_spec")
-			else:
-				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Drop")
-				focused_actions.append("action_button_move_inv")
+			action_str = "Drop"
 		else:
-			if focus.num > 1:
-				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Pick Up All")
-				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ]: Pick Up 1")
-				focused_actions.append("action_button_move_inv")
-				focused_actions.append("action_button_move_inv_spec")
-			else:
-				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ]: Pick Up")
-				focused_actions.append("action_button_move_inv")
-	if item.type == "consumable":
-		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use")[0].as_text() + " ]: Eat")
-		focused_actions.append("action_button_use")
+			action_str = "Pick Up"
+		if focus.num > 1:
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " All")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ] " + action_str + " 1")
+			focused_actions.append("action_button_move_inv")
+			focused_actions.append("action_button_move_inv_spec")
+		else:
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str)
+			focused_actions.append("action_button_move_inv")
 
 # TODO
 func do_action(action):
 	if focus != null and focus.contains(action):
 		match action:
-			"action_button_use":
-				if use_item_action(focus.item):
-					focus.change_count(-1)
+			"action_button_equip":
+				if focus.onGround:
+					player.equipment.hold_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item, 1))
+				else:
+					player.equipment.hold_item(player.inventory.remove_item(focus.item))
 				
 	return false
 
