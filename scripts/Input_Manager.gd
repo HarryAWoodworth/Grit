@@ -50,17 +50,19 @@ func _input(event):
 			if game.move_actor_vect(player,Vector2(1,1)):
 				action("move")
 	### ACTION KEYS
-	elif event.is_action_pressed("action_button_use"):
-		action("action_button_use")
+	elif event.is_action_pressed("action_button_equip"):
+		action("action_button_equip")
 
 # Schedule an action with the game based on a string
 func action(action):
+	
 	match action:
 		"move":
 			game.ticker.schedule_action(player,player.speed)
 			game.run_until_player_turn()
 			game.open_loot_tray(game.map[player.curr_tile.x][player.curr_tile.y])
-		"action_button_use":
-			if game.do_action("action_button_use"):
-				game.ticker.schedule_action(player,player.eat_speed)
+		"action_button_equip":
+			if game.do_action("action_button_equip"):
+				game.ticker.schedule_action(player,5)
+				print("Action Button Equip")
 				game.run_until_player_turn()

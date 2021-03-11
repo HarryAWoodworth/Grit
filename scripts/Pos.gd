@@ -54,7 +54,7 @@ func add_item(item):
 	else:
 		items[item.id] = [item, 1]
 
-func remove_item(item, num=1):
+func remove_item(item, num):
 	
 	var item_id = item.id
 	
@@ -63,8 +63,8 @@ func remove_item(item, num=1):
 		if (items[item_id][1] - num) < 0:
 			print("ERROR: Removing too many items: " + item_id + " Num: " + str(num) + " Actual: " + str(items[item_id][1]))
 		items[item_id][1] = items[item_id][1] - num
-	# Update invslot
-	game.update_invslot_count(item.id,num)
+		game.update_invslot_count(item.id,-1*num,true)
+	
 	# Remove entry from dict if count is 0
 	if items[item_id][1] <= 0:
 		items.erase(item_id)

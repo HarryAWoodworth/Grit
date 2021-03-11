@@ -18,7 +18,7 @@ var rarity: int
 # How many hands it takes to hold this item
 var hand_size #int, defaults to 1
 # What type of item? (Melee, ranged, ammo, item)
-var type: String
+var type #String
 # Countable (do multiple instances of this item stack?)
 var stacks #bool, defaults to FALSE
 

@@ -583,24 +583,31 @@ func addActionsInfoPanel(ui):
 
 # TODO
 func do_action(action):
-	if focus != null and focus.contains(action):
+	if focus != null and focused_actions.has(action):
 		match action:
 			"action_button_equip":
 				if focus.onGround:
-					player.equipment.hold_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item, 1))
+					player.equipment.hold_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1))
 				else:
 					player.equipment.hold_item(player.inventory.remove_item(focus.item))
 				
-	return false
+	return true
 
 # TODO
 func use_item_action(item):
 	pass
 
 # Update the count in invslot
-func update_invslot_count(id,num):
+func update_invslot_count(id,num,onGround=false):
 	var invslot = null
-	for slot in InventoryScroller.get_node("VBoxContainer").get_children():
+	print("Updating invslot with item id: " + id)
+	var scroller
+	if onGround: 
+		scroller = GroundScroller
+	else:
+		scroller = InventoryScroller
+	for slot in scroller.get_node("VBoxContainer").get_children():
+		print("Slot: " + slot.item.id)
 		if slot.item.id == id:
 			invslot = slot
 			break
