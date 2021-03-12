@@ -6,9 +6,6 @@
 # [ ] Change Equip from double click to action
 
 ## BUGS:
-# [ ] Not updating invslot when item dropped
-# [ ] Multple dropped items only incrementing invslot by 1
-# [ ] Non-stackable item dropped makes invslot of num 0
 
 ## PLAYER INTERACTION
 # [ ] Burstfire turn action
