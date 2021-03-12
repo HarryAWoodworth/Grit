@@ -6,6 +6,9 @@
 # [ ] Change Equip from double click to action
 
 ## BUGS:
+# [ ] Not updating invslot when item dropped
+# [ ] Multple dropped items only incrementing invslot by 1
+# [ ] Non-stackable item dropped makes invslot of num 0
 
 ## PLAYER INTERACTION
 # [ ] Burstfire turn action
@@ -495,9 +498,11 @@ func open_loot_tray(pos):
 			GroundScroller.get_node("VBoxContainer").add_child(invslot)
 			invslot.init(item[0],item[1], self)
 		GroundScroller.show()
+		pos.showing = true
 	# Otherwise hide the scroller
 	else:
 		GroundScroller.hide()
+		pos.showing = false
 
 # Equip item from inventory
 func inventory_item_double_clicked(invslot):
@@ -525,10 +530,14 @@ func ground_item_double_clicked(id, invslot):
 	pass
 
 # Add a new invslot item to the UI inventory list
-func add_new_invslot(item, num):
+func add_new_invslot(item, num, onGround=false):
 	var newinvslot = InventorySlot.instance()
-	InventoryScroller.get_node("VBoxContainer").add_child(newinvslot)
-	newinvslot.init(item,num,self,false)
+	# Add to Position or player inventory
+	if onGround:
+		GroundScroller.get_node("VBoxContainer").add_child(newinvslot)
+	else:
+		InventoryScroller.get_node("VBoxContainer").add_child(newinvslot)
+	newinvslot.init(item,num,self,onGround)
 
 # When an invslot is hovered over, show its info and action list
 func show_invslot_info_ui(invslot):
@@ -593,28 +602,23 @@ func do_action(action):
 					player.equipment.hold_item(player.inventory.remove_item(focus.item))
 			# Drop or pick up items
 			"action_button_move_inv":
+				var temp_num = focus.num
 				if focus.onGround:
-					var temp_num = focus.num
-					player.inventory.add_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, focus.num),temp_num)
+					player.inventory.add_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id,temp_num),temp_num)
 				else:
-					pass
+					map[player.curr_tile.x][player.curr_tile.y].add_item(player.inventory.remove_item(focus.item,temp_num),temp_num)
 			# Drop or Pick Up 1 item
 			"action_button_move_inv_spec":
 				if focus.onGround:
 					player.inventory.add_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1),1)
 				else:
-					pass
-				
+					map[player.curr_tile.x][player.curr_tile.y].add_item(player.inventory.remove_item(focus.item),1)
 	return true
-
-# TODO
-func use_item_action(item):
-	pass
 
 # Update the count in invslot
 func update_invslot_count(id,num,onGround=false):
 	var invslot = null
-	print("Updating invslot with item id: " + id)
+	#print("Updating invslot (onGround?: " + str(onGround) + ") with item id: " + id + " and changing count " + str(num))
 	var scroller
 	if onGround: 
 		scroller = GroundScroller

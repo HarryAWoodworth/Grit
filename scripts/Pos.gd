@@ -8,6 +8,7 @@ var tile
 var rarest_item_rarity
 var rarest_item_id
 var curr_tile
+var showing
 
 # Game ref
 var game
@@ -19,6 +20,7 @@ func init_pos(game_, tile_, curr_tile_):
 	actors = []
 	items = {}
 	rarest_item_rarity = 0
+	showing = false
 	position = Vector2(curr_tile.x * game.TILE_SIZE, curr_tile.y * game.TILE_SIZE)
 
 func add_actor(actor):
@@ -39,7 +41,7 @@ func print_pos():
 		print("-----------------------")
 		item[0].print_item()
 
-func add_item(item):
+func add_item(item,num=1):
 	#print("Adding item " + item.id + " at position (" + str(curr_tile.x) + "," + str(curr_tile.y) + ")")
 	# Update rarity, update sprite
 	if item.rarity > rarest_item_rarity:
@@ -51,8 +53,13 @@ func add_item(item):
 	# Add the item to the items dict
 	if items.has(item.id):
 		items[item.id][1] += 1
+		if showing:
+			game.update_invslot_count(item.id,num,true)
 	else:
-		items[item.id] = [item, 1]
+		items[item.id] = [item, num]
+		if showing:
+			game.add_new_invslot(item,num,true)
+	
 
 func remove_item(item, num):
 	
@@ -71,7 +78,7 @@ func remove_item(item, num):
 		
 		# Update rarest item/sprite if rarest item is removed
 		if item.id == rarest_item_id:
-			print("Readjusting rarity after " + item.id + "/" + rarest_item_id + " removed...")
+			#print("Readjusting rarity after " + item.id + "/" + rarest_item_id + " removed...")
 			rarest_item_rarity = -1
 			if !items.empty():
 				#print("Items: " + str(items))

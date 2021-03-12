@@ -25,7 +25,7 @@ func change_count(dec):
 	# Delete if no more items
 	if num <= 0:
 		queue_free()
-	print("setting text in invslot of item " + item.id + " to " + str(num))
+	#print("setting text in invslot (onGround?: " + str(onGround) + ") of item " + item.id + " to " + str(num))
 	count.text = "x" + str(num)
 
 func _on_InventorySlot_mouse_entered():

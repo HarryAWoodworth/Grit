@@ -4,7 +4,7 @@ export (int) var speed = 30
 
 var direction := Vector2.ZERO
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if direction != Vector2.ZERO:
 		var velocity = direction * speed
 		position += velocity
