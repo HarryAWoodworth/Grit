@@ -13,7 +13,7 @@ func _input(event):
 	if !event.is_pressed():
 		return
 	## YOUR DEBUG KEY IS }
-	if Input.is_action_just_pressed("debug"):
+	if event.is_action_pressed("debug"):
 		#for child in game.InventoryScroller.get_node("VBoxContainer").get_children():
 		#	print("Child: " + str(child.item))
 		player.shoot()
@@ -52,6 +52,12 @@ func _input(event):
 	### ACTION KEYS
 	elif event.is_action_pressed("action_button_equip"):
 		action("action_button_equip")
+	elif event.is_action_pressed("action_button_move_inv"):
+		if event.shift:
+			print("wowxers")
+			action("action_button_move_inv_spec")
+		else:
+			action("action_button_move_inv")
 
 # Schedule an action with the game based on a string
 func action(action):
@@ -62,7 +68,8 @@ func action(action):
 			game.run_until_player_turn()
 			game.open_loot_tray(game.map[player.curr_tile.x][player.curr_tile.y])
 		"action_button_equip":
-			if game.do_action("action_button_equip"):
-				game.ticker.schedule_action(player,5)
-				print("Action Button Equip")
-				game.run_until_player_turn()
+			game.do_action("action_button_equip")
+		"action_button_move_inv":
+			game.do_action("action_button_move_inv")
+		"action_button_move_inv_spec":
+			game.do_action("action_button_move_inv_spec")

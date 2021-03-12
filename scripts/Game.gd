@@ -574,22 +574,36 @@ func addActionsInfoPanel(ui):
 			action_str = "Pick Up"
 		if focus.num > 1:
 			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " All")
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv_spec")[0].as_text() + " ] " + action_str + " 1")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("shift")[0].as_text() + " + " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " 1")
 			focused_actions.append("action_button_move_inv")
 			focused_actions.append("action_button_move_inv_spec")
 		else:
 			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str)
 			focused_actions.append("action_button_move_inv")
 
-# TODO
+# Do an action witht the focused UI Item and available actions. Called from Input_Manager
 func do_action(action):
 	if focus != null and focused_actions.has(action):
 		match action:
+			# Equip weapon from ground or inventory
 			"action_button_equip":
 				if focus.onGround:
 					player.equipment.hold_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1))
 				else:
 					player.equipment.hold_item(player.inventory.remove_item(focus.item))
+			# Drop or pick up items
+			"action_button_move_inv":
+				if focus.onGround:
+					var temp_num = focus.num
+					player.inventory.add_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, focus.num),temp_num)
+				else:
+					pass
+			# Drop or Pick Up 1 item
+			"action_button_move_inv_spec":
+				if focus.onGround:
+					player.inventory.add_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1),1)
+				else:
+					pass
 				
 	return true
 
@@ -607,7 +621,6 @@ func update_invslot_count(id,num,onGround=false):
 	else:
 		scroller = InventoryScroller
 	for slot in scroller.get_node("VBoxContainer").get_children():
-		print("Slot: " + slot.item.id)
 		if slot.item.id == id:
 			invslot = slot
 			break
