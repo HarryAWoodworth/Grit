@@ -5,8 +5,7 @@
 [ext_resource path="res://assets/test_floor.png" type="Texture" id=3]
 [ext_resource path="res://assets/test_wall.png" type="Texture" id=4]
 [ext_resource path="res://scripts/Mouse_Detection.gd" type="Script" id=5]
-[ext_resource path="res://assets/shadow_discovered.png" type="Texture" id=6]
-[ext_resource path="res://scenes/Ticker.gd" type="Script" id=7]
+[ext_resource path="res://scripts/Ticker.gd" type="Script" id=7]
 [ext_resource path="res://scripts/Input_Manager.gd" type="Script" id=8]
 [ext_resource path="res://assets/background.png" type="Texture" id=9]
 [ext_resource path="res://scripts/Item_Manager.gd" type="Script" id=11]
@@ -41,9 +40,12 @@
 1/shapes = [  ]
 1/z_index = 0
 
-[sub_resource type="TileSet" id=2]
+[sub_resource type="StreamTexture" id=2]
+flags = 4
+
+[sub_resource type="TileSet" id=3]
 0/name = "shadow_discovered.png 0"
-0/texture = ExtResource( 6 )
+0/texture = SubResource( 2 )
 0/tex_offset = Vector2( 0, 0 )
 0/modulate = Color( 1, 1, 1, 1 )
 0/region = Rect2( 0, 0, 32, 32 )
@@ -81,7 +83,7 @@ format = 1
 [node name="ShadowMap" type="TileMap" parent="."]
 visible = false
 z_index = 1
-tile_set = SubResource( 2 )
+tile_set = SubResource( 3 )
 cell_size = Vector2( 32, 32 )
 format = 1
 

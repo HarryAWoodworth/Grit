@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/opening.png-0358b8ef9d1ca4aa2f1298b58fa523a4.stex"
+path="res://.import/stone_tile_1.png-a5b35a1247b0cccb78f5e142fd97ab67.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/opening.png"
-dest_files=[ "res://.import/opening.png-0358b8ef9d1ca4aa2f1298b58fa523a4.stex" ]
+source_file="res://assets/tiles/stone_tile_1.png"
+dest_files=[ "res://.import/stone_tile_1.png-a5b35a1247b0cccb78f5e142fd97ab67.stex" ]
 
 [params]
 
@@ -31,4 +31,4 @@ process/invert_color=false
 stream=false
 size_limit=0
 detect_3d=true
-svg/scale=2.0
+svg/scale=1.0
