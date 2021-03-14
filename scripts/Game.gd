@@ -160,7 +160,6 @@ var PositionClass = preload("res://scenes/Position.tscn")
 var Monster = preload("res://actors/Monster.tscn")
 var Player = preload("res://actors/Player.tscn")
 var Wall = preload("res://actors/Wall.tscn")
-var SightNode = preload("res://util/SightNode.tscn")
 var Item = preload("res://actors/Item.tscn")
 var InventorySlot = preload("res://scenes/InventorySlot.tscn")
 
@@ -292,41 +291,41 @@ func build_chunk():
 			# add_sight_node(x, y)
 
 	# Extra walls for testing
-	add_wall(6, 4, forest_tex)
-	add_wall(8, 4, forest_tex)
-	add_wall(6, 5, forest_tex)
-	add_wall(8, 5, forest_tex)
-	add_wall(6, 6, forest_tex)
-	add_wall(8, 6, forest_tex)
-	add_wall(6, 7, forest_tex)
-	add_wall(8, 7, forest_tex)
-	add_wall(6, 8, forest_tex)
-	add_wall(8, 8, forest_tex)
-	add_wall(5, 8, forest_tex)
-	add_wall(4, 8, forest_tex)
-	add_wall(3, 8, forest_tex)
-	add_wall(9, 8, forest_tex)
-	add_wall(10, 8, forest_tex)
-	add_wall(11, 8, forest_tex)
-	add_wall(5, 3, forest_tex)
-	add_wall(6, 3, forest_tex)
-	add_wall(6, 2, forest_tex)
+	add_wall(6, 4)
+	add_wall(8, 4)
+	add_wall(6, 5)
+	add_wall(8, 5)
+	add_wall(6, 6)
+	add_wall(8, 6)
+	add_wall(6, 7)
+	add_wall(8, 7)
+	add_wall(6, 8)
+	add_wall(8, 8)
+	add_wall(5, 8)
+	add_wall(4, 8)
+	add_wall(3, 8)
+	add_wall(9, 8)
+	add_wall(10, 8)
+	add_wall(11, 8)
+	add_wall(5, 3)
+	add_wall(6, 3)
+	add_wall(6, 2)
 
-	add_wall(6, 4, forest_tex)
-	add_wall(8, 4, forest_tex)
-	add_wall(10, 4, forest_tex)
-	add_wall(12, 4, forest_tex)
-	add_wall(14, 4, forest_tex)
-	add_wall(6, 6, forest_tex)
-	add_wall(8, 6, forest_tex)
-	add_wall(10, 6, forest_tex)
-	add_wall(12, 6, forest_tex)
-	add_wall(14, 6, forest_tex)
-	add_wall(6, 8, forest_tex)
-	add_wall(8, 8, forest_tex)
-	add_wall(10, 8, forest_tex)
-	add_wall(12, 8, forest_tex)
-	add_wall(14, 8, forest_tex)
+	add_wall(6, 4)
+	add_wall(8, 4)
+	add_wall(10, 4)
+	add_wall(12, 4)
+	add_wall(14, 4)
+	add_wall(6, 6)
+	add_wall(8, 6)
+	add_wall(10, 6)
+	add_wall(12, 6)
+	add_wall(14, 6)
+	add_wall(6, 8)
+	add_wall(8, 8)
+	add_wall(10, 8)
+	add_wall(12, 8)
+	add_wall(14, 8)
 
 
 	# Place Player
@@ -420,11 +419,11 @@ func set_tile(x, y, type):
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)
 
-func add_wall(x,y,texture,identifier="...",title="...",description="...",hidden=false,blocks_other_actors=true,blocks_light=true):
+func add_wall(x,y,identifier="...",title="...",description="...",hidden=false,blocks_other_actors=true,blocks_light=true):
 	var wall = Wall.instance()
 	add_child(wall)
 	wall.init(self,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
-	wall.sprite.texture = texture
+	#wall.sprite.texture = texture
 	# Add wall to map pos
 	map[x][y].add_actor(wall)
 
@@ -503,27 +502,11 @@ func open_loot_tray(pos):
 
 # Equip item from inventory
 func inventory_item_double_clicked(invslot):
-	#print("Inventory item " + invslot.item.item_name + " with uid " + str(invslot.item.uid) + " double clicked")
-	#var removed_item = player.inventory.remove_item(invslot.item)
-	#print("Removed item " + removed_item.item_name + " with uid " + str(removed_item.uid))
-	#player.equipment.hold_item(removed_item)
 	pass
 
 # When the user double clicks an item in the ground list, move it to the player
 # inventory and add it as an invslot in the UI
 func ground_item_double_clicked(id, invslot):
-	# Get the item to loot (and remove the item from Pos)
-	#var item_to_loot = map[player.curr_tile.x][player.curr_tile.y].loot_item(id, invslot.num)
-	#if item_to_loot != null:
-		#print("Looting item " + item_to_loot.id)
-		# Add to player's Inventory and add to Inventory UI
-		#player.inventory.add_item(item_to_loot, invslot.num)
-		# Remove from Ground UI
-		#GroundScroller.get_node("VBoxContainer").remove_child(invslot)
-		# Free the inventory node
-		#invslot.queue_free()
-	#else:
-		#print("ERROR (Game.gd, ground_item_double_clicked): Attempted to loot item " + id + " but it was not found!")
 	pass
 
 # Add a new invslot item to the UI inventory list
@@ -680,7 +663,11 @@ func display_equipment_data(item):
 func display_actor_data(actor):
 	InfoPanel.hide()
 	clearInfoPanel()
-	InfoPanel.Icon.texture = actor.sprite.texture
+	if actor.has_node("AnimatedSprite"):
+		print("Getting idle anim...")
+		InfoPanel.Icon.texture = actor.sprite.frames.get_frame("Idle",0)
+	else:
+		InfoPanel.Icon.texture = actor.sprite.texture
 	InfoPanel.Icon.show()
 	InfoPanel.Description.text = actor.description
 	InfoPanel.show()

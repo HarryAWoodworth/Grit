@@ -1,7 +1,7 @@
 extends "res://scripts/Actor.gd"
 
 # Child Nodes
-onready var sprite = $Sprite
+onready var sprite = $AnimatedSprite
 onready var ai_manager = $AI_Manager
 onready var detection_shape = $Visibility/DetectionShape
 
