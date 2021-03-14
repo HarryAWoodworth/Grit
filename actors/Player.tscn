@@ -38,6 +38,7 @@ script = ExtResource( 4 )
 position = Vector2( 3.8147e-06, 3.8147e-06 )
 frames = SubResource( 1 )
 animation = "Idle"
+frame = 3
 speed_scale = 1.25
 playing = true
 centered = false

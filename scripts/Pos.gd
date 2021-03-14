@@ -1,6 +1,4 @@
-extends Node2D
-
-onready var sprite = $Sprite
+extends Sprite
 
 var actors
 var items
@@ -42,14 +40,16 @@ func print_pos():
 		item[0].print_item()
 
 func add_item(item,num=1):
-	#print("Adding item " + item.id + " at position (" + str(curr_tile.x) + "," + str(curr_tile.y) + ")")
+	print("Adding item " + item.id + " at position (" + str(curr_tile.x) + "," + str(curr_tile.y) + ")")
 	# Update rarity, update sprite
 	if item.rarity > rarest_item_rarity:
 		rarest_item_rarity = item.rarity
 		rarest_item_id = item.id
-		sprite.texture = load_tex(item)
-		if !sprite.visible:
-			sprite.show()
+		texture = load_tex(item)
+		print("visible?: " + str(visible))
+		if !visible:
+			print("Showing")
+			show()
 	# Add the item to the items dict
 	if items.has(item.id):
 		items[item.id][1] += 1
@@ -59,7 +59,6 @@ func add_item(item,num=1):
 		items[item.id] = [item, num]
 		if showing:
 			game.add_new_invslot(item,num,true)
-	
 
 func remove_item(item, num):
 	
@@ -87,10 +86,10 @@ func remove_item(item, num):
 						rarest_item_rarity = item_entry[0].rarity
 						rarest_item_id = item_entry[0].id
 				#print("New rarest item at pos: " + rarest_item_name)
-				sprite.texture = load_tex(items[rarest_item_id][0])
+				texture = load_tex(items[rarest_item_id][0])
 			else:
 				rarest_item_id = ""
-				sprite.hide()
+				hide()
 
 func loot_item(id, num):
 	#print("Looting " + str(num) + " " + id + "(s): " + str(items[id]))
@@ -104,20 +103,6 @@ func loot_item(id, num):
 	#print_pos()
 	return item_temp
 
-#func display_loot_menu():
-#	game.PosInventory.show()
-#	for item in items:
-#		loot_menu.add_icon_check_item(
-#			load_tex(item),
-#			item.item_name
-#		)
-#	loot_menu.show()
-
 func load_tex(item):
 	var tex_id = item.id.split("-")[0]
 	return load("res://assets/item_sprites/" + tex_id + "_small.png")
-
-# Double click opens loot list at pos
-#func _on_ClickDetector_input_event(_viewport, event, _shape_idx):
-#	if event is InputEventMouseButton and event.doubleclick:
-#		display_loot_menu()

@@ -156,15 +156,12 @@ onready var EquippedWeapon2 = $UI/PlayerInfo/EquippedWeapon2
 
 # Node preloads for instancing
 var Furniture = preload("res://actors/Furniture.tscn")
-var PositionClass = preload("res://scenes/Position.tscn")
+var Pos = preload("res://scenes/Position.tscn")
 var Monster = preload("res://actors/Monster.tscn")
 var Player = preload("res://actors/Player.tscn")
 var Wall = preload("res://actors/Wall.tscn")
 var Item = preload("res://actors/Item.tscn")
 var InventorySlot = preload("res://scenes/InventorySlot.tscn")
-
-# Texture preloads
-var forest_tex = preload("res://assets/test_wall.png")
 
 # Game State -------------------------------------------------------------------
 
@@ -281,11 +278,11 @@ func build_chunk():
 		map.append([])
 		for y in range(CHUNK_DIMENSION):
 			# Instance/Init a PositionClass node
-			pos = PositionClass.instance()
+			pos = Pos.instance()
 			add_child(pos)
-			var tile_rand
+			var floor_tile_num = randi()%4
+			pos.init_pos(self, floor_tile_num, Vector2(x,y))
 			
-			pos.init_pos(self, TILE.Test, Vector2(x,y))
 			map[x].append(pos)
 			# Set the tile map
 			tile_map.set_cell(x, y, map[x][y].tile)
