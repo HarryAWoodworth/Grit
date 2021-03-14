@@ -33,7 +33,7 @@
 		{
 			"id": "hunting_knife",
 			"item_name": "Hunting Knife",
-			"description":"A can of tuna. A little smelly.",
+			"description":"The blade is laser engaved with the words Stabby McStabberson.",
 			"weight": 0.3125,
 			"rarity": 1,
 			"type": "melee",

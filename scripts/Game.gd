@@ -3,7 +3,6 @@
 
 ## TODO:
 # [ ] Implement actions
-# [ ] Change Equip from double click to action
 
 ## BUGS:
 
@@ -13,7 +12,7 @@
 # [ ] Reloading Gun (Ammo, removing ammo, turn action)
 # [ ] Melee Weapons
 # [ ] Melee Combat, turn action
-# [W] Player armor equipment
+# [ ] Player armor equipment
 
 ## PLAYER UI
 # [W] Display Player information/equipment/inventory
@@ -34,11 +33,12 @@
 # [ ] Check that pathfinding still works
 # [ ] Different AI's? (check out bookmarked rougelike AI article)
 # [ ] Monster manager from json file
-
-# [ ] Different Monster actions? Speed for actions?
+# [ ] Info box shows monster's current action
+# [ ] Different Monster actions with different speeds
 
 ## SETTINGS
-# [ ] Set screen side of UI
+# [ ] Set screen side of UI (switch ground and inv too [swap position?])
+# [ ] Hide/Show UI
 
 ## GAME STATE
 # [ ] Save Game
