@@ -131,7 +131,7 @@ const TILE_SIZE = 128
 const CHUNK_DIMENSION = 16
 const MAX_TESTLOG_LENGTH = 10000
 
-enum TILE { Test, Wall }
+enum TILE { stone1, stone2, stone3, stone4 }
 enum Shadow { Shadow }
 
 # Node Refs --------------------------------------------------------------------
@@ -283,6 +283,8 @@ func build_chunk():
 			# Instance/Init a PositionClass node
 			pos = PositionClass.instance()
 			add_child(pos)
+			var tile_rand
+			
 			pos.init_pos(self, TILE.Test, Vector2(x,y))
 			map[x].append(pos)
 			# Set the tile map
