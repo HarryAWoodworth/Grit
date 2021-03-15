@@ -209,7 +209,8 @@ func _ready():
 	
 	### TESTING ###
 	#map[2][2].print_pos()
-	
+	Action_Parser.parse_and_do("[Eat>+5&Cmetal_can]")
+	Action_Parser.parse_and_do("?Efungus_leech[Remove Spores>REfungus_leech]\n		?Eschrapnel[Remove Schrapnel>REschrapnel]")
 
 # Actor Movement ------------------------------------------------------------------------
 

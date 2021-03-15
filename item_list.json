@@ -37,7 +37,8 @@
 			"weight": 0.3125,
 			"rarity": 1,
 			"type": "melee",
-			"effect": "?Efungus_leech:[Remove Spores>REfungus_leech]&?schrapnel:[Remove Schrapnel>REschrapnel]",
+			"effect": "?Efungus_leech[Remove Spores>REfungus_leech]
+								 ?Eschrapnel[Remove Schrapnel>REschrapnel]",
 			"reusable": false
 		},
 		{
