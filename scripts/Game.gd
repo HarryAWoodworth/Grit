@@ -150,6 +150,7 @@ onready var UI = $UI
 onready var HealthBar = $UI/PlayerInfo/HealthRect
 onready var EquippedWeapon1 = $UI/PlayerInfo/EquippedWeapon
 onready var EquippedWeapon2 = $UI/PlayerInfo/EquippedWeapon2
+onready var Action_Parser = $Action_Parser
 
 
 # Entity Preloads --------------------------------------------------------------
@@ -187,16 +188,25 @@ var health_bar_max
 # Init the game
 func _ready():
 	#OS.set_window_size(WINDOW_SIZE)
+	# Init the item manager
+	item_manager.init()
+	# Init mouse detection input
+	Mouse_Detection.init(self)
+	# Init the UI
+	UI.init(self)
+	# Init the manager for player input
+	Input_Manager.init(self)
+	# Init the parser for actions
+	Action_Parser.init(self)
+	# Build the chunk
 	randomize()
 	tile_map.cell_quadrant_size = TILE_SIZE
-	item_manager.init()
 	build_chunk()
-	Mouse_Detection.init(self)
-	UI.init(self)
-	Input_Manager.init(self)
+	
 	health_bar_max = HealthBar.rect_size.y
 	focus = null
 	focused_actions = []
+	
 	### TESTING ###
 	#map[2][2].print_pos()
 	
@@ -674,3 +684,4 @@ func display_actor_data(actor):
 func player_health_update_ui(ratio):
 	HealthBar.rect_size.y = ratio * health_bar_max
 	HealthBar.rect_position.y = health_bar_max - HealthBar.rect_size.y
+		

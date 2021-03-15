@@ -6,7 +6,7 @@
 			"description":"A can of tuna. A little smelly.",
 			"weight": 0.3125,
 			"rarity": 1,
-			"effect": "[Eat>HU+5&Cmetal_can]",
+			"effect": "[Eat>+5&Cmetal_can]",
 			"reusable": false
 		},
 		{
