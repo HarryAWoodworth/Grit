@@ -8,11 +8,10 @@ var ActionLabel = preload("res://scenes/ActionLabel.tscn")
 
 var effect_dict = {}
 
-func add_action(action_str, effect_str=null):
-	
+func add_action(action_str, effect_str=null, effect_ticks=0):
 	if effect_str != null:
-		effect_dict[action_str] = effect_str
-	
+		print("Adding Action to InfoPanel: " + action_str + ", effect: " + effect_str + ", ticks: " + str(effect_ticks))
+		effect_dict[action_str] = [effect_str, effect_ticks]
 	var newLabel = ActionLabel.instance()
 	ActionGrid.add_child(newLabel)
 	newLabel.text = action_str
@@ -24,3 +23,15 @@ func clear():
 	for child in ActionGrid.get_children():
 		child.queue_free()
 	effect_dict.clear()
+
+func get_action(input: String):
+	if effect_dict.has(input):
+		return effect_dict[input][0]
+	print("ERROR: Effect Dict does not have action: " + input)
+	return null
+
+func get_ticks(input: String):
+	if effect_dict.has(input):
+		return effect_dict[input][1]
+	print("ERROR: Effect Dict does not have action: " + input)
+	return -1

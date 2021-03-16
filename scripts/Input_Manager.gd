@@ -54,10 +54,17 @@ func _input(event):
 		action("action_button_equip")
 	elif event.is_action_pressed("action_button_move_inv"):
 		if event.shift:
-			print("wowxers")
 			action("action_button_move_inv_spec")
 		else:
 			action("action_button_move_inv")
+	elif event.is_action_pressed("action_button_use_2"):
+		action("action_button_use_2")
+	elif event.is_action_pressed("action_button_use_3"):
+		action("action_button_use_3")
+	elif event.is_action_pressed("action_button_use_4"):
+		action("action_button_use_4")
+	elif event.is_action_pressed("action_button_use_5"):
+		action("action_button_use_5")
 
 # Schedule an action with the game based on a string
 func action(action):
@@ -68,8 +75,14 @@ func action(action):
 			game.run_until_player_turn()
 			game.open_loot_tray(game.map[player.curr_tile.x][player.curr_tile.y])
 		"action_button_equip":
-			game.do_action("action_button_equip")
+			game.do_action(action)
 		"action_button_move_inv":
-			game.do_action("action_button_move_inv")
+			game.do_action(action)
 		"action_button_move_inv_spec":
-			game.do_action("action_button_move_inv_spec")
+			game.do_action(action)
+		"action_button_use_2" or "action_button_use_3" or "action_button_use_4" or "action_button_use_5":
+			game.do_action(action)
+			var tick_count = game.InfoBox.get_ticks(action)
+			if !tick_count <= 0:
+				game.ticker.schedule_action(player,tick_count)
+				game.run_until_player_turn()

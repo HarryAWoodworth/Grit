@@ -561,23 +561,28 @@ func addActionsInfoPanel(ui):
 	focus = ui
 	focused_actions.clear()
 	var item = focus.item
-	
 	# Add actions based on the item's "effect" dictionary
 	if item.effect != null and !item.effect.empty():
-		var index_action_use_key = 2
-		var keys = item.effect.keys()
-		var val
+		print("Adding effects from item effect dict")
+		# Var for selecting which extra action button to use
+		var index_action_use_key = 1
 		# For each effect, check if the action is an IF action (only shown if
 		# the criteria are true), or just add the action
+		var keys = item.effect.keys()
+		var val
+		var effect_string_and_ticks
 		for key in keys:
 			val = item.effect[key].replace(" ","")
+			# Grab the Effect String and the ticks
+			effect_string_and_ticks = val.right(val.find('>')+1).split("|")
 			# If the action is do-able, show it
 			if val[0] == '?':
 				if Action_Parser.eval_if(val.left(val.find('>'))):
-					InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, val.right(val.find('>')))
+					
+					InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, effect_string_and_ticks[0], effect_string_and_ticks[1].to_int())
 					index_action_use_key+=1
 			else:
-				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, val.right(val.find('>')))
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, effect_string_and_ticks[0], effect_string_and_ticks[1].to_int())
 				index_action_use_key+=1
 	
 	# If the focus is from an inventory...
@@ -623,6 +628,9 @@ func do_action(action):
 					player.inventory.add_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1),1)
 				else:
 					map[player.curr_tile.x][player.curr_tile.y].add_item(player.inventory.remove_item(focus.item),1)
+			# Use custom effect actions
+			"action_button_use_2" or "action_button_use_3" or "action_button_use_4" or "action_button_use_5":
+				print("CUSTOM: " + InfoPanel.get_action(action))
 	return true
 
 # Update the count in invslot

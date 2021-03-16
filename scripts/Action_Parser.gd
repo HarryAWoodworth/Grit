@@ -12,7 +12,7 @@ func eval_if(parseable):
 	var evaluation_str = parseable.substr(2)
 	
 	# TODO
-	print("Parseable: " + evaluation_str)
+	# print("Parseable: " + evaluation_str)
 	return true
 
 # Parse the effect string from item_list.json into a dictionary of commands and effect strings
