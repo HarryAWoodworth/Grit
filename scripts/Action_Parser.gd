@@ -5,27 +5,22 @@ var game
 func init(game_):
 	game = game_
 
-# Parse the effect string from item_list.json into an array of action strings
-func parse(effect: String):
-	# Remove tabs, spaces, and newlines
-	var action_string = effect.dedent().strip_escapes()
-	var actions = []
-	var right_bracket = action_string.find(']')
-	var left
-	# Split all of the different actions into seperate strings and add to actions[]
-	while right_bracket != -1:
-		left = action_string.left(right_bracket)
-		print("Action Found, Appending...: " + left)
-		actions.append(left)
-		action_string = action_string.substr(right_bracket+1)
-		right_bracket = action_string.find(']')
-	return actions
+
+# Parse an IF criteria action. Return true 
+func eval_if(parseable):
+	var evaluation_type = parseable[1]
+	var evaluation_str = parseable.substr(1, parseable.find('>'))
+	print("Parseable: " + evaluation_str)
+
+# Parse the effect string from item_list.json into a dictionary of commands and effect strings
+func parse(effects):
+	for key in effects.keys():
+		pass
 	
 func do_action():
+	pass
 	# Go through all actions
-	for action in actions:
 		# Get the starting character
-		var symb = action[0]
 		# Evaluate Action
 #		if symb == '[':
 #			action_string = action_string.trim_prefix('[')

@@ -6,8 +6,10 @@
 			"description":"A can of tuna. A little smelly.",
 			"weight": 0.3125,
 			"rarity": 1,
-			"effect": "[Eat>+5&Cmetal_can]",
-			"reusable": false
+			"effect": {
+				"Eat": "> +5 & C metal_can",
+			},
+			"reusable": false,
 		},
 		{
 			"id": "metal_can",
@@ -37,8 +39,10 @@
 			"weight": 0.3125,
 			"rarity": 1,
 			"type": "melee",
-			"effect": "?Efungus_leech[Remove Spores>REfungus_leech]
-								 ?Eschrapnel[Remove Schrapnel>REschrapnel]",
+			"effect": {
+				"Remove Spores": "?Efungus_leech>REfungus_leech",
+				"Remove Schrapnel": "?Eschrapnel>REschrapnel",
+			},
 			"reusable": false
 		},
 		{

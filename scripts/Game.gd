@@ -122,6 +122,9 @@
 # [ ] Hotswap UI
 # [ ] Using gun takes into account mods
 
+## OTHER
+# [?] Critical Attacks activate a quick time event
+
 extends Node2D
 
 # Consts -----------------------------------------------------------------------
@@ -209,8 +212,8 @@ func _ready():
 	
 	### TESTING ###
 	#map[2][2].print_pos()
-	Action_Parser.parse_and_do("[Eat>+5&Cmetal_can]")
-	Action_Parser.parse_and_do("?Efungus_leech[Remove Spores>REfungus_leech]\n		?Eschrapnel[Remove Schrapnel>REschrapnel]")
+	#Action_Parser.parse_and_do("[Eat>+5&Cmetal_can]")
+	#Action_Parser.parse_and_do("?Efungus_leech[Remove Spores>REfungus_leech]\n		?Eschrapnel[Remove Schrapnel>REschrapnel]")
 
 # Actor Movement ------------------------------------------------------------------------
 
@@ -371,10 +374,12 @@ func build_chunk():
 	add_item("canned_tuna",0,3)
 
 	### TESTING ###
-	#var item_inst1 = Item.instance()
-	#item_inst1.init_clone(item_manager.item_dictionary.get("7.62×39mm"))
-	#var item_inst2 = Item.instance()
-	#item_inst2.init_clone(item_manager.item_dictionary.get("ak_47"))
+	var item_inst1 = Item.instance()
+	item_inst1.init_clone(item_manager.item_dictionary.get("canned_tuna"),"767676767")
+	var item_inst2 = Item.instance()
+	item_inst2.init_clone(item_manager.item_dictionary.get("hunting_knife"),"909090909")
+	Action_Parser.eval_if(item_inst1.effect.values()[0])
+	Action_Parser.eval_if(item_inst2.effect.values()[0])
 	#player.equipment.hold_item(item_inst2)
 	#player.equipment.print_hands()
 	#player.equipment.hold_item(item_inst1)
@@ -560,6 +565,19 @@ func addActionsInfoPanel(ui):
 	focus = ui
 	focused_actions.clear()
 	var item = focus.item
+	
+	# Add actions based on the item's "effect" dictionary
+	if item.effect != null and !item.effect.empty():
+		var index_action_use_key = 2
+		var keys = item.effect.keys()
+		var val
+		for key in keys:
+			val = item.effect[key]
+			# If the action is do-able, show it
+			if val[0] == '?' and Action_Parser.eval_if(val.left(val.find('>'))):
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key)
+				index_action_use_key+=1
+	
 	# If the focus is from an inventory...
 	if "onGround" in focus:
 		# Add Equip action

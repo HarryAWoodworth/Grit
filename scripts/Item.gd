@@ -40,7 +40,7 @@ var burst_size #int
 var current_ammo #int
 
 ##### CONSUMABLE
-var effect #String
+var effect #Dictionary
 var reusable #bool, defaults to false
 
 ##### INGREDIENT
