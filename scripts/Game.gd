@@ -193,6 +193,9 @@ func _ready():
 	#OS.set_window_size(WINDOW_SIZE)
 	# Init the item manager
 	item_manager.init()
+	# Init the game, player, map
+	randomize()
+	build_chunk()
 	# Init mouse detection input
 	Mouse_Detection.init(self)
 	# Init the UI
@@ -201,19 +204,14 @@ func _ready():
 	Input_Manager.init(self)
 	# Init the parser for actions
 	Action_Parser.init(self)
-	# Build the chunk
-	randomize()
+	# Set Tile Size
 	tile_map.cell_quadrant_size = TILE_SIZE
-	build_chunk()
 	
+	# Healthbar UI
 	health_bar_max = HealthBar.rect_size.y
+	# InfoBox Focus variables
 	focus = null
 	focused_actions = []
-	
-	### TESTING ###
-	#map[2][2].print_pos()
-	#Action_Parser.parse_and_do("[Eat>+5&Cmetal_can]")
-	#Action_Parser.parse_and_do("?Efungus_leech[Remove Spores>REfungus_leech]\n		?Eschrapnel[Remove Schrapnel>REschrapnel]")
 
 # Actor Movement ------------------------------------------------------------------------
 
@@ -358,6 +356,7 @@ func build_chunk():
 	add_item("ak_47",0,1)
 	add_item("7.62×39mm",0,1)
 	add_item("7.62×39mm",0,1)
+	add_item("hunting_knife",1,0)
 	
 	add_item("ak_47",0,1,"debug")
 	add_item("7.62×39mm",0,2)
@@ -378,8 +377,8 @@ func build_chunk():
 	item_inst1.init_clone(item_manager.item_dictionary.get("canned_tuna"),"767676767")
 	var item_inst2 = Item.instance()
 	item_inst2.init_clone(item_manager.item_dictionary.get("hunting_knife"),"909090909")
-	Action_Parser.eval_if(item_inst1.effect.values()[0])
-	Action_Parser.eval_if(item_inst2.effect.values()[0])
+	#Action_Parser.eval_if(item_inst1.effect.values()[0])
+	#Action_Parser.eval_if(item_inst2.effect.values()[0])
 	#player.equipment.hold_item(item_inst2)
 	#player.equipment.print_hands()
 	#player.equipment.hold_item(item_inst1)
@@ -554,10 +553,7 @@ func show_equipment_info_ui(invslot):
 	InfoPanel.show()
 
 func clearInfoPanel():
-	InfoPanel.Icon.hide()
-	InfoPanel.Description.text = ""
-	for child in InfoPanel.ActionGrid.get_children():
-		child.queue_free()
+	InfoPanel.clear()
 
 # Bring the added ui class into "focus", so it's item has actions attached to it
 func addActionsInfoPanel(ui):
@@ -571,11 +567,17 @@ func addActionsInfoPanel(ui):
 		var index_action_use_key = 2
 		var keys = item.effect.keys()
 		var val
+		# For each effect, check if the action is an IF action (only shown if
+		# the criteria are true), or just add the action
 		for key in keys:
-			val = item.effect[key]
+			val = item.effect[key].replace(" ","")
 			# If the action is do-able, show it
-			if val[0] == '?' and Action_Parser.eval_if(val.left(val.find('>'))):
-				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key)
+			if val[0] == '?':
+				if Action_Parser.eval_if(val.left(val.find('>'))):
+					InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, val.right(val.find('>')))
+					index_action_use_key+=1
+			else:
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, val.right(val.find('>')))
 				index_action_use_key+=1
 	
 	# If the focus is from an inventory...

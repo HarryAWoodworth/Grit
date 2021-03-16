@@ -7,7 +7,7 @@
 			"weight": 0.3125,
 			"rarity": 1,
 			"effect": {
-				"Eat": "> +5 & C metal_can",
+				"Eat": "+5 & C metal_can",
 			},
 			"reusable": false,
 		},

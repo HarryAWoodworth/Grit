@@ -9,8 +9,11 @@ func init(game_):
 # Parse an IF criteria action. Return true 
 func eval_if(parseable):
 	var evaluation_type = parseable[1]
-	var evaluation_str = parseable.substr(1, parseable.find('>'))
+	var evaluation_str = parseable.substr(2)
+	
+	# TODO
 	print("Parseable: " + evaluation_str)
+	return true
 
 # Parse the effect string from item_list.json into a dictionary of commands and effect strings
 func parse(effects):
