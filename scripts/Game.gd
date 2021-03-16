@@ -1,8 +1,9 @@
 
-# <<< A0.1 >>>
+# <<< A0.1 >>> -----------------------------------------------------------------
 
 ## TODO:
-# [ ] Implement actions
+# [ ] Implement eval_if() in Action_Parser
+# [ ] Implement do_action() in Action_Parser
 
 ## BUGS:
 
@@ -13,6 +14,7 @@
 # [ ] Melee Weapons
 # [ ] Melee Combat, turn action
 # [ ] Player armor equipment
+# [ ] Action effects that can set on the scheduler and activate once the ticker hits it
 
 ## PLAYER UI
 # [W] Display Player information/equipment/inventory
@@ -29,11 +31,17 @@
 # [ ] Monster corpses
 # [ ] Morning -> Noon -> Evening Cycle
 
+## PLAYER AND MONSTER EFFECTS
+# [ ] Effect types
+# [ ] Effect checks
+# [ ] Effect Manager?
+
 ## MONSTERS
 # [ ] Check that pathfinding still works
 # [ ] Different AI's? (check out bookmarked rougelike AI article)
 # [ ] Monster manager from json file
-# [ ] Info box shows monster's current action
+# [ ] Monster can have effects
+# [ ] Info box shows monster's current action and effects
 # [ ] Different Monster actions with different speeds
 
 ## SETTINGS
@@ -74,12 +82,7 @@
 # [ ] Fancy color/fonts in logs
 # [ ] Fancy color/font in inventory
 
-# <<< A0.2 >>>
-
-## PLAYER AND MONSTER EFFECTS
-# [ ] Effect types
-# [ ] Effect checks
-# [ ] Effect Manager?
+# <<< A0.2 >>> -----------------------------------------------------------------
 
 ## WEATHER
 # [ ] Weather Types
@@ -93,16 +96,32 @@
 # [ ] More Recipes
 # [ ] More Enemies
 
-## Monsters
-# [ ] Monsters Wander
-
-# <<< A0.3 >>> 
+# <<< A0.3 >>> -----------------------------------------------------------------
 
 ## FARMING
 # [ ] Seed Items
 # [ ] Farm Plots
 # [ ] Harvesting grown plants
 # [ ] Seed Splicing
+
+## GENERAL
+# [ ] More Prefabs
+# [ ] More Items
+# [ ] More Recipes
+# [ ] More Enemies
+
+# <<< A0.4 >>> -----------------------------------------------------------------
+
+## Monsters
+# [ ] Monsters Wander
+
+## GENERAL
+# [ ] More Prefabs
+# [ ] More Items
+# [ ] More Recipes
+# [ ] More Enemies
+
+# <<< A0.5 >>> -----------------------------------------------------------------
 
 ## FLOORS
 # [ ] Player can move between floors in buildings (transport to smaller map)
@@ -113,7 +132,7 @@
 # [ ] More Recipes
 # [ ] More Enemies
 
-# <<< A0.4 >>>
+# <<< A0.6 >>> -----------------------------------------------------------------
 
 ## MODULAR WEAPONS
 # [ ] Mod weapons with items
@@ -122,8 +141,20 @@
 # [ ] Hotswap UI
 # [ ] Using gun takes into account mods
 
+## GENERAL
+# [ ] More Prefabs
+# [ ] More Items
+# [ ] More Recipes
+# [ ] More Enemies
+
+# <<< Other >>> ----------------------------------------------------------------
+
 ## OTHER
 # [?] Critical Attacks activate a quick time event
+
+## MONSTER IDEAS
+# [ ] Monster with action that "flashes" you, turns screen pure white for a set 
+#		number of ticks
 
 extends Node2D
 
@@ -190,6 +221,7 @@ var health_bar_max
 
 # Init the game
 func _ready():
+	## NOTE: DON'T mess with orderings!
 	#OS.set_window_size(WINDOW_SIZE)
 	# Init the item manager
 	item_manager.init()
@@ -373,10 +405,11 @@ func build_chunk():
 	add_item("canned_tuna",0,3)
 
 	### TESTING ###
-	var item_inst1 = Item.instance()
-	item_inst1.init_clone(item_manager.item_dictionary.get("canned_tuna"),"767676767")
-	var item_inst2 = Item.instance()
-	item_inst2.init_clone(item_manager.item_dictionary.get("hunting_knife"),"909090909")
+	player.add_effect("shrapnel")
+	# var item_inst1 = Item.instance()
+	# item_inst1.init_clone(item_manager.item_dictionary.get("canned_tuna"),"767676767")
+	# var item_inst2 = Item.instance()
+	# item_inst2.init_clone(item_manager.item_dictionary.get("hunting_knife"),"909090909")
 	#Action_Parser.eval_if(item_inst1.effect.values()[0])
 	#Action_Parser.eval_if(item_inst2.effect.values()[0])
 	#player.equipment.hold_item(item_inst2)
@@ -455,16 +488,20 @@ func add_character(x,y,health=10,ai="none",identifier="...",title="...",descript
 # Add item to position. Return false if it failed, true if it succeeded
 func add_item(id,x,y,debug=null):
 	# Clone the item from the item manager
-	var item_inst = Item.instance()
-	var item_from_dict = item_manager.item_dictionary.get(id)
-	if item_from_dict == null:
-		print("Error: No item found in item_dictionary with ID: \"" + id + "\"")
-		return false
-	item_inst.init_clone(item_manager.item_dictionary.get(id),item_manager.new_uid())
+	var item_inst = get_item_from_manager(id)
 	if debug != null:
 		item_inst.description = "Volcano!"
 	map[x][y].add_item(item_inst)
 	return true
+
+func get_item_from_manager(item_name):
+	var item_inst = Item.instance()
+	var item_from_dict = item_manager.item_dictionary.get(item_name)
+	if item_from_dict == null:
+		print("Error: No item found in item_dictionary with ID: \"" + item_name + "\"")
+		return false
+	item_inst.init_clone(item_manager.item_dictionary.get(item_name),item_manager.new_uid())
+	return item_inst
 
 # TODO
 func add_item_to_lootable(id,lootable):
@@ -573,22 +610,25 @@ func addActionsInfoPanel(ui):
 		var effect_string_and_ticks
 		for key in keys:
 			val = item.effect[key].replace(" ","")
+			print("Evaluating Action " + key + ": " + val)
 			# Grab the Effect String and the ticks
 			effect_string_and_ticks = val.right(val.find('>')+1).split("|")
 			# If the action is do-able, show it
 			if val[0] == '?':
+				print("Evaluating IF: " + val.left(val.find('>')))
 				if Action_Parser.eval_if(val.left(val.find('>'))):
-					
-					InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, effect_string_and_ticks[0], effect_string_and_ticks[1].to_int())
+					InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, "action_button_use_" + str(index_action_use_key), effect_string_and_ticks[0], effect_string_and_ticks[1].to_int())
+					focused_actions.append("action_button_use_" + str(index_action_use_key))
 					index_action_use_key+=1
 			else:
-				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, effect_string_and_ticks[0], effect_string_and_ticks[1].to_int())
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, "action_button_use_" + str(index_action_use_key), effect_string_and_ticks[0], effect_string_and_ticks[1].to_int())
+				focused_actions.append("action_button_use_" + str(index_action_use_key))
 				index_action_use_key+=1
 	
 	# If the focus is from an inventory...
 	if "onGround" in focus:
 		# Add Equip action
-		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Equip")
+		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Equip", "action_button_equip")
 		focused_actions.append("action_button_equip")
 		# Add pick up/drop actions
 		var action_str
@@ -597,17 +637,19 @@ func addActionsInfoPanel(ui):
 		else:
 			action_str = "Pick Up"
 		if focus.num > 1:
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " All")
-			InfoPanel.add_action("[ " + InputMap.get_action_list("shift")[0].as_text() + " + " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " 1")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " All", "action_button_move_inv")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("shift")[0].as_text() + " + " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " 1", "action_button_move_inv_spec")
 			focused_actions.append("action_button_move_inv")
 			focused_actions.append("action_button_move_inv_spec")
 		else:
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str)
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str, "action_button_move_inv")
 			focused_actions.append("action_button_move_inv")
 
 # Do an action witht the focused UI Item and available actions. Called from Input_Manager
 func do_action(action):
+	print("Game.do_action(): Doing action " + action)
 	if focus != null and focused_actions.has(action):
+		print("Game.do_action(): Has action " + action)
 		match action:
 			# Equip weapon from ground or inventory
 			"action_button_equip":
@@ -629,8 +671,16 @@ func do_action(action):
 				else:
 					map[player.curr_tile.x][player.curr_tile.y].add_item(player.inventory.remove_item(focus.item),1)
 			# Use custom effect actions
-			"action_button_use_2" or "action_button_use_3" or "action_button_use_4" or "action_button_use_5":
-				print("CUSTOM: " + InfoPanel.get_action(action))
+			"action_button_use_1":
+				Action_Parser.do_action(InfoPanel.get_action(action))
+			"action_button_use_2":
+				Action_Parser.do_action(InfoPanel.get_action(action))
+			"action_button_use_3":
+				Action_Parser.do_action(InfoPanel.get_action(action))
+			"action_button_use_4":
+				Action_Parser.do_action(InfoPanel.get_action(action))
+			"action_button_use_5":
+				Action_Parser.do_action(InfoPanel.get_action(action))
 	return true
 
 # Update the count in invslot
@@ -713,4 +763,7 @@ func display_actor_data(actor):
 func player_health_update_ui(ratio):
 	HealthBar.rect_size.y = ratio * health_bar_max
 	HealthBar.rect_position.y = health_bar_max - HealthBar.rect_size.y
-		
+	
+
+# ACTION HELPERS ---------------------------------------------------------------
+	

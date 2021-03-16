@@ -58,8 +58,11 @@ func shoot():
 	if !equipment.empty() and equipment.both_hands.type == "ranged":
 		Combat_Manager.shoot(get_global_mouse_position(), equipment.both_hands.innacuracy_angle)
 		
+func gain_health(plus):
+	health += plus
+	game.player_health_update_ui(float(health)/float(max_health))
 		
-func take_damage(dmg):
+func lose_health(dmg):
 	health -= dmg
 	game.player_health_update_ui(float(health)/float(max_health))
 	

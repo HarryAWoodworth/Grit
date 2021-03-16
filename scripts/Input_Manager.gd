@@ -57,6 +57,8 @@ func _input(event):
 			action("action_button_move_inv_spec")
 		else:
 			action("action_button_move_inv")
+	elif event.is_action_pressed("action_button_use_1"):
+		action("action_button_use_1")
 	elif event.is_action_pressed("action_button_use_2"):
 		action("action_button_use_2")
 	elif event.is_action_pressed("action_button_use_3"):
@@ -68,7 +70,6 @@ func _input(event):
 
 # Schedule an action with the game based on a string
 func action(action):
-	
 	match action:
 		"move":
 			game.ticker.schedule_action(player,player.speed)
@@ -80,9 +81,21 @@ func action(action):
 			game.do_action(action)
 		"action_button_move_inv_spec":
 			game.do_action(action)
-		"action_button_use_2" or "action_button_use_3" or "action_button_use_4" or "action_button_use_5":
-			game.do_action(action)
-			var tick_count = game.InfoBox.get_ticks(action)
-			if !tick_count <= 0:
-				game.ticker.schedule_action(player,tick_count)
-				game.run_until_player_turn()
+		"action_button_use_1":
+			helper(action)
+		"action_button_use_2":
+			helper(action)
+		"action_button_use_3":
+			helper(action)
+		"action_button_use_4":
+			helper(action)
+		"action_button_use_5":
+			helper(action)
+				
+func helper(action):
+	print("Using Action Button: " + action)
+	game.do_action(action)
+	var tick_count = game.InfoPanel.get_ticks(action)
+	if !tick_count <= 0:
+		game.ticker.schedule_action(player,tick_count)
+		game.run_until_player_turn()

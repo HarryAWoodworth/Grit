@@ -7,7 +7,7 @@
 			"weight": 0.3125,
 			"rarity": 1,
 			"effect": {
-				"Eat": "+5 & C metal_can |5",
+				"Eat": "HE+5 , CR8 metal_can |5",
 			},
 			"reusable": false,
 		},
@@ -40,8 +40,8 @@
 			"rarity": 1,
 			"type": "melee",
 			"effect": {
-				"Remove Spores": "?Efungus_leech > REfungus_leech |4",
-				"Remove Schrapnel": "?Eschrapnel > REschrapnel |8",
+				"Remove Spores": "?EFFfungus_leech > RMEfungus_leech |4",
+				"Remove Shrapnel": "?EFFshrapnel > RMEshrapnel |8",
 			},
 			"reusable": false
 		},
