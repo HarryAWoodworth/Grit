@@ -41,7 +41,6 @@ var current_ammo #int
 
 ##### CONSUMABLE
 var effect #Dictionary
-var reusable #bool, defaults to false
 
 ##### INGREDIENT
 var scrap #String
@@ -68,7 +67,6 @@ func init_clone(item, uid_):
 	burst_size = item.burst_size
 	current_ammo = item.current_ammo
 	effect = item.effect
-	reusable = item.reusable
 	scrap = item.scrap
 	
 	# Create a unique ID for non-stacking items
@@ -77,7 +75,7 @@ func init_clone(item, uid_):
 
 # All items will have these fields
 # (Stacks determined by item type)
-func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_,damage_range_,innacuracy_angle_,ammo_type_,max_ammo_,burst_size_,stacks_,effect_,reusable_,scrap_):
+func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_,damage_range_,innacuracy_angle_,ammo_type_,max_ammo_,burst_size_,stacks_,effect_,scrap_):
 	id = id_
 	item_name = name_
 	name_specialized = name_specialized_
@@ -94,7 +92,6 @@ func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_siz
 	stacks = stacks_
 	current_ammo = 0
 	effect = effect_
-	reusable = reusable_
 	scrap = scrap_
 
 func print_item():
@@ -111,11 +108,10 @@ func print_item():
 	print("Damage_range: (" + str(damage_range.x) + "," + str(damage_range.y) + ")")
 	print("Innacuracy Angle: " + str(innacuracy_angle))
 	print("Scrap: " + scrap)
+	if effect != null:
+		print("Effect: " + effect)
 	if type == "ranged":
 		print("Ammo Type: " + ammo_type)
 		print("Max Ammo: " + str(max_ammo))
 		print("Burst Size: " + str(burst_size))
 		print("Current Ammo: " + str(current_ammo))
-	if type == "consumable":
-		print("Reusable: " + str(reusable))
-		print("Effect: " + effect)

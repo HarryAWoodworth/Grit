@@ -81,7 +81,9 @@ func add_effect(effect):
 func remove_effect(effect):
 	if effects.has(effect):
 		effects.erase(effect)
+		print("Removed effect \"" + effect + "\" from Player.")
 		return true
+	print("Failed to remove effect \"" + effect + "\" from Player, effect not present.")
 	return false
 	
 func has_effect(effect):

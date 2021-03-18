@@ -20,12 +20,15 @@ func init(item_, num_, game_, onGround_=true):
 	onGround = onGround_
 	count.text = "x" + str(num)
 
+func remove_item():
+	change_count(-1)
+
 func change_count(dec):
 	num += dec
 	# Delete if no more items
 	if num <= 0:
 		queue_free()
-	#print("setting text in invslot (onGround?: " + str(onGround) + ") of item " + item.id + " to " + str(num))
+	# Set count string to reflect new num
 	count.text = "x" + str(num)
 
 func _on_InventorySlot_mouse_entered():

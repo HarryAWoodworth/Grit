@@ -7,9 +7,8 @@
 			"weight": 0.3125,
 			"rarity": 1,
 			"effect": {
-				"Eat": "HE+5 , CR8 metal_can |5",
+				"Eat": "HE+5 , CR8 metal_can , DEStroy |5",
 			},
-			"reusable": false,
 		},
 		{
 			"id": "metal_can",
@@ -43,7 +42,7 @@
 				"Remove Spores": "?EFFfungus_leech > RMEfungus_leech |4",
 				"Remove Shrapnel": "?EFFshrapnel > RMEshrapnel |8",
 			},
-			"reusable": false
+			"reusable": true,
 		},
 		{
 			"id": "7.62×39mm",

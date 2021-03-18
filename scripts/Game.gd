@@ -2,10 +2,11 @@
 # <<< A0.1 >>> -----------------------------------------------------------------
 
 ## TODO:
-# [ ] Implement eval_if() in Action_Parser
-# [ ] Implement do_action() in Action_Parser
+# [ ] Fix DEStroy item action
+# [ ] Display Equipment item and actions
 
 ## BUGS:
+
 
 ## PLAYER INTERACTION
 # [ ] Burstfire turn action
@@ -577,17 +578,20 @@ func show_invslot_info_ui(invslot):
 	InfoPanel.Icon.texture = load_tex(invslot.item)
 	InfoPanel.Icon.show()
 	InfoPanel.Description.text = invslot.item.description
+	# Add actions, set invslot as focus
 	addActionsInfoPanel(invslot)
 	InfoPanel.show()
-	
+
+# TODO
 func show_equipment_info_ui(invslot):
-	InfoPanel.hide()
-	clearInfoPanel()
-	InfoPanel.Icon.texture = load_tex(invslot.item)
-	InfoPanel.Icon.show()
-	InfoPanel.Description.text = invslot.item.description
-	addActionsInfoPanel(invslot)
-	InfoPanel.show()
+	pass
+#	InfoPanel.hide()
+#	clearInfoPanel()
+#	InfoPanel.Icon.texture = load_tex(invslot.item)
+#	InfoPanel.Icon.show()
+#	InfoPanel.Description.text = invslot.item.description
+#	addActionsInfoPanel(invslot)
+#	InfoPanel.show()
 
 func clearInfoPanel():
 	InfoPanel.clear()
@@ -655,8 +659,10 @@ func do_action(action):
 			"action_button_equip":
 				if focus.onGround:
 					player.equipment.hold_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1))
+					InfoPanel.clear()
 				else:
 					player.equipment.hold_item(player.inventory.remove_item(focus.item))
+					InfoPanel.clear()
 			# Drop or pick up items
 			"action_button_move_inv":
 				var temp_num = focus.num
@@ -672,26 +678,27 @@ func do_action(action):
 					map[player.curr_tile.x][player.curr_tile.y].add_item(player.inventory.remove_item(focus.item),1)
 			# Use custom effect actions
 			"action_button_use_1":
-				Action_Parser.do_action(InfoPanel.get_action(action))
+				Action_Parser.do_action(InfoPanel.get_action(action), focus)
 			"action_button_use_2":
-				Action_Parser.do_action(InfoPanel.get_action(action))
+				Action_Parser.do_action(InfoPanel.get_action(action), focus)
 			"action_button_use_3":
-				Action_Parser.do_action(InfoPanel.get_action(action))
+				Action_Parser.do_action(InfoPanel.get_action(action), focus)
 			"action_button_use_4":
-				Action_Parser.do_action(InfoPanel.get_action(action))
+				Action_Parser.do_action(InfoPanel.get_action(action), focus)
 			"action_button_use_5":
-				Action_Parser.do_action(InfoPanel.get_action(action))
+				Action_Parser.do_action(InfoPanel.get_action(action), focus)
 	return true
 
-# Update the count in invslot
+# Find the invslot with the item matching ID, then update it's count with num
 func update_invslot_count(id,num,onGround=false):
 	var invslot = null
-	#print("Updating invslot (onGround?: " + str(onGround) + ") with item id: " + id + " and changing count " + str(num))
 	var scroller
+	# Determine which scroller to search in
 	if onGround: 
 		scroller = GroundScroller
 	else:
 		scroller = InventoryScroller
+	# Find the invslot with the same item ID
 	for slot in scroller.get_node("VBoxContainer").get_children():
 		if slot.item.id == id:
 			invslot = slot
@@ -699,6 +706,7 @@ func update_invslot_count(id,num,onGround=false):
 	if invslot == null:
 		print("ERROR (Game.gd, update_invslot_count): Attempting to update invslot of item " + id + ", but no Invslot found!")
 		return
+	# Update its num
 	invslot.change_count(num)
 
 func update_equipment_ui():

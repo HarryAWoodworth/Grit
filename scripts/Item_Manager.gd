@@ -50,7 +50,7 @@ func init(uid_counter_=0):
 		if !("scrap" in item):
 			item.scrap = null
 		# Init item
-		item_inst.init_item(item.id,item.item_name,item.name_specialized,item.description,item.weight,item.rarity,item.hand_size,item.type,item.damage_range,item.innacuracy_angle,item.ammo_type,item.max_ammo,item.burst_size,item.stacks,item.effect,item.reusable,item.scrap)
+		item_inst.init_item(item.id,item.item_name,item.name_specialized,item.description,item.weight,item.rarity,item.hand_size,item.type,item.damage_range,item.innacuracy_angle,item.ammo_type,item.max_ammo,item.burst_size,item.stacks,item.effect,item.scrap)
 		# Add to item dictionary
 		item_dictionary[item_inst.id] = item_inst
 
