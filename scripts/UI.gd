@@ -9,7 +9,7 @@ func init(game_):
 	game = game_
 
 func _on_EquippedWeapon_mouse_entered():
-	game.display_equipment_data(EquippedWeapon1)
+	game.show_equipment_info_ui(EquippedWeapon1)
 
 func _on_EquippedWeapon2_mouse_entered():
-	game.display_equipment_data(EquippedWeapon2)
+	game.show_equipment_info_ui(EquippedWeapon2)

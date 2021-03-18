@@ -6,7 +6,8 @@
 # [ ] Display Equipment item and actions
 
 ## BUGS:
-
+# [ ] Equipping hunting knife from ground, and then equipping bullet from 10 stack
+#	  causes the bullet to go into the right hand and the hunting knife to dissapear.
 
 ## PLAYER INTERACTION
 # [ ] Burstfire turn action
@@ -578,20 +579,18 @@ func show_invslot_info_ui(invslot):
 	InfoPanel.Icon.texture = load_tex(invslot.item)
 	InfoPanel.Icon.show()
 	InfoPanel.Description.text = invslot.item.description
-	# Add actions, set invslot as focus
 	addActionsInfoPanel(invslot)
 	InfoPanel.show()
 
-# TODO
-func show_equipment_info_ui(invslot):
-	pass
-#	InfoPanel.hide()
-#	clearInfoPanel()
-#	InfoPanel.Icon.texture = load_tex(invslot.item)
-#	InfoPanel.Icon.show()
-#	InfoPanel.Description.text = invslot.item.description
-#	addActionsInfoPanel(invslot)
-#	InfoPanel.show()
+func show_equipment_info_ui(equipslot):
+	InfoPanel.hide()
+	clearInfoPanel()
+	print("Show equipslot: " + equipslot.slot)
+	InfoPanel.Icon.texture = load_tex(equipslot.item)
+	InfoPanel.Icon.show()
+	InfoPanel.Description.text = equipslot.item.description
+	addActionsInfoPanel(equipslot)
+	InfoPanel.show()
 
 func clearInfoPanel():
 	InfoPanel.clear()
@@ -648,21 +647,31 @@ func addActionsInfoPanel(ui):
 		else:
 			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str, "action_button_move_inv")
 			focused_actions.append("action_button_move_inv")
+	
+	# If the focus is on an equipment
+	elif "equipped" in focus:
+		# Add Unequip action
+		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Unequip", "action_button_equip")
+		focused_actions.append("action_button_equip")
+		# Add Drop action
 
 # Do an action witht the focused UI Item and available actions. Called from Input_Manager
 func do_action(action):
-	print("Game.do_action(): Doing action " + action)
+	#print("Game.do_action(): Doing action " + action)
 	if focus != null and focused_actions.has(action):
-		print("Game.do_action(): Has action " + action)
+		#print("Game.do_action(): Has action " + action)
 		match action:
 			# Equip weapon from ground or inventory
 			"action_button_equip":
-				if focus.onGround:
-					player.equipment.hold_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1))
-					InfoPanel.clear()
-				else:
-					player.equipment.hold_item(player.inventory.remove_item(focus.item))
-					InfoPanel.clear()
+				if "onGround" in focus:
+					if focus.onGround:
+						player.equipment.hold_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1))
+						InfoPanel.clear()
+					else:
+						player.equipment.hold_item(player.inventory.remove_item(focus.item))
+						InfoPanel.clear()
+				elif "equipped" in focus:
+					player.equipment.empty_hand(focus.slot)
 			# Drop or pick up items
 			"action_button_move_inv":
 				var temp_num = focus.num
@@ -714,16 +723,16 @@ func update_equipment_ui():
 	if both_item != null:
 		EquippedWeapon2.hide()
 		EquippedWeapon1.hide()
-		EquippedWeapon1.get_node("EquippedWeaponImage").texture = load_big_tex(both_item)
-		EquippedWeapon1.get_node("EquippedWeaponImage")
-		EquippedWeapon1.get_node("EquippedWeaponImage")
-		EquippedWeapon1.get_node("HandUseLabel").text = "LR"
-		EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = both_item.name_specialized
+		EquippedWeapon1.Icon.texture = load_big_tex(both_item)
+		EquippedWeapon1.HandUse.text = "LR"
+		EquippedWeapon1.Name.bbcode_text = both_item.name_specialized
 		EquippedWeapon1.set_item(both_item)
+		print("Slot 1 (both): " + EquippedWeapon1.item.id)
+		EquippedWeapon1.set_slot("both-1")
 		if both_item.type == "ranged":
-			EquippedWeapon1.get_node("CurrentAmmo").text = str(both_item.current_ammo) + "/" + str(both_item.max_ammo)
+			EquippedWeapon1.Ammo.text = str(both_item.current_ammo) + "/" + str(both_item.max_ammo)
 		else:
-			EquippedWeapon1.get_node("CurrentAmmo").text = ""
+			EquippedWeapon1.Ammo.text = ""
 		EquippedWeapon1.show()
 	else:
 		var right_item = player.equipment.right_hand
@@ -731,30 +740,29 @@ func update_equipment_ui():
 		EquippedWeapon1.hide()
 		EquippedWeapon2.hide()
 		if right_item != null:
-			EquippedWeapon1.get_node("EquippedWeaponImage").texture = load_big_tex(right_item)
-			EquippedWeapon1.get_node("EquippedWeaponImage")
-			EquippedWeapon1.get_node("HandUseLabel").text = "R"
-			EquippedWeapon1.get_node("EquippedWeaponName").bbcode_text = right_item.name_specialized
+			EquippedWeapon1.Icon.texture = load_big_tex(right_item)
+			EquippedWeapon1.HandUse.text = "R"
+			EquippedWeapon1.Name.bbcode_text = right_item.name_specialized
 			EquippedWeapon1.set_item(right_item)
+			print("Slot 1: " + EquippedWeapon1.item.id)
+			EquippedWeapon1.set_slot("right")
 			if right_item.type == "ranged":
-				EquippedWeapon1.get_node("CurrentAmmo").text = str(right_item.current_ammo) + "/" + str(right_item.max_ammo)
+				EquippedWeapon1.Ammo.text = str(right_item.current_ammo) + "/" + str(right_item.max_ammo)
 			else:
-				EquippedWeapon1.get_node("CurrentAmmo").text = ""
+				EquippedWeapon1.Ammo.text = ""
 			EquippedWeapon1.show()
 		if left_item != null:
-			EquippedWeapon2.get_node("EquippedWeaponImage").texture = load_big_tex(left_item)
-			EquippedWeapon2.get_node("EquippedWeaponImage")
-			EquippedWeapon2.get_node("HandUseLabel").text = "L"
-			EquippedWeapon2.get_node("EquippedWeaponName").bbcode_text = left_item.name_specialized
+			EquippedWeapon2.Icon.texture = load_big_tex(left_item)
+			EquippedWeapon2.HandUse.text = "L"
+			EquippedWeapon2.Name.bbcode_text = left_item.name_specialized
 			EquippedWeapon2.set_item(left_item)
+			print("Slot 2: " + EquippedWeapon2.item.id)
+			EquippedWeapon1.set_slot("left")
 			if left_item.type == "ranged":
-				EquippedWeapon2.get_node("CurrentAmmo").text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
+				EquippedWeapon2.Ammo.text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
 			else:
-				EquippedWeapon2.get_node("CurrentAmmo").text = ""
+				EquippedWeapon2.Ammo.text = ""
 			EquippedWeapon2.show()
-
-func display_equipment_data(item):
-	pass
 
 func display_actor_data(actor):
 	InfoPanel.hide()
