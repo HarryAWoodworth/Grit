@@ -5,7 +5,7 @@ onready var Name = $EquippedWeaponName
 onready var HandUse = $HandUseLabel
 onready var Ammo = $CurrentAmmo
 
-var item
+var item = null
 var slot: String
 
 func set_slot(slot_: String):
@@ -22,3 +22,12 @@ func remove_item():
 	var tempitem = item
 	item = null
 	tempitem.queue_free()
+	
+func toString():
+	print("EQUIPMENT SLOT!")
+	print("Item:::::::::::::::")
+	if item != null:
+		item.print_item()
+	else:
+		print("Item is null!")
+	print("Slot: " + slot)

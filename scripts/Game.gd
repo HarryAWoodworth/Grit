@@ -278,6 +278,7 @@ func move_actor(actor, x ,y):
 	return false
 
 # Move actor using a difference vector
+
 func move_actor_vect(actor, vect):
 	return move_actor(actor, actor.curr_tile.x + vect.x, actor.curr_tile.y + vect.y)
 
@@ -575,7 +576,7 @@ func add_new_invslot(item, num, onGround=false):
 # When an invslot is hovered over, show its info and action list
 func show_invslot_info_ui(invslot):
 	InfoPanel.hide()
-	clearInfoPanel()
+	InfoPanel.clear()
 	InfoPanel.Icon.texture = load_tex(invslot.item)
 	InfoPanel.Icon.show()
 	InfoPanel.Description.text = invslot.item.description
@@ -583,17 +584,14 @@ func show_invslot_info_ui(invslot):
 	InfoPanel.show()
 
 func show_equipment_info_ui(equipslot):
+	equipslot.toString()
 	InfoPanel.hide()
-	clearInfoPanel()
-	print("Show equipslot: " + equipslot.slot)
+	InfoPanel.clear()
 	InfoPanel.Icon.texture = load_tex(equipslot.item)
 	InfoPanel.Icon.show()
 	InfoPanel.Description.text = equipslot.item.description
 	addActionsInfoPanel(equipslot)
 	InfoPanel.show()
-
-func clearInfoPanel():
-	InfoPanel.clear()
 
 # Bring the added ui class into "focus", so it's item has actions attached to it
 func addActionsInfoPanel(ui):
@@ -727,13 +725,14 @@ func update_equipment_ui():
 		EquippedWeapon1.HandUse.text = "LR"
 		EquippedWeapon1.Name.bbcode_text = both_item.name_specialized
 		EquippedWeapon1.set_item(both_item)
-		print("Slot 1 (both): " + EquippedWeapon1.item.id)
 		EquippedWeapon1.set_slot("both-1")
 		if both_item.type == "ranged":
 			EquippedWeapon1.Ammo.text = str(both_item.current_ammo) + "/" + str(both_item.max_ammo)
 		else:
 			EquippedWeapon1.Ammo.text = ""
 		EquippedWeapon1.show()
+		print("From UPDATE_UI")
+		EquippedWeapon1.toString()
 	else:
 		var right_item = player.equipment.right_hand
 		var left_item = player.equipment.left_hand
@@ -766,9 +765,8 @@ func update_equipment_ui():
 
 func display_actor_data(actor):
 	InfoPanel.hide()
-	clearInfoPanel()
+	InfoPanel.clear()
 	if actor.has_node("AnimatedSprite"):
-		print("Getting idle anim...")
 		InfoPanel.Icon.texture = actor.sprite.frames.get_frame("Idle",0)
 	else:
 		InfoPanel.Icon.texture = actor.sprite.texture

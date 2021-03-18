@@ -107,7 +107,8 @@ func print_item():
 	print("Hand Size: " + str(hand_size))
 	print("Damage_range: (" + str(damage_range.x) + "," + str(damage_range.y) + ")")
 	print("Innacuracy Angle: " + str(innacuracy_angle))
-	print("Scrap: " + scrap)
+	if scrap != null:
+		print("Scrap: " + scrap)
 	if effect != null:
 		print("Effect: " + effect)
 	if type == "ranged":

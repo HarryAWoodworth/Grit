@@ -27,7 +27,6 @@ func change_count(dec):
 	num += dec
 	# Delete if no more items
 	if num <= 0:
-		item.queue_free()
 		queue_free()
 	# Set count string to reflect new num
 	count.text = "x" + str(num)
