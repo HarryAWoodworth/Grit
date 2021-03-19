@@ -183,5 +183,6 @@ action_button_use_1={
 
 quality/2d/use_nvidia_rect_flicker_workaround=true
 quality/2d/use_pixel_snap=true
+batching/precision/uv_contract=true
 environment/default_clear_color=Color( 0.0392157, 0.266667, 0.207843, 1 )
 environment/default_environment="res://default_env.tres"

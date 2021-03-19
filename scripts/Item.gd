@@ -110,7 +110,7 @@ func print_item():
 	if scrap != null:
 		print("Scrap: " + scrap)
 	if effect != null:
-		print("Effect: " + effect)
+		print("Effect: " + JSON.print(effect))
 	if type == "ranged":
 		print("Ammo Type: " + ammo_type)
 		print("Max Ammo: " + str(max_ammo))

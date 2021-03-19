@@ -2,28 +2,25 @@
 # <<< A0.1 >>> -----------------------------------------------------------------
 
 ## TODO:
-# [ ] Fix DEStroy item action
-# [ ] Display Equipment item and actions
+# [ ] Display Equipment actions
 
 ## BUGS:
-# [ ] Equipping hunting knife from ground, and then equipping bullet from 10 stack
-#	  causes the bullet to go into the right hand and the hunting knife to dissapear.
 
 ## PLAYER INTERACTION
-# [ ] Burstfire turn action
+# [4] Burstfire turn action
 #	{?} What if each bullet is 1 small action and kept the aim state? (Would be like shooting moving targets coming at you)
-# [ ] Reloading Gun (Ammo, removing ammo, turn action)
-# [ ] Melee Weapons
-# [ ] Melee Combat, turn action
-# [ ] Player armor equipment
-# [ ] Action effects that can set on the scheduler and activate once the ticker hits it
+# [1] Reloading Gun (Ammo, removing ammo, turn action)
+# [2] Melee Weapons
+# [3] Melee Combat, turn action
+# [5] Player armor equipment
+# [11] Action effects that can set on the scheduler and activate once the ticker hits it
 
 ## PLAYER UI
-# [W] Display Player information/equipment/inventory
-#   { } Armor 
-# [W] Hovering mouse over tile within range displays tile actions
-# [W] Hovering over item in player info box opens it in info box with actions
-# [ ] Add Weight to UI somewhere (Info box)
+# [6] Equip/Display Player Armor
+# [7] Display Armor item and actions
+# [8] Hovering mouse over tile within range displays tile actions
+# [9] Add Weight to UI somewhere (Info box)
+# [10] Display player effects (Effect class with bbcode?, Effect manager?)
 
 ## ENVIRONMENT INTERACTION
 # [ ] Doors
