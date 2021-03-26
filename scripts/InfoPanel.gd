@@ -8,7 +8,7 @@ var ActionLabel = preload("res://scenes/ActionLabel.tscn")
 
 var effect_dict = {}
 
-func add_action(action_str, key_str, effect_str=null, effect_ticks=0):
+func add_action(action_str, key_str, effect_ticks=0, effect_str=null):
 	if effect_str != null:
 		print("Adding Action to InfoPanel: " + action_str + ", key: " + key_str + ", effect: " + effect_str + ", ticks: " + str(effect_ticks))
 		effect_dict[key_str] = [effect_str, effect_ticks]

@@ -38,8 +38,8 @@ func init_player():
 	health = max_health
 	speed = 5
 	inventory.init(current_weight,max_weight,game)
-	equipment.init(game)
 	Combat_Manager.init()
+	equipment.init(game,self)
 	Center_Of_Player.position = Vector2(game.TILE_SIZE/2,game.TILE_SIZE/2)
 
 # Tick -------------------------------------------------------------------------

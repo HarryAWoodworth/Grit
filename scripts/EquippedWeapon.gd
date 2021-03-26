@@ -7,6 +7,7 @@ onready var Ammo = $CurrentAmmo
 
 var item = null
 var slot: String
+var equipped = true
 
 func set_ammo(ammo):
 	Ammo.text = ammo
@@ -19,6 +20,23 @@ func unequip():
 
 func set_item(item_):
 	item = item_
+
+func clear():
+	item = null
+	slot = ""
+	equipped = false
+	Icon.hide()
+	Name.hide()
+	HandUse.hide()
+	Ammo.hide()
+
+func reveal():
+	Icon.show()
+	Name.show()
+	HandUse.show()
+	Ammo.show()
+	equipped = true
+
 
 # Deletes the Item
 func remove_item():

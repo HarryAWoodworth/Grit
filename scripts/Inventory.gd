@@ -54,6 +54,8 @@ func add_item(item, num=1):
 
 # Add item to inventory
 func add_item_no_weight_change(item, num=1):
+	if item == null:
+		print("Inventory.gd.add_item_no_weight_change(): ERROR: Attempting to add null item to inventory!")
 	#print("Adding item " + item.item_name + " to player inventory (no weight change)")
 	# Add to inventory
 	# Probably implement item.stacks here, make unique key with unique id?
@@ -90,6 +92,11 @@ func remove_all_items_by_id(id):
 		return remove_item_by_id(id,bag[id][1])
 	print("ERROR: Trying to remove all items from player inventory with id " + id + " but none were found!")
 	return null
+
+func reduce_weight(num):
+	current_weight -= num
+	if current_weight < 0:
+		print("Inventory.gd.reduce_weight(): Somehow got to a negative weight! by reducing weight by " + str(num) + " to get " + str(current_weight))
 
 # Change the max weight the player has
 func change_max_weight(new_weight):

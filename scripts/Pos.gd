@@ -40,15 +40,13 @@ func print_pos():
 		item[0].print_item()
 
 func add_item(item,num=1):
-	print("Adding item " + item.id + " at position (" + str(curr_tile.x) + "," + str(curr_tile.y) + ")")
+	#print("Adding item " + item.id + " at position (" + str(curr_tile.x) + "," + str(curr_tile.y) + ")")
 	# Update rarity, update sprite
 	if item.rarity > rarest_item_rarity:
 		rarest_item_rarity = item.rarity
 		rarest_item_id = item.id
 		texture = load_tex(item)
-		print("visible?: " + str(visible))
 		if !visible:
-			print("Showing")
 			show()
 	# Add the item to the items dict
 	if items.has(item.id):

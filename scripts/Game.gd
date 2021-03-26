@@ -2,7 +2,7 @@
 # <<< A0.1 >>> -----------------------------------------------------------------
 
 ## TODO:
-# [ ] Display Equipment actions
+# [ ] Display Equipment actions (Drop, Unquip, Reload)
 
 ## BUGS:
 
@@ -552,12 +552,12 @@ func open_loot_tray(pos):
 		pos.showing = false
 
 # Equip item from inventory
-func inventory_item_double_clicked(invslot):
+func inventory_item_double_clicked(_invslot):
 	pass
 
 # When the user double clicks an item in the ground list, move it to the player
 # inventory and add it as an invslot in the UI
-func ground_item_double_clicked(id, invslot):
+func ground_item_double_clicked(_id, _invslot):
 	pass
 
 # Add a new invslot item to the UI inventory list
@@ -581,7 +581,7 @@ func show_invslot_info_ui(invslot):
 	InfoPanel.show()
 
 func show_equipment_info_ui(equipslot):
-	equipslot.toString()
+	#equipslot.toString()
 	InfoPanel.hide()
 	InfoPanel.clear()
 	InfoPanel.Icon.texture = load_tex(equipslot.item)
@@ -615,18 +615,18 @@ func addActionsInfoPanel(ui):
 			if val[0] == '?':
 				print("Evaluating IF: " + val.left(val.find('>')))
 				if Action_Parser.eval_if(val.left(val.find('>'))):
-					InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, "action_button_use_" + str(index_action_use_key), effect_string_and_ticks[0], effect_string_and_ticks[1].to_int())
+					InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, "action_button_use_" + str(index_action_use_key), effect_string_and_ticks[1].to_int(), effect_string_and_ticks[0])
 					focused_actions.append("action_button_use_" + str(index_action_use_key))
 					index_action_use_key+=1
 			else:
-				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, "action_button_use_" + str(index_action_use_key), effect_string_and_ticks[0], effect_string_and_ticks[1].to_int())
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, "action_button_use_" + str(index_action_use_key),effect_string_and_ticks[1].to_int(), effect_string_and_ticks[0])
 				focused_actions.append("action_button_use_" + str(index_action_use_key))
 				index_action_use_key+=1
 	
 	# If the focus is from an inventory...
 	if "onGround" in focus:
 		# Add Equip action
-		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Equip", "action_button_equip")
+		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Equip",     0,       "action_button_equip")
 		focused_actions.append("action_button_equip")
 		# Add pick up/drop actions
 		var action_str
@@ -635,20 +635,23 @@ func addActionsInfoPanel(ui):
 		else:
 			action_str = "Pick Up"
 		if focus.num > 1:
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " All", "action_button_move_inv")
-			InfoPanel.add_action("[ " + InputMap.get_action_list("shift")[0].as_text() + " + " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " 1", "action_button_move_inv_spec")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " All",     0,       "action_button_move_inv")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("shift")[0].as_text() + " + " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " 1",     0,       "action_button_move_inv_spec")
 			focused_actions.append("action_button_move_inv")
 			focused_actions.append("action_button_move_inv_spec")
 		else:
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str, "action_button_move_inv")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str,     0,       "action_button_move_inv")
 			focused_actions.append("action_button_move_inv")
 	
 	# If the focus is on an equipment
 	elif "equipped" in focus:
+		print("Game.gd.AddActionsInfoPanel(): Adding Equipment Actions!")
 		# Add Unequip action
-		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Unequip", "action_button_equip")
+		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Unequip",     0,      "action_button_equip")
 		focused_actions.append("action_button_equip")
-		# Add Drop action
+		# Add Unequip action
+		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] Drop",     0,       "action_button_move_inv")
+		focused_actions.append("action_button_move_inv")
 
 # Do an action witht the focused UI Item and available actions. Called from Input_Manager
 func do_action(action):
@@ -665,21 +668,29 @@ func do_action(action):
 					else:
 						player.equipment.hold_item(player.inventory.remove_item(focus.item))
 						InfoPanel.clear()
+				# Unequip item
 				elif "equipped" in focus:
-					player.equipment.empty_hand(focus.slot)
-			# Drop or pick up items
+					player.equipment.unequip_item(focus.item)
+					focus.clear()
 			"action_button_move_inv":
-				var temp_num = focus.num
-				if focus.onGround:
-					player.inventory.add_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id,temp_num),temp_num)
-				else:
-					map[player.curr_tile.x][player.curr_tile.y].add_item(player.inventory.remove_item(focus.item,temp_num),temp_num)
-			# Drop or Pick Up 1 item
+				# Drop or pick up items
+				if "onGround" in focus:
+					var temp_num = focus.num
+					if focus.onGround:
+						player.inventory.add_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id,temp_num),temp_num)
+					else:
+						map[player.curr_tile.x][player.curr_tile.y].add_item(player.inventory.remove_item(focus.item,temp_num),temp_num)
+				# Drop item to ground
+				elif "equipped" in focus:
+					player.equipment.unequip_item(focus.item, true)
+					focus.clear()
 			"action_button_move_inv_spec":
-				if focus.onGround:
-					player.inventory.add_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1),1)
-				else:
-					map[player.curr_tile.x][player.curr_tile.y].add_item(player.inventory.remove_item(focus.item),1)
+				# Drop or Pick Up 1 item
+				if "onGround" in focus:
+					if focus.onGround:
+						player.inventory.add_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1),1)
+					else:
+						map[player.curr_tile.x][player.curr_tile.y].add_item(player.inventory.remove_item(focus.item),1)
 			# Use custom effect actions
 			"action_button_use_1":
 				Action_Parser.do_action(InfoPanel.get_action(action), focus)
@@ -723,13 +734,14 @@ func update_equipment_ui():
 		EquippedWeapon1.Name.bbcode_text = both_item.name_specialized
 		EquippedWeapon1.set_item(both_item)
 		EquippedWeapon1.set_slot("both-1")
+		EquippedWeapon1.reveal()
 		if both_item.type == "ranged":
 			EquippedWeapon1.Ammo.text = str(both_item.current_ammo) + "/" + str(both_item.max_ammo)
 		else:
 			EquippedWeapon1.Ammo.text = ""
 		EquippedWeapon1.show()
-		print("From UPDATE_UI")
-		EquippedWeapon1.toString()
+		#print("From UPDATE_UI")
+		#EquippedWeapon1.toString()
 	else:
 		var right_item = player.equipment.right_hand
 		var left_item = player.equipment.left_hand
@@ -740,8 +752,8 @@ func update_equipment_ui():
 			EquippedWeapon1.HandUse.text = "R"
 			EquippedWeapon1.Name.bbcode_text = right_item.name_specialized
 			EquippedWeapon1.set_item(right_item)
-			print("Slot 1: " + EquippedWeapon1.item.id)
 			EquippedWeapon1.set_slot("right")
+			EquippedWeapon1.reveal()
 			if right_item.type == "ranged":
 				EquippedWeapon1.Ammo.text = str(right_item.current_ammo) + "/" + str(right_item.max_ammo)
 			else:
@@ -752,8 +764,8 @@ func update_equipment_ui():
 			EquippedWeapon2.HandUse.text = "L"
 			EquippedWeapon2.Name.bbcode_text = left_item.name_specialized
 			EquippedWeapon2.set_item(left_item)
-			print("Slot 2: " + EquippedWeapon2.item.id)
 			EquippedWeapon1.set_slot("left")
+			EquippedWeapon1.reveal()
 			if left_item.type == "ranged":
 				EquippedWeapon2.Ammo.text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
 			else:
@@ -803,3 +815,7 @@ func reload_from_inv(num,ammo_id):
 			print("ERROR: Game.reload_from_inv(" + str(num) + "," + ammo_id + "): Player inventory did not contain ammo_id")
 			return 0
 		return num
+
+# Add item to position player is at
+func item_drop(item):
+	map[player.curr_tile.x][player.curr_tile.y].add_item(item)	
