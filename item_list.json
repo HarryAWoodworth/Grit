@@ -1,5 +1,6 @@
 {
 	"items": [
+		// CONSUMABLES
 		{
 			"id": "canned_tuna",
 			"item_name": "Canned Tuna",
@@ -10,6 +11,7 @@
 				"Eat": "HE+5 , CR8 metal_can , DEStroy |5",
 			},
 		},
+		// SCRAP INGREDIENTS
 		{
 			"id": "metal_can",
 			"item_name": "Metal Can",
@@ -17,6 +19,7 @@
 			"weight": 0.07,
 			"rarity": 0,
 		},
+		// RANGED WEAPONS
 		{
 			"id": "ak_47",
 			"item_name": "AK-47",
@@ -31,6 +34,20 @@
 			"burst_size": 5,
 			"stacks": false
 		},
+		// AMMUNITION
+		{
+			"id": "7.62×39mm",
+			"item_name": "7.62×39mm",
+			"description":"Big bullets.",
+			"weight": 0.0016,
+			"rarity": 1,
+			"type": "ammo",
+			"damage_range": {
+				"low": 10,
+				"high": 40
+			},
+		},
+		// MELEE WEAPONS
 		{
 			"id": "hunting_knife",
 			"item_name": "Hunting Knife",
@@ -43,18 +60,6 @@
 				"Remove Shrapnel": "?EFFshrapnel > RMEshrapnel |8",
 			},
 			"reusable": true,
-		},
-		{
-			"id": "7.62×39mm",
-			"item_name": "7.62×39mm",
-			"description":"Big bullets.",
-			"weight": 0.0016,
-			"rarity": 1,
-			"type": "ammo",
-			"damage_range": {
-				"low": 10,
-				"high": 40
-			},
 		},
 	]
 }

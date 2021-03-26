@@ -15,11 +15,20 @@ func init(uid_counter_=0):
 	# Read item_list JSON file contents
 	var file = File.new()
 	file.open("res://item_list.json", file.READ)
-	var json = file.get_as_text()
+	var file_text = file.get_as_text()
+	file.close()
+	# Remove all comments
+	var lines = file_text.split('\n')
+	var json = ""
+	for line in lines:
+		if !line.strip_escapes().begins_with("//"):
+			#print("Comment: " + line)
+			json += line
+	print(json)
+	# Read as JSON
 	var json_parse = JSON.parse(json)
 	#print(json_parse.error_string)
 	var json_result = json_parse.result
-	file.close()
 	
 	# Parse JSON into Item nodes
 	var items = json_result["items"]
