@@ -8,6 +8,9 @@ onready var Ammo = $CurrentAmmo
 var item = null
 var slot: String
 
+func set_ammo(ammo):
+	Ammo.text = ammo
+
 func set_slot(slot_: String):
 	slot = slot_
 
@@ -19,9 +22,9 @@ func set_item(item_):
 
 # Deletes the Item
 func remove_item():
-	var tempitem = item
+	#var tempitem = item
 	item = null
-	tempitem.queue_free()
+	#tempitem.queue_free()
 	
 func toString():
 	print("EQUIPMENT SLOT!")

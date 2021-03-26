@@ -53,10 +53,14 @@ func tick():
 # Combat -----------------------------------------------------------------------
 
 func shoot():
-	print("HANDS: " + str(equipment.both_hands))
-	
-	if !equipment.empty() and equipment.both_hands.type == "ranged":
-		Combat_Manager.shoot(get_global_mouse_position(), equipment.both_hands.innacuracy_angle)
+	if !equipment.empty():
+		if equipment.both_hands != null and equipment.both_hands.type == "ranged" and equipment.both_hands.current_ammo > 0:
+			Combat_Manager.shoot(get_global_mouse_position(), equipment.both_hands)
+		else:
+			if equipment.right_hand != null and equipment.right_hand.type == "ranged" and equipment.right_hand.current_ammo > 0:
+				Combat_Manager.shoot(get_global_mouse_position(), equipment.right_hand)
+			if equipment.left_hand != null and equipment.left_hand.type == "ranged" and equipment.left_hand.current_ammo > 0:
+				Combat_Manager.shoot(get_global_mouse_position(), equipment.left_hand)
 		
 func gain_health(plus):
 	health += plus

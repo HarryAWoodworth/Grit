@@ -28,6 +28,11 @@ func init(current_weight_, max_weight_, game_):
 	item_manager = game.item_manager
 	player = game.player
 
+# Return how many of item_id there are in inventory
+func num_of_item(item_id):
+	if bag.has(item_id):
+		return bag[item_id][1]
+
 # Add item to inventory, increase weight
 func add_item(item, num=1):
 	#print("Adding item " + item.item_name + " to player inventory")
@@ -77,7 +82,13 @@ func remove_item_by_id(id,num=1):
 			bag.erase(id)
 		game.update_invslot_count(id, -1 * num)
 		return tempitem
-	print("ERROR: Trying to remove item from player inventory with id " + id + " but none was found! Bag has?: " + str(bag.has(id)))
+	print("ERROR: Trying to remove item from player inventory with id " + id + " but none were found!")
+	return null
+
+func remove_all_items_by_id(id):
+	if bag.has(id) and bag[id][1] > 0:
+		return remove_item_by_id(id,bag[id][1])
+	print("ERROR: Trying to remove all items from player inventory with id " + id + " but none were found!")
 	return null
 
 # Change the max weight the player has

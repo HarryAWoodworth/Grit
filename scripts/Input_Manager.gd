@@ -49,6 +49,11 @@ func _input(event):
 	elif event.is_action_pressed("move_down_right"):
 			if game.move_actor_vect(player,Vector2(1,1)):
 				action("move")
+
+	### MISC ACTIONS
+	elif event.is_action_pressed("action_button_reload"):
+		player.equipment.reload()
+
 	### ACTION KEYS
 	elif event.is_action_pressed("action_button_equip"):
 		action("action_button_equip")

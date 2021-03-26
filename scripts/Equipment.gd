@@ -60,7 +60,29 @@ func empty_hand(hand):
 	else:
 		game.player.inventory.add_item_no_weight_change(both_hands)
 		both_hands = null
-			
+
 func empty():
 	return right_hand == null and left_hand == null and both_hands == null
-	
+
+func reload():
+	# return if empty
+	if empty():
+		return
+	# Reload all weapons in hands
+	var reloaded = false
+	var toReload
+	if both_hands != null and both_hands.max_ammo != null:
+		# game.reload_from_inv removes bullets from inventory and returns number of bullets removed
+		toReload = game.reload_from_inv(both_hands.max_ammo - both_hands.current_ammo, both_hands.ammo_type)
+		both_hands.current_ammo = both_hands.current_ammo + toReload
+		game.update_equipment_ui_ammo("both_hands", both_hands)
+	else:
+		# Reloads RIGHT HAND FIRST ALWAYS!
+		if right_hand != null and right_hand.max_ammo != null:
+			toReload = game.reload_from_inv(right_hand.max_ammo - right_hand.current_ammo, right_hand.ammo_type)
+			right_hand.current_ammo = right_hand.current_ammo + toReload
+			game.update_equipment_ui_ammo("right_hand", right_hand)
+		if left_hand != null and left_hand.max_ammo != null:
+			toReload = game.reload_from_inv(left_hand.max_ammo - left_hand.current_ammo, left_hand.ammo_type)
+			left_hand.current_ammo = left_hand.current_ammo + toReload
+			game.update_equipment_ui_ammo("left_hand", left_hand)

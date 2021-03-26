@@ -760,6 +760,13 @@ func update_equipment_ui():
 				EquippedWeapon2.Ammo.text = ""
 			EquippedWeapon2.show()
 
+# Update the Equipment ammo UI using a slot string and a ref to the updated item
+func update_equipment_ui_ammo(slot, updatedItem):
+	if slot == "left_hand":
+		EquippedWeapon2.Ammo.text = str(updatedItem.current_ammo) + "/" + str(updatedItem.max_ammo)
+	else:
+		EquippedWeapon1.Ammo.text = str(updatedItem.current_ammo) + "/" + str(updatedItem.max_ammo)
+
 func display_actor_data(actor):
 	InfoPanel.hide()
 	InfoPanel.clear()
@@ -777,4 +784,22 @@ func player_health_update_ui(ratio):
 	
 
 # ACTION HELPERS ---------------------------------------------------------------
-	
+
+# Return the number of bullets in inventory that can be removed up to num
+# Remove the bullets before returning
+func reload_from_inv(num,ammo_id):
+	var removedItem
+	var numInInv = player.inventory.num_of_item(ammo_id)
+	print("GAME.reload_from_inv(): There are " + str(numInInv) + " in player inventory.")
+	if num > numInInv:
+		removedItem = player.inventory.remove_all_items_by_id(ammo_id)
+		if removedItem == null:
+			print("ERROR: Game.reload_from_inv(" + str(num) + "," + ammo_id + "): Player inventory did not contain ammo_id")
+			return 0
+		return numInInv
+	else:
+		removedItem = player.inventory.remove_item_by_id(ammo_id,num)
+		if removedItem == null:
+			print("ERROR: Game.reload_from_inv(" + str(num) + "," + ammo_id + "): Player inventory did not contain ammo_id")
+			return 0
+		return num
