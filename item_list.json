@@ -61,5 +61,9 @@
 			},
 			"reusable": true,
 		},
+		// ARMOR
+		{
+			"id": ""
+		}
 	]
 }
