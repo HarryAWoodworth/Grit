@@ -48,10 +48,8 @@ __meta__ = {
 }
 
 [node name="ArmorSlot" type="Control" parent="PlayerInfo/Armor"]
-margin_left = -6.86646e-05
-margin_top = 0.114201
 margin_right = 110.0
-margin_bottom = 30.1142
+margin_bottom = 30.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -73,6 +71,234 @@ size_flags_horizontal = 4
 text = "Head"
 align = 1
 valign = 1
+
+[node name="ArmorSlot2" type="Control" parent="PlayerInfo/Armor"]
+margin_right = 110.0
+margin_bottom = 30.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot2"]
+margin_left = 30.0
+margin_right = 110.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 80, 30 )
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot2"]
+margin_right = 33.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+rect_clip_content = true
+size_flags_horizontal = 4
+text = "Head"
+align = 1
+valign = 1
+
+[node name="ArmorSlot3" type="Control" parent="PlayerInfo/Armor"]
+margin_right = 110.0
+margin_bottom = 30.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot3"]
+margin_left = 30.0
+margin_right = 110.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 80, 30 )
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot3"]
+margin_right = 33.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+rect_clip_content = true
+size_flags_horizontal = 4
+text = "Head"
+align = 1
+valign = 1
+
+[node name="ArmorSlot4" type="Control" parent="PlayerInfo/Armor"]
+margin_right = 110.0
+margin_bottom = 30.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot4"]
+margin_left = 30.0
+margin_right = 110.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 80, 30 )
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot4"]
+margin_right = 33.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+rect_clip_content = true
+size_flags_horizontal = 4
+text = "Head"
+align = 1
+valign = 1
+
+[node name="ArmorSlot5" type="Control" parent="PlayerInfo/Armor"]
+margin_right = 110.0
+margin_bottom = 30.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot5"]
+margin_left = 30.0
+margin_right = 110.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 80, 30 )
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot5"]
+margin_right = 33.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+rect_clip_content = true
+size_flags_horizontal = 4
+text = "Head"
+align = 1
+valign = 1
+
+[node name="ArmorSlot6" type="Control" parent="PlayerInfo/Armor"]
+margin_right = 110.0
+margin_bottom = 30.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot6"]
+margin_left = 30.0
+margin_right = 110.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 80, 30 )
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot6"]
+margin_right = 33.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+rect_clip_content = true
+size_flags_horizontal = 4
+text = "Head"
+align = 1
+valign = 1
+
+[node name="ArmorSlot7" type="Control" parent="PlayerInfo/Armor"]
+margin_right = 110.0
+margin_bottom = 30.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot7"]
+margin_left = 30.0
+margin_right = 110.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 80, 30 )
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot7"]
+margin_right = 33.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+rect_clip_content = true
+size_flags_horizontal = 4
+text = "Head"
+align = 1
+valign = 1
+
+[node name="ArmorSlot8" type="Control" parent="PlayerInfo/Armor"]
+margin_right = 110.0
+margin_bottom = 30.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot8"]
+margin_left = 30.0
+margin_right = 110.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 80, 30 )
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot8"]
+margin_right = 33.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+rect_clip_content = true
+size_flags_horizontal = 4
+text = "Head"
+align = 1
+valign = 1
+
+[node name="ArmorSlot9" type="Control" parent="PlayerInfo/Armor"]
+margin_right = 110.0
+margin_bottom = 30.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot9"]
+margin_left = 30.0
+margin_right = 110.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 80, 30 )
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot9"]
+margin_right = 33.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+rect_clip_content = true
+size_flags_horizontal = 4
+text = "Head"
+align = 1
+valign = 1
+
+[node name="ArmorSlot10" type="Control" parent="PlayerInfo/Armor"]
+margin_right = 110.0
+margin_bottom = 30.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot10"]
+margin_left = 30.0
+margin_right = 110.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 80, 30 )
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot10"]
+margin_right = 33.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 30, 30 )
+rect_clip_content = true
+size_flags_horizontal = 4
+text = "Head"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="HeadEquip" type="RichTextLabel" parent="PlayerInfo"]
 visible = false
@@ -331,5 +557,15 @@ scroll_following = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot" to="." method="_on_ArmorSlot_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot2" to="." method="_on_ArmorSlot2_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot3" to="." method="_on_ArmorSlot3_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot4" to="." method="_on_ArmorSlot4_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot5" to="." method="_on_ArmorSlot5_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot6" to="." method="_on_ArmorSlot6_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot7" to="." method="_on_ArmorSlot7_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot8" to="." method="_on_ArmorSlot8_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot9" to="." method="_on_ArmorSlot9_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot10" to="." method="_on_ArmorSlot10_mouse_entered"]
 [connection signal="mouse_entered" from="PlayerInfo/EquippedWeapon" to="." method="_on_EquippedWeapon_mouse_entered"]
 [connection signal="mouse_entered" from="PlayerInfo/EquippedWeapon2" to="." method="_on_EquippedWeapon2_mouse_entered"]
