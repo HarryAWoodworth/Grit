@@ -35,21 +35,22 @@ __meta__ = {
 }
 
 [node name="healthbody" type="Sprite" parent="PlayerInfo"]
-position = Vector2( 53.5313, 79.0571 )
+position = Vector2( 53.531, 79 )
 scale = Vector2( 0.177423, 0.177002 )
 texture = ExtResource( 2 )
 
 [node name="Armor" type="Control" parent="PlayerInfo"]
 margin_left = 97.0
 margin_right = 317.0
-margin_bottom = 150.0
+margin_bottom = 157.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ArmorSlot" type="Control" parent="PlayerInfo/Armor"]
+margin_top = 3.0
 margin_right = 110.0
-margin_bottom = 30.0
+margin_bottom = 18.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -58,23 +59,28 @@ __meta__ = {
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot"]
 margin_left = 30.0
 margin_right = 110.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 80, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot"]
-margin_right = 33.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 30, 30 )
+margin_left = 1.0
+margin_right = 38.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 30, 15 )
 rect_clip_content = true
 size_flags_horizontal = 4
-text = "Head"
+text = "Head:"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ArmorSlot2" type="Control" parent="PlayerInfo/Armor"]
+margin_top = 20.0
 margin_right = 110.0
-margin_bottom = 30.0
+margin_bottom = 35.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -83,23 +89,27 @@ __meta__ = {
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot2"]
 margin_left = 30.0
 margin_right = 110.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 80, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot2"]
 margin_right = 33.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 30, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 30, 15 )
 rect_clip_content = true
 size_flags_horizontal = 4
-text = "Head"
+text = "Face:"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ArmorSlot3" type="Control" parent="PlayerInfo/Armor"]
+margin_top = 38.0
 margin_right = 110.0
-margin_bottom = 30.0
+margin_bottom = 53.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -108,23 +118,27 @@ __meta__ = {
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot3"]
 margin_left = 30.0
 margin_right = 110.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 80, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot3"]
-margin_right = 33.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 30, 30 )
+margin_right = 39.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 30, 15 )
 rect_clip_content = true
 size_flags_horizontal = 4
-text = "Head"
+text = "Torso:"
 align = 1
 valign = 1
 
 [node name="ArmorSlot4" type="Control" parent="PlayerInfo/Armor"]
+margin_top = 57.0
 margin_right = 110.0
-margin_bottom = 30.0
+margin_bottom = 72.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -133,23 +147,24 @@ __meta__ = {
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot4"]
 margin_left = 30.0
 margin_right = 110.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 80, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot4"]
-margin_right = 33.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 30, 30 )
+margin_right = 41.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 30, 15 )
 rect_clip_content = true
 size_flags_horizontal = 4
-text = "Head"
+text = "Jacket:"
 align = 1
 valign = 1
 
 [node name="ArmorSlot5" type="Control" parent="PlayerInfo/Armor"]
+margin_top = 76.0
 margin_right = 110.0
-margin_bottom = 30.0
+margin_bottom = 91.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -158,23 +173,24 @@ __meta__ = {
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot5"]
 margin_left = 30.0
 margin_right = 110.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 80, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot5"]
-margin_right = 33.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 30, 30 )
+margin_right = 34.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 30, 15 )
 rect_clip_content = true
 size_flags_horizontal = 4
-text = "Head"
+text = "Back:"
 align = 1
 valign = 1
 
 [node name="ArmorSlot6" type="Control" parent="PlayerInfo/Armor"]
+margin_top = 93.0
 margin_right = 110.0
-margin_bottom = 30.0
+margin_bottom = 108.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -183,23 +199,24 @@ __meta__ = {
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot6"]
 margin_left = 30.0
 margin_right = 110.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 80, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot6"]
-margin_right = 33.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 30, 30 )
+margin_right = 44.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 30, 15 )
 rect_clip_content = true
 size_flags_horizontal = 4
-text = "Head"
+text = "Hands:"
 align = 1
 valign = 1
 
 [node name="ArmorSlot7" type="Control" parent="PlayerInfo/Armor"]
+margin_top = 110.0
 margin_right = 110.0
-margin_bottom = 30.0
+margin_bottom = 125.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -208,23 +225,27 @@ __meta__ = {
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot7"]
 margin_left = 30.0
 margin_right = 110.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 80, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot7"]
 margin_right = 33.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 30, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 30, 15 )
 rect_clip_content = true
 size_flags_horizontal = 4
-text = "Head"
+text = "Legs:"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ArmorSlot8" type="Control" parent="PlayerInfo/Armor"]
+margin_top = 126.0
 margin_right = 110.0
-margin_bottom = 30.0
+margin_bottom = 141.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -233,23 +254,25 @@ __meta__ = {
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot8"]
 margin_left = 30.0
 margin_right = 110.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 80, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot8"]
-margin_right = 33.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 30, 30 )
+margin_left = -0.000358582
+margin_right = 49.9996
+margin_bottom = 15.0
+rect_min_size = Vector2( 30, 15 )
 rect_clip_content = true
 size_flags_horizontal = 4
-text = "Head"
+text = "LgArmr:"
 align = 1
 valign = 1
 
 [node name="ArmorSlot9" type="Control" parent="PlayerInfo/Armor"]
+margin_top = 143.0
 margin_right = 110.0
-margin_bottom = 30.0
+margin_bottom = 158.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -258,42 +281,17 @@ __meta__ = {
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot9"]
 margin_left = 30.0
 margin_right = 110.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 80, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot9"]
 margin_right = 33.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 30, 30 )
+margin_bottom = 15.0
+rect_min_size = Vector2( 30, 15 )
 rect_clip_content = true
 size_flags_horizontal = 4
-text = "Head"
-align = 1
-valign = 1
-
-[node name="ArmorSlot10" type="Control" parent="PlayerInfo/Armor"]
-margin_right = 110.0
-margin_bottom = 30.0
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot10"]
-margin_left = 30.0
-margin_right = 110.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 80, 30 )
-mouse_filter = 2
-
-[node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot10"]
-margin_right = 33.0
-margin_bottom = 30.0
-rect_min_size = Vector2( 30, 30 )
-rect_clip_content = true
-size_flags_horizontal = 4
-text = "Head"
+text = "Feet:"
 align = 1
 valign = 1
 __meta__ = {
@@ -558,14 +556,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 [connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot" to="." method="_on_ArmorSlot_mouse_entered"]
-[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot2" to="." method="_on_ArmorSlot2_mouse_entered"]
-[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot3" to="." method="_on_ArmorSlot3_mouse_entered"]
-[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot4" to="." method="_on_ArmorSlot4_mouse_entered"]
-[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot5" to="." method="_on_ArmorSlot5_mouse_entered"]
-[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot6" to="." method="_on_ArmorSlot6_mouse_entered"]
-[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot7" to="." method="_on_ArmorSlot7_mouse_entered"]
-[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot8" to="." method="_on_ArmorSlot8_mouse_entered"]
-[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot9" to="." method="_on_ArmorSlot9_mouse_entered"]
-[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot10" to="." method="_on_ArmorSlot10_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot2" to="." method="_on_ArmorSlot_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot3" to="." method="_on_ArmorSlot_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot4" to="." method="_on_ArmorSlot_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot5" to="." method="_on_ArmorSlot_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot6" to="." method="_on_ArmorSlot_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot7" to="." method="_on_ArmorSlot_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot8" to="." method="_on_ArmorSlot_mouse_entered"]
+[connection signal="mouse_entered" from="PlayerInfo/Armor/ArmorSlot9" to="." method="_on_ArmorSlot_mouse_entered"]
 [connection signal="mouse_entered" from="PlayerInfo/EquippedWeapon" to="." method="_on_EquippedWeapon_mouse_entered"]
 [connection signal="mouse_entered" from="PlayerInfo/EquippedWeapon2" to="." method="_on_EquippedWeapon2_mouse_entered"]
