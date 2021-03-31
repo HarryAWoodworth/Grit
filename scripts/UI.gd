@@ -2,16 +2,15 @@ extends CanvasLayer
 
 onready var EquippedWeapon1 = $PlayerInfo/EquippedWeapon
 onready var EquippedWeapon2 = $PlayerInfo/EquippedWeapon2
-onready var ArmorSlot1 = $PlayerInfo/ArmorSlot
-onready var ArmorSlot2 = $PlayerInfo/ArmorSlot2
-onready var ArmorSlot3 = $PlayerInfo/ArmorSlot3
-onready var ArmorSlot4 = $PlayerInfo/ArmorSlot4
-onready var ArmorSlot5 = $PlayerInfo/ArmorSlot5
-onready var ArmorSlot6 = $PlayerInfo/ArmorSlot6
-onready var ArmorSlot7 = $PlayerInfo/ArmorSlot7
-onready var ArmorSlot8 = $PlayerInfo/ArmorSlot8
-onready var ArmorSlot9 = $PlayerInfo/ArmorSlot9
-onready var ArmorSlot10 = $PlayerInfo/ArmorSlot10
+onready var ArmorSlot1 = $PlayerInfo/Armor/ArmorSlot
+onready var ArmorSlot2 = $PlayerInfo/Armor/ArmorSlot2
+onready var ArmorSlot3 = $PlayerInfo/Armor/ArmorSlot3
+onready var ArmorSlot4 = $PlayerInfo/Armor/ArmorSlot4
+onready var ArmorSlot5 = $PlayerInfo/Armor/ArmorSlot5
+onready var ArmorSlot6 = $PlayerInfo/Armor/ArmorSlot6
+onready var ArmorSlot7 = $PlayerInfo/Armor/ArmorSlot7
+onready var ArmorSlot8 = $PlayerInfo/Armor/ArmorSlot8
+onready var ArmorSlot9 = $PlayerInfo/Armor/ArmorSlot9
 
 
 var game
