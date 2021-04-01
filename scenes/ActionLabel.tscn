@@ -1,12 +1,13 @@
 [gd_scene format=2]
 
 [node name="Label" type="Label"]
-margin_top = 78.0
-margin_right = 138.0
-margin_bottom = 98.0
-rect_min_size = Vector2( 136, 20 )
-size_flags_horizontal = 3
-size_flags_vertical = 6
+margin_right = 42.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+size_flags_horizontal = 2
 text = "TEST"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

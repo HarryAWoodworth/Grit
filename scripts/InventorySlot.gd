@@ -20,6 +20,19 @@ func init(item_, num_, game_, onGround_=true):
 	onGround = onGround_
 	count.text = "x" + str(num)
 
+func hide_name():
+	text.hide()
+	# Icon and count next to each other (each 32)
+	# Plus a 4 pixel gap for niceness
+	rect_min_size.x = 68
+	rect.rect_size.x = 68
+	count.position.x = 36
+
+func show_name():
+	text.show()
+	rect_min_size.x = 200
+	rect.rect_size.x = 200
+
 func remove_item():
 	change_count(-1)
 

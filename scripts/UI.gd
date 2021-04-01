@@ -51,6 +51,3 @@ func _on_ArmorSlot8_mouse_entered():
 func _on_ArmorSlot9_mouse_entered():
 	if ArmorSlot9.equipped:
 		game.show_armor_info_ui(ArmorSlot9)
-func _on_ArmorSlot10_mouse_entered():
-	if ArmorSlot10.equipped:
-		game.show_armor_info_ui(ArmorSlot10)

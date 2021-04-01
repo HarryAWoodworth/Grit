@@ -1,7 +1,7 @@
 extends Control
 
 onready var Icon = $EquippedWeaponImage
-onready var Name = $EquippedWeaponName
+#onready var Name = $EquippedWeaponName
 onready var HandUse = $HandUseLabel
 onready var Ammo = $CurrentAmmo
 
@@ -26,13 +26,13 @@ func clear():
 	slot = ""
 	equipped = false
 	Icon.hide()
-	Name.hide()
+	#Name.hide()
 	HandUse.hide()
 	Ammo.hide()
 
 func reveal():
 	Icon.show()
-	Name.show()
+	#Name.show()
 	HandUse.show()
 	Ammo.show()
 	equipped = true
@@ -40,9 +40,7 @@ func reveal():
 
 # Deletes the Item
 func remove_item():
-	#var tempitem = item
 	item = null
-	#tempitem.queue_free()
 	
 func toString():
 	print("EQUIPMENT SLOT!")

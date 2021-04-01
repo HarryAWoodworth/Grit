@@ -180,7 +180,7 @@ onready var InfoPanel = $UI/InfoPanel
 onready var Mouse_Detection = $Mouse_Detection
 onready var Input_Manager = $Input_Manager
 onready var UI = $UI
-onready var HealthBar = $UI/PlayerInfo/HealthRect
+onready var HealthBar = $UI/PlayerInfo/HealthIndicator/HealthRect
 onready var EquippedWeapon1 = $UI/PlayerInfo/EquippedWeapon
 onready var EquippedWeapon2 = $UI/PlayerInfo/EquippedWeapon2
 onready var Action_Parser = $Action_Parser
@@ -582,13 +582,19 @@ func show_invslot_info_ui(invslot):
 
 func show_equipment_info_ui(equipslot):
 	#equipslot.toString()
-	InfoPanel.hide()
-	InfoPanel.clear()
-	InfoPanel.Icon.texture = load_tex(equipslot.item)
-	InfoPanel.Icon.show()
-	InfoPanel.Description.text = equipslot.item.description
-	addActionsInfoPanel(equipslot)
-	InfoPanel.show()
+	if equipslot.item != null:
+		InfoPanel.hide()
+		InfoPanel.clear()
+		InfoPanel.Icon.texture = load_tex(equipslot.item)
+		InfoPanel.Icon.show()
+		InfoPanel.Description.text = equipslot.item.description
+		addActionsInfoPanel(equipslot)
+		InfoPanel.show()
+	else:
+		print("Game.show_equipment_info_ui(): ERROR: Equipslot item null.")
+
+func show_armor_info_ui(armorslot):
+	pass
 
 # Bring the added ui class into "focus", so it's item has actions attached to it
 func addActionsInfoPanel(ui):
@@ -731,7 +737,7 @@ func update_equipment_ui():
 		EquippedWeapon1.hide()
 		EquippedWeapon1.Icon.texture = load_big_tex(both_item)
 		EquippedWeapon1.HandUse.text = "LR"
-		EquippedWeapon1.Name.bbcode_text = both_item.name_specialized
+		#EquippedWeapon1.Name.bbcode_text = both_item.name_specialized
 		EquippedWeapon1.set_item(both_item)
 		EquippedWeapon1.set_slot("both-1")
 		EquippedWeapon1.reveal()
@@ -750,7 +756,7 @@ func update_equipment_ui():
 		if right_item != null:
 			EquippedWeapon1.Icon.texture = load_big_tex(right_item)
 			EquippedWeapon1.HandUse.text = "R"
-			EquippedWeapon1.Name.bbcode_text = right_item.name_specialized
+			#EquippedWeapon1.Name.bbcode_text = right_item.name_specialized
 			EquippedWeapon1.set_item(right_item)
 			EquippedWeapon1.set_slot("right")
 			EquippedWeapon1.reveal()
@@ -762,7 +768,7 @@ func update_equipment_ui():
 		if left_item != null:
 			EquippedWeapon2.Icon.texture = load_big_tex(left_item)
 			EquippedWeapon2.HandUse.text = "L"
-			EquippedWeapon2.Name.bbcode_text = left_item.name_specialized
+			#EquippedWeapon2.Name.bbcode_text = left_item.name_specialized
 			EquippedWeapon2.set_item(left_item)
 			EquippedWeapon1.set_slot("left")
 			EquippedWeapon1.reveal()

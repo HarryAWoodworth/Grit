@@ -16,32 +16,39 @@ script = ExtResource( 4 )
 
 [node name="PlayerInfo" type="ColorRect" parent="."]
 margin_left = 11.0
-margin_top = 10.1141
-margin_right = 421.0
-margin_bottom = 275.114
+margin_top = 16.0
+margin_right = 319.0
+margin_bottom = 254.0
+rect_pivot_offset = Vector2( 281.908, 42.5 )
 color = Color( 0, 0, 0, 0.129412 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HealthRect" type="ColorRect" parent="PlayerInfo"]
-margin_left = 11.0
-margin_right = 97.0
-margin_bottom = 158.0
-size_flags_vertical = 9
-color = Color( 0.733333, 0.121569, 0.121569, 1 )
+[node name="HealthIndicator" type="Control" parent="PlayerInfo"]
+margin_right = 40.0
+margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="healthbody" type="Sprite" parent="PlayerInfo"]
-position = Vector2( 53.531, 79 )
-scale = Vector2( 0.177423, 0.177002 )
+[node name="HealthRect" type="ColorRect" parent="PlayerInfo/HealthIndicator"]
+margin_right = 86.0
+margin_bottom = 157.0
+size_flags_vertical = 9
+color = Color( 0.211765, 0.729412, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="healthbody" type="Sprite" parent="PlayerInfo/HealthIndicator"]
+scale = Vector2( 0.177, 0.177 )
 texture = ExtResource( 2 )
+centered = false
 
 [node name="Armor" type="Control" parent="PlayerInfo"]
-margin_left = 97.0
-margin_right = 317.0
+margin_left = 88.0
+margin_right = 308.0
 margin_bottom = 157.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -49,7 +56,7 @@ __meta__ = {
 
 [node name="ArmorSlot" type="Control" parent="PlayerInfo/Armor"]
 margin_top = 3.0
-margin_right = 110.0
+margin_right = 219.0
 margin_bottom = 18.0
 script = ExtResource( 3 )
 __meta__ = {
@@ -57,15 +64,14 @@ __meta__ = {
 }
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot"]
-margin_left = 30.0
-margin_right = 110.0
+margin_left = 39.0
+margin_right = 220.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot"]
-margin_left = 1.0
-margin_right = 38.0
+margin_right = 37.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 30, 15 )
 rect_clip_content = true
@@ -79,7 +85,7 @@ __meta__ = {
 
 [node name="ArmorSlot2" type="Control" parent="PlayerInfo/Armor"]
 margin_top = 20.0
-margin_right = 110.0
+margin_right = 219.0
 margin_bottom = 35.0
 script = ExtResource( 3 )
 __meta__ = {
@@ -87,8 +93,8 @@ __meta__ = {
 }
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot2"]
-margin_left = 30.0
-margin_right = 110.0
+margin_left = 37.0
+margin_right = 220.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
@@ -108,7 +114,7 @@ __meta__ = {
 
 [node name="ArmorSlot3" type="Control" parent="PlayerInfo/Armor"]
 margin_top = 38.0
-margin_right = 110.0
+margin_right = 219.0
 margin_bottom = 53.0
 script = ExtResource( 3 )
 __meta__ = {
@@ -116,8 +122,8 @@ __meta__ = {
 }
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot3"]
-margin_left = 30.0
-margin_right = 110.0
+margin_left = 44.0
+margin_right = 220.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
@@ -137,7 +143,7 @@ valign = 1
 
 [node name="ArmorSlot4" type="Control" parent="PlayerInfo/Armor"]
 margin_top = 57.0
-margin_right = 110.0
+margin_right = 219.0
 margin_bottom = 72.0
 script = ExtResource( 3 )
 __meta__ = {
@@ -145,8 +151,8 @@ __meta__ = {
 }
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot4"]
-margin_left = 30.0
-margin_right = 110.0
+margin_left = 44.0
+margin_right = 220.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
@@ -163,7 +169,7 @@ valign = 1
 
 [node name="ArmorSlot5" type="Control" parent="PlayerInfo/Armor"]
 margin_top = 76.0
-margin_right = 110.0
+margin_right = 219.0
 margin_bottom = 91.0
 script = ExtResource( 3 )
 __meta__ = {
@@ -171,8 +177,8 @@ __meta__ = {
 }
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot5"]
-margin_left = 30.0
-margin_right = 110.0
+margin_left = 37.0
+margin_right = 220.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
@@ -189,7 +195,7 @@ valign = 1
 
 [node name="ArmorSlot6" type="Control" parent="PlayerInfo/Armor"]
 margin_top = 93.0
-margin_right = 110.0
+margin_right = 219.0
 margin_bottom = 108.0
 script = ExtResource( 3 )
 __meta__ = {
@@ -197,11 +203,14 @@ __meta__ = {
 }
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot6"]
-margin_left = 30.0
-margin_right = 110.0
+margin_left = 50.0
+margin_right = 220.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label" type="Label" parent="PlayerInfo/Armor/ArmorSlot6"]
 margin_right = 44.0
@@ -215,7 +224,7 @@ valign = 1
 
 [node name="ArmorSlot7" type="Control" parent="PlayerInfo/Armor"]
 margin_top = 110.0
-margin_right = 110.0
+margin_right = 219.0
 margin_bottom = 125.0
 script = ExtResource( 3 )
 __meta__ = {
@@ -223,8 +232,8 @@ __meta__ = {
 }
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot7"]
-margin_left = 30.0
-margin_right = 110.0
+margin_left = 37.0
+margin_right = 220.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
@@ -244,7 +253,7 @@ __meta__ = {
 
 [node name="ArmorSlot8" type="Control" parent="PlayerInfo/Armor"]
 margin_top = 126.0
-margin_right = 110.0
+margin_right = 219.0
 margin_bottom = 141.0
 script = ExtResource( 3 )
 __meta__ = {
@@ -252,8 +261,8 @@ __meta__ = {
 }
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot8"]
-margin_left = 30.0
-margin_right = 110.0
+margin_left = 55.0
+margin_right = 220.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
@@ -271,7 +280,7 @@ valign = 1
 
 [node name="ArmorSlot9" type="Control" parent="PlayerInfo/Armor"]
 margin_top = 143.0
-margin_right = 110.0
+margin_right = 219.0
 margin_bottom = 158.0
 script = ExtResource( 3 )
 __meta__ = {
@@ -279,8 +288,8 @@ __meta__ = {
 }
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PlayerInfo/Armor/ArmorSlot9"]
-margin_left = 30.0
-margin_right = 110.0
+margin_left = 34.0
+margin_right = 220.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 80, 15 )
 mouse_filter = 2
@@ -298,69 +307,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HeadEquip" type="RichTextLabel" parent="PlayerInfo"]
-visible = false
-margin_left = 103.0
-margin_top = 6.0
-margin_right = 216.0
-margin_bottom = 19.0
-text = "HEAD"
-scroll_active = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TorsoEquip" type="RichTextLabel" parent="PlayerInfo"]
-visible = false
-margin_left = 103.0
-margin_top = 42.5
-margin_right = 216.0
-margin_bottom = 55.5
-text = "TORSO"
-scroll_active = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HandsEquip" type="RichTextLabel" parent="PlayerInfo"]
-visible = false
-margin_left = 103.0
-margin_top = 76.5
-margin_right = 216.0
-margin_bottom = 89.5
-text = "HANDS"
-scroll_active = false
-
-[node name="LegsEquip" type="RichTextLabel" parent="PlayerInfo"]
-visible = false
-margin_left = 103.0
-margin_top = 110.5
-margin_right = 216.0
-margin_bottom = 123.5
-text = "LEGS"
-scroll_active = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="FeetEquip" type="RichTextLabel" parent="PlayerInfo"]
-visible = false
-margin_left = 102.0
-margin_top = 144.0
-margin_right = 215.0
-margin_bottom = 157.0
-text = "FEET"
-scroll_active = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="EquippedWeapon" type="Control" parent="PlayerInfo"]
 visible = false
-margin_left = 10.0
-margin_top = 175.0
-margin_right = 400.0
-margin_bottom = 215.0
+margin_top = 158.0
+margin_right = 307.0
+margin_bottom = 198.0
 rect_clip_content = true
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -369,9 +320,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="HandUseLabel" type="Label" parent="PlayerInfo/EquippedWeapon"]
+margin_left = 10.4142
+margin_top = 12.638
+margin_right = 25.4142
+margin_bottom = 26.638
+text = "LR"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="EquippedWeaponImage" type="TextureRect" parent="PlayerInfo/EquippedWeapon"]
-margin_left = 19.0
-margin_right = 149.0
+margin_left = 40.0
+margin_right = 247.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 130, 40 )
 rect_clip_content = true
@@ -382,37 +345,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HandUseLabel" type="Label" parent="PlayerInfo/EquippedWeapon"]
-margin_top = 12.638
-margin_right = 15.0
-margin_bottom = 26.638
-text = "LR"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="EquippedWeaponName" type="RichTextLabel" parent="PlayerInfo/EquippedWeapon"]
-margin_left = 151.0
-margin_top = 11.0
-margin_right = 344.0
-margin_bottom = 31.0
-mouse_filter = 2
-bbcode_enabled = true
-bbcode_text = "[b]AK-47[/b]"
-text = "AK-47"
-__meta__ = {
-"_edit_use_anchors_": false,
-"_editor_description_": "
-"
-}
-
 [node name="CurrentAmmo" type="Label" parent="PlayerInfo/EquippedWeapon"]
-margin_left = 330.0
-margin_top = 11.0
-margin_right = 390.0
-margin_bottom = 25.0
+margin_left = 247.11
+margin_top = 12.638
+margin_right = 307.11
+margin_bottom = 26.638
 text = "30/30"
 align = 1
 valign = 1
@@ -422,10 +359,10 @@ __meta__ = {
 
 [node name="EquippedWeapon2" type="Control" parent="PlayerInfo"]
 visible = false
-margin_left = 10.4142
-margin_top = 215.0
-margin_right = 400.414
-margin_bottom = 255.0
+margin_left = -1.0
+margin_top = 198.0
+margin_right = 308.0
+margin_bottom = 238.0
 rect_clip_content = true
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -434,9 +371,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="HandUseLabel" type="Label" parent="PlayerInfo/EquippedWeapon2"]
+margin_left = 11.4142
+margin_top = 11.638
+margin_right = 26.4142
+margin_bottom = 25.638
+text = "LR"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="EquippedWeaponImage" type="TextureRect" parent="PlayerInfo/EquippedWeapon2"]
-margin_left = 19.0
-margin_right = 149.0
+margin_left = 41.0
+margin_right = 248.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 130, 40 )
 rect_clip_content = true
@@ -447,37 +396,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HandUseLabel" type="Label" parent="PlayerInfo/EquippedWeapon2"]
-margin_top = 11.638
-margin_right = 15.0
-margin_bottom = 25.638
-text = "LR"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="EquippedWeaponName" type="RichTextLabel" parent="PlayerInfo/EquippedWeapon2"]
-margin_left = 151.0
-margin_top = 11.0
-margin_right = 344.0
-margin_bottom = 31.0
-mouse_filter = 2
-bbcode_enabled = true
-bbcode_text = "[b]AK-47[/b]"
-text = "AK-47"
-__meta__ = {
-"_edit_use_anchors_": false,
-"_editor_description_": "
-"
-}
-
 [node name="CurrentAmmo" type="Label" parent="PlayerInfo/EquippedWeapon2"]
-margin_left = 330.0
-margin_top = 11.0
-margin_right = 390.0
-margin_bottom = 25.0
+margin_left = 248.11
+margin_top = 11.638
+margin_right = 308.11
+margin_bottom = 25.638
 text = "30/30"
 align = 1
 valign = 1
@@ -487,9 +410,12 @@ __meta__ = {
 
 [node name="InfoPanel" type="ColorRect" parent="."]
 margin_left = 10.0
-margin_top = 285.0
-margin_right = 420.0
-margin_bottom = 590.0
+margin_top = 265.0
+margin_right = 319.0
+margin_bottom = 498.0
+rect_clip_content = true
+size_flags_horizontal = 4
+size_flags_vertical = 4
 color = Color( 0.0745098, 0.0745098, 0.0745098, 0.309804 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -497,36 +423,56 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="InfoPanel"]
-margin_left = 20.0
-margin_top = 10.0
-margin_right = 148.0
-margin_bottom = 138.0
+margin_right = 128.0
+margin_bottom = 128.0
 stretch_mode = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GridContainer" type="GridContainer" parent="InfoPanel"]
-margin_left = 11.4142
-margin_top = 148.0
-margin_right = 401.414
-margin_bottom = 295.0
-columns = 3
+[node name="Description" type="Label" parent="InfoPanel"]
+margin_left = 144.0
+margin_right = 308.0
+margin_bottom = 64.0
+align = 1
+valign = 1
+autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="InfoPanel"]
-margin_left = 150.0
-margin_top = 10.0
-margin_right = 402.0
+[node name="Special" type="Label" parent="InfoPanel"]
+margin_left = 144.0
+margin_top = 64.0
+margin_right = 308.0
 margin_bottom = 128.0
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="InfoPanel"]
+margin_top = 128.0
+margin_right = 308.0
+margin_bottom = 233.0
+rect_min_size = Vector2( 308, 105 )
+rect_clip_content = true
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_constants/vseparation = 1
+custom_constants/hseparation = 1
+columns = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="InventoryScroller" type="ScrollContainer" parent="."]
-margin_left = 10.0
-margin_top = 600.0
-margin_right = 210.0
-margin_bottom = 930.0
+margin_left = 11.0
+margin_top = 512.448
+margin_right = 211.0
+margin_bottom = 842.448
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -535,9 +481,9 @@ __meta__ = {
 
 [node name="GroundScroller" type="ScrollContainer" parent="."]
 margin_left = 220.0
-margin_top = 600.0
+margin_top = 512.448
 margin_right = 420.0
-margin_bottom = 930.0
+margin_bottom = 842.448
 __meta__ = {
 "_edit_use_anchors_": false
 }

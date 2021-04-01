@@ -24,7 +24,7 @@ func init(uid_counter_=0):
 		if !line.strip_escapes().begins_with("//"):
 			#print("Comment: " + line)
 			json += line
-	print(json)
+	#print(json)
 	# Read as JSON
 	var json_parse = JSON.parse(json)
 	#print(json_parse.error_string)
