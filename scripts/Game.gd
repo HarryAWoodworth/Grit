@@ -9,7 +9,6 @@
 ## PLAYER INTERACTION
 # [4] Burstfire turn action
 #	{?} What if each bullet is 1 small action and kept the aim state? (Would be like shooting moving targets coming at you)
-# [1] Reloading Gun (Ammo, removing ammo, turn action)
 # [2] Melee Weapons
 # [3] Melee Combat, turn action
 # [5] Player armor equipment
