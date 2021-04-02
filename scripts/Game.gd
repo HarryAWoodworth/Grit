@@ -211,6 +211,7 @@ var world_running = false
 # What invslot is focused
 var focus
 var focused_actions
+var aiming = false
 
 ## UI
 var health_bar_max
@@ -657,6 +658,17 @@ func addActionsInfoPanel(ui):
 		# Add Unequip action
 		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] Drop",     0,       "action_button_move_inv")
 		focused_actions.append("action_button_move_inv")
+		
+		if "type" in focus.item and focus.item.type == "ranged":
+			
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use")[0].as_text() + " ] Aim",     0,      "action_button_use")
+			focused_actions.append("action_button_use")
+			
+			if focus.item.current_ammo < focus.item.max_ammo:
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_reload")[0].as_text() + " ] Reload",     0,      "action_button_reload")
+				# Covered by user input
+				#focused_actions.append("action_button_reload")
+			
 
 # Do an action witht the focused UI Item and available actions. Called from Input_Manager
 func do_action(action):
@@ -665,6 +677,10 @@ func do_action(action):
 		#print("Game.do_action(): Has action " + action)
 		match action:
 			# Equip weapon from ground or inventory
+			"action_button_use":
+				if "type" in focus.item and focus.item.type == "ranged":
+					aiming = !aiming
+					print("Game.do_action(): Aiming?:" + str(aiming))
 			"action_button_equip":
 				if "onGround" in focus:
 					if focus.onGround:
@@ -807,6 +823,8 @@ func player_health_update_ui(ratio):
 func reload_from_inv(num,ammo_id):
 	var removedItem
 	var numInInv = player.inventory.num_of_item(ammo_id)
+	if numInInv == null or numInInv <= 0:
+		return 0
 	print("GAME.reload_from_inv(): There are " + str(numInInv) + " in player inventory.")
 	if num > numInInv:
 		removedItem = player.inventory.remove_all_items_by_id(ammo_id)

@@ -19,19 +19,19 @@ func init(item_, num_, game_, onGround_=true):
 	game = game_
 	onGround = onGround_
 	count.text = "x" + str(num)
+	shrink()
 
-func hide_name():
+func shrink():
 	text.hide()
 	# Icon and count next to each other (each 32)
 	# Plus a 4 pixel gap for niceness
-	rect_min_size.x = 68
 	rect.rect_size.x = 68
-	count.position.x = 36
+	count.rect_position.x = 36
 
-func show_name():
+func expand():
 	text.show()
-	rect_min_size.x = 200
 	rect.rect_size.x = 200
+	count.rect_position.x = 167
 
 func remove_item():
 	change_count(-1)
@@ -45,11 +45,13 @@ func change_count(dec):
 	count.text = "x" + str(num)
 
 func _on_InventorySlot_mouse_entered():
+	expand()
 	rect.color = Color(0.30,0.30,0.50)
 	game.show_invslot_info_ui(self)
 
 func _on_InventorySlot_mouse_exited():
 	rect.color = Color(0.37,0.37,0.37)
+	shrink()
 
 # If double clicked, call ground_item_selected() in game 
 func _on_InventorySlot_gui_input(event):

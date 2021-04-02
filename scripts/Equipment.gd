@@ -124,6 +124,9 @@ func reload():
 	if both_hands != null and both_hands.max_ammo != null:
 		# game.reload_from_inv removes bullets from inventory and returns number of bullets removed
 		toReload = game.reload_from_inv(both_hands.max_ammo - both_hands.current_ammo, both_hands.ammo_type)
+		if toReload == 0:
+			print("Equipment.reload(): No bullets to reload")
+			return false
 		both_hands.current_ammo = both_hands.current_ammo + toReload
 		game.update_equipment_ui_ammo("both_hands", both_hands)
 	else:

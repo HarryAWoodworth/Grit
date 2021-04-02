@@ -470,9 +470,9 @@ __meta__ = {
 
 [node name="InventoryScroller" type="ScrollContainer" parent="."]
 margin_left = 11.0
-margin_top = 512.448
+margin_top = 512.0
 margin_right = 211.0
-margin_bottom = 842.448
+margin_bottom = 927.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -481,9 +481,9 @@ __meta__ = {
 
 [node name="GroundScroller" type="ScrollContainer" parent="."]
 margin_left = 220.0
-margin_top = 512.448
+margin_top = 512.0
 margin_right = 420.0
-margin_bottom = 842.448
+margin_bottom = 927.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -493,7 +493,7 @@ __meta__ = {
 [node name="TextLog" type="RichTextLabel" parent="."]
 margin_left = 10.0
 margin_top = 940.0
-margin_right = 420.0
+margin_right = 319.0
 margin_bottom = 1070.0
 custom_styles/normal = SubResource( 1 )
 scroll_active = false

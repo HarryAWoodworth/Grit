@@ -15,9 +15,11 @@ func _process(_delta):
 	update()
 
 func _draw():
-	var mouse_position = get_global_mouse_position()
-	draw_line(Vector2(game.player.position.x + half_tile,game.player.position.y + half_tile), mouse_position, Color(1,0,0,1))
-	draw_circle(mouse_position, 10, Color(1,0,0,1))
+	# TODO maybe just remove node if not aiming?
+	if game.aiming:
+		var mouse_position = get_global_mouse_position()
+		draw_line(Vector2(game.player.position.x + half_tile,game.player.position.y + half_tile), mouse_position, Color(1,0,0,1))
+		draw_circle(mouse_position, 10, Color(1,0,0,1))
 
 func _input(event):
 	pass   

@@ -25,6 +25,8 @@ func _input(event):
 		return
 
 	### MOVEMENT KEYS
+	if event.is_action_pressed("action_button_use_1"):
+			action("click")
 	if event.is_action_pressed("move_left"):
 			if game.move_actor_vect(player,Vector2(-1,0)):
 				action("move")
@@ -62,6 +64,8 @@ func _input(event):
 			action("action_button_move_inv_spec")
 		else:
 			action("action_button_move_inv")
+	elif event.is_action_pressed("action_button_use"):
+		action("action_button_use")
 	elif event.is_action_pressed("action_button_use_1"):
 		action("action_button_use_1")
 	elif event.is_action_pressed("action_button_use_2"):
@@ -76,6 +80,8 @@ func _input(event):
 # Schedule an action with the game based on a string
 func action(action):
 	match action:
+		"click":
+			player.shoot()
 		"move":
 			game.ticker.schedule_action(player,player.speed)
 			game.run_until_player_turn()
@@ -85,6 +91,8 @@ func action(action):
 		"action_button_move_inv":
 			game.do_action(action)
 		"action_button_move_inv_spec":
+			game.do_action(action)
+		"action_button_use":
 			game.do_action(action)
 		"action_button_use_1":
 			helper(action)
