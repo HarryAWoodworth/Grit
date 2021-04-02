@@ -81,19 +81,22 @@ func _input(event):
 func action(action):
 	match action:
 		"click":
-			player.shoot()
+			if game.aiming:
+				var tick_count = player.shoot()
+				game.ticker.schedule_action(player,tick_count)
+				game.run_until_player_turn()
 		"move":
 			game.ticker.schedule_action(player,player.speed)
 			game.run_until_player_turn()
 			game.open_loot_tray(game.map[player.curr_tile.x][player.curr_tile.y])
 		"action_button_equip":
-			game.do_action(action)
+			helper(action)
 		"action_button_move_inv":
-			game.do_action(action)
+			helper(action)
 		"action_button_move_inv_spec":
-			game.do_action(action)
+			helper(action)
 		"action_button_use":
-			game.do_action(action)
+			helper(action)
 		"action_button_use_1":
 			helper(action)
 		"action_button_use_2":
@@ -106,9 +109,9 @@ func action(action):
 			helper(action)
 				
 func helper(action):
-	print("Using Action Button: " + action)
+	print("Input_Manager.helper(): Using Action Button: " + action)
 	game.do_action(action)
 	var tick_count = game.InfoPanel.get_ticks(action)
-	if !tick_count <= 0:
+	if tick_count > 0:
 		game.ticker.schedule_action(player,tick_count)
 		game.run_until_player_turn()

@@ -31,7 +31,7 @@
 			"innacuracy_angle": 5,
 			"ammo_type": "7.62×39mm",
 			"max_ammo": 30,
-			"burst_size": 5,
+			"speed": 4,
 			"stacks": false
 		},
 		// AMMUNITION

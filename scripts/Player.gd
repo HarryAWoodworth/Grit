@@ -53,17 +53,26 @@ func tick():
 # Combat -----------------------------------------------------------------------
 
 func shoot():
+	var tick_count = 0
 	if !equipment.empty():
 		if equipment.both_hands != null and equipment.both_hands.type == "ranged" and equipment.both_hands.current_ammo > 0:
 			Combat_Manager.shoot(get_global_mouse_position(), equipment.both_hands)
 			equipment.both_hands.current_ammo -= 1
+			return equipment.both_hands.speed
 		else:
 			if equipment.right_hand != null and equipment.right_hand.type == "ranged" and equipment.right_hand.current_ammo > 0:
 				Combat_Manager.shoot(get_global_mouse_position(), equipment.right_hand)
 				equipment.right_hand.current_ammo -= 1
+				tick_count = equipment.right_hand.speed
 			if equipment.left_hand != null and equipment.left_hand.type == "ranged" and equipment.left_hand.current_ammo > 0:
 				Combat_Manager.shoot(get_global_mouse_position(), equipment.left_hand)
 				equipment.left_hand.current_ammo -= 1
+				if tick_count < equipment.left_hand.speed:
+					tick_count = equipment.left_hand.speed
+			return tick_count
+	else:
+		print("Player.shoot(): Attempting to shoot with empty hands!")
+		return tick_count
 		
 func gain_health(plus):
 	health += plus

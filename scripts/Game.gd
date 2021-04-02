@@ -2,6 +2,8 @@
 # <<< A0.1 >>> -----------------------------------------------------------------
 
 ## TODO:
+# [ ] Aiming animation
+# [ ] Shooting bullet takes turn
 # [ ] Display Equipment actions (Drop, Unquip, Reload)
 
 ## BUGS:
@@ -680,7 +682,7 @@ func do_action(action):
 			"action_button_use":
 				if "type" in focus.item and focus.item.type == "ranged":
 					aiming = !aiming
-					print("Game.do_action(): Aiming?:" + str(aiming))
+					#print("Game.do_action(): Aiming?:" + str(aiming))
 			"action_button_equip":
 				if "onGround" in focus:
 					if focus.onGround:
@@ -825,7 +827,7 @@ func reload_from_inv(num,ammo_id):
 	var numInInv = player.inventory.num_of_item(ammo_id)
 	if numInInv == null or numInInv <= 0:
 		return 0
-	print("GAME.reload_from_inv(): There are " + str(numInInv) + " in player inventory.")
+	print("Game.reload_from_inv(): There are " + str(numInInv) + " in player inventory.")
 	if num > numInInv:
 		removedItem = player.inventory.remove_all_items_by_id(ammo_id)
 		if removedItem == null:
