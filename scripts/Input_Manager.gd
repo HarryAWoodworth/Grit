@@ -25,7 +25,7 @@ func _input(event):
 		return
 
 	### MOVEMENT KEYS
-	if event.is_action_pressed("action_button_use_1"):
+	if event.is_action_pressed("action_button_click"):
 			action("click")
 	if event.is_action_pressed("move_left"):
 			if game.move_actor_vect(player,Vector2(-1,0)):

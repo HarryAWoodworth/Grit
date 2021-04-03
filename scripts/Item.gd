@@ -35,7 +35,7 @@ var ammo_type #String
 # How many bullets go into the weapon clip
 var max_ammo #int
 # How many bullets are fired per weapon firing action
-var burst_size #int
+var speed #int
 # Current Ammunition Amount
 var current_ammo #int
 
@@ -64,7 +64,7 @@ func init_clone(item, uid_):
 	innacuracy_angle = item.innacuracy_angle
 	ammo_type = item.ammo_type
 	max_ammo = item.max_ammo
-	burst_size = item.burst_size
+	speed = item.speed
 	current_ammo = item.current_ammo
 	effect = item.effect
 	scrap = item.scrap
@@ -75,7 +75,7 @@ func init_clone(item, uid_):
 
 # All items will have these fields
 # (Stacks determined by item type)
-func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_,damage_range_,innacuracy_angle_,ammo_type_,max_ammo_,burst_size_,stacks_,effect_,scrap_):
+func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_,damage_range_,innacuracy_angle_,ammo_type_,max_ammo_,speed_,stacks_,effect_,scrap_):
 	id = id_
 	item_name = name_
 	name_specialized = name_specialized_
@@ -88,7 +88,7 @@ func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_siz
 	innacuracy_angle = innacuracy_angle_
 	ammo_type = ammo_type_
 	max_ammo = max_ammo_
-	burst_size = burst_size_
+	speed = speed_
 	stacks = stacks_
 	current_ammo = 0
 	effect = effect_
@@ -114,5 +114,5 @@ func print_item():
 	if type == "ranged":
 		print("Ammo Type: " + ammo_type)
 		print("Max Ammo: " + str(max_ammo))
-		print("Burst Size: " + str(burst_size))
+		print("Speed: " + str(speed))
 		print("Current Ammo: " + str(current_ammo))

@@ -211,8 +211,8 @@ var unique_actor_id = 0
 # Is the game world running?
 var world_running = false
 # What invslot is focused
-var focus
-var focused_actions
+var focus = null
+var focused_actions = []
 var aiming = false
 
 ## UI
@@ -239,12 +239,8 @@ func _ready():
 	Action_Parser.init(self)
 	# Set Tile Size
 	tile_map.cell_quadrant_size = TILE_SIZE
-	
 	# Healthbar UI
 	health_bar_max = HealthBar.rect_size.y
-	# InfoBox Focus variables
-	focus = null
-	focused_actions = []
 
 # Actor Movement ------------------------------------------------------------------------
 
@@ -430,9 +426,10 @@ func build_chunk():
 
 # Call next_turn on the Ticker and incrememnt the ticks if it returns true.
 func run_until_player_turn():
-	while(ticker.next_turn()):
+	player.has_turn = false
+	while(ticker.do_next_turn()):
 		ticker.ticks = ticker.ticks + 1
-		#print("Tick " + str(ticker.ticks))
+		print("Game.run_until_player_turn(): Tick " + str(ticker.ticks))
 	player.has_turn = true
 
 # Util -------------------------------------------------------------------------
@@ -670,7 +667,10 @@ func addActionsInfoPanel(ui):
 				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_reload")[0].as_text() + " ] Reload",     0,      "action_button_reload")
 				# Covered by user input
 				#focused_actions.append("action_button_reload")
-			
+				
+			if focus.item.current_ammo < focus.item.max_ammo:
+				InfoPanel.add_action("[ M1 ] Shoot",     0,      "action_button_click")
+				focused_actions.append("action_button_click")
 
 # Do an action witht the focused UI Item and available actions. Called from Input_Manager
 func do_action(action):

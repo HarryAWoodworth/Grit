@@ -48,8 +48,8 @@ func init(uid_counter_=0):
 			item.ammo_type = null
 		if !("max_ammo" in item):
 			item.max_ammo = null
-		if !("burst_size" in item):
-			item.burst_size = null
+		if !("speed" in item):
+			item.speed = null
 		if !("stacks" in item):
 			item.stacks = true
 		if !("effect" in item):
@@ -59,7 +59,7 @@ func init(uid_counter_=0):
 		if !("scrap" in item):
 			item.scrap = null
 		# Init item
-		item_inst.init_item(item.id,item.item_name,item.name_specialized,item.description,item.weight,item.rarity,item.hand_size,item.type,item.damage_range,item.innacuracy_angle,item.ammo_type,item.max_ammo,item.burst_size,item.stacks,item.effect,item.scrap)
+		item_inst.init_item(item.id,item.item_name,item.name_specialized,item.description,item.weight,item.rarity,item.hand_size,item.type,item.damage_range,item.innacuracy_angle,item.ammo_type,item.max_ammo,item.speed,item.stacks,item.effect,item.scrap)
 		# Add to item dictionary
 		item_dictionary[item_inst.id] = item_inst
 
