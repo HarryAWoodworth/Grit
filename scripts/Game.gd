@@ -4,7 +4,6 @@
 ## TODO:
 # [ ] Aiming animation
 # [ ] Shooting bullet takes turn
-# [ ] Display Equipment actions (Drop, Unquip, Reload)
 
 ## BUGS:
 
@@ -631,7 +630,7 @@ func addActionsInfoPanel(ui):
 	# If the focus is from an inventory...
 	if "onGround" in focus:
 		# Add Equip action
-		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Equip",     0,       "action_button_equip")
+		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Equip","action_button_equip",     0)
 		focused_actions.append("action_button_equip")
 		# Add pick up/drop actions
 		var action_str
@@ -640,36 +639,36 @@ func addActionsInfoPanel(ui):
 		else:
 			action_str = "Pick Up"
 		if focus.num > 1:
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " All",     0,       "action_button_move_inv")
-			InfoPanel.add_action("[ " + InputMap.get_action_list("shift")[0].as_text() + " + " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " 1",     0,       "action_button_move_inv_spec")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " All", "action_button_move_inv",     0)
+			InfoPanel.add_action("[ " + InputMap.get_action_list("shift")[0].as_text() + " + " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str + " 1", "action_button_move_inv_spec",     0)
 			focused_actions.append("action_button_move_inv")
 			focused_actions.append("action_button_move_inv_spec")
 		else:
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str,     0,       "action_button_move_inv")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] " + action_str,"action_button_move_inv",     0)
 			focused_actions.append("action_button_move_inv")
 	
 	# If the focus is on an equipment
 	elif "equipped" in focus:
 		print("Game.gd.AddActionsInfoPanel(): Adding Equipment Actions!")
 		# Add Unequip action
-		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Unequip",     0,      "action_button_equip")
+		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Unequip","action_button_equip",     0)
 		focused_actions.append("action_button_equip")
 		# Add Unequip action
-		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] Drop",     0,       "action_button_move_inv")
+		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_move_inv")[0].as_text() + " ] Drop","action_button_move_inv",     0)
 		focused_actions.append("action_button_move_inv")
 		
 		if "type" in focus.item and focus.item.type == "ranged":
 			
-			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use")[0].as_text() + " ] Aim",     0,      "action_button_use")
+			InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use")[0].as_text() + " ] Aim","action_button_use",     0)
 			focused_actions.append("action_button_use")
 			
 			if focus.item.current_ammo < focus.item.max_ammo:
-				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_reload")[0].as_text() + " ] Reload",     0,      "action_button_reload")
+				InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_reload")[0].as_text() + " ] Reload","action_button_reload",     0)
 				# Covered by user input
 				#focused_actions.append("action_button_reload")
 				
 			if focus.item.current_ammo < focus.item.max_ammo:
-				InfoPanel.add_action("[ M1 ] Shoot",     0,      "action_button_click")
+				InfoPanel.add_action("[ M1 ] Shoot","action_button_click",     0)
 				focused_actions.append("action_button_click")
 
 # Do an action witht the focused UI Item and available actions. Called from Input_Manager
@@ -742,7 +741,7 @@ func update_invslot_count(id,num,onGround=false):
 			invslot = slot
 			break
 	if invslot == null:
-		print("ERROR (Game.gd, update_invslot_count): Attempting to update invslot of item " + id + ", but no Invslot found!")
+		print("ERROR (Game.update_invslot_count()): Attempting to update invslot of item " + id + ", but no Invslot found!")
 		return
 	# Update its num
 	invslot.change_count(num)

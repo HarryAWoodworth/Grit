@@ -81,6 +81,8 @@ func _input(event):
 func action(action):
 	match action:
 		"click":
+			print("Input_Manager.action(): Player clicked mouse 1")
+			print("Input_Manager.action(): Game in aiming state?: " + str(game.aiming))
 			if game.aiming:
 				var tick_count = player.shoot()
 				game.ticker.schedule_action(player,tick_count)
@@ -107,7 +109,7 @@ func action(action):
 			helper(action)
 		"action_button_use_5":
 			helper(action)
-				
+
 func helper(action):
 	print("Input_Manager.helper(): Using Action Button: " + action)
 	game.do_action(action)
