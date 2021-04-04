@@ -114,6 +114,14 @@ func empty_hand_drop(hand):
 func empty():
 	return right_hand == null and left_hand == null and both_hands == null
 
+func decrement(string):
+	if string == "both_hands":
+		both_hands.current_ammo = both_hands.current_ammo - 1
+	elif string == "right_hand":
+		right_hand.current_ammo = right_hand.current_ammo - 1
+	elif string == "left_hand":
+		left_hand.current_ammo = left_hand.current_ammo - 1
+
 func reload():
 	# return if empty
 	if empty():

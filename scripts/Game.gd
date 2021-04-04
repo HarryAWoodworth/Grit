@@ -602,7 +602,7 @@ func addActionsInfoPanel(ui):
 	var item = focus.item
 	# Add actions based on the item's "effect" dictionary
 	if item.effect != null and !item.effect.empty():
-		print("Adding effects from item effect dict")
+		#print("Adding effects from item effect dict")
 		# Var for selecting which extra action button to use
 		var index_action_use_key = 1
 		# For each effect, check if the action is an IF action (only shown if
@@ -612,12 +612,12 @@ func addActionsInfoPanel(ui):
 		var effect_string_and_ticks
 		for key in keys:
 			val = item.effect[key].replace(" ","")
-			print("Evaluating Action " + key + ": " + val)
+			#print("Evaluating Action " + key + ": " + val)
 			# Grab the Effect String and the ticks
 			effect_string_and_ticks = val.right(val.find('>')+1).split("|")
 			# If the action is do-able, show it
 			if val[0] == '?':
-				print("Evaluating IF: " + val.left(val.find('>')))
+				#print("Evaluating IF: " + val.left(val.find('>')))
 				if Action_Parser.eval_if(val.left(val.find('>'))):
 					InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_use_" + str(index_action_use_key))[0].as_text() + " ] " + key, "action_button_use_" + str(index_action_use_key), effect_string_and_ticks[1].to_int(), effect_string_and_ticks[0])
 					focused_actions.append("action_button_use_" + str(index_action_use_key))
@@ -649,7 +649,7 @@ func addActionsInfoPanel(ui):
 	
 	# If the focus is on an equipment
 	elif "equipped" in focus:
-		print("Game.gd.AddActionsInfoPanel(): Adding Equipment Actions!")
+		#print("Game.gd.AddActionsInfoPanel(): Adding Equipment Actions!")
 		# Add Unequip action
 		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Unequip","action_button_equip",     0)
 		focused_actions.append("action_button_equip")
@@ -667,9 +667,9 @@ func addActionsInfoPanel(ui):
 				# Covered by user input
 				#focused_actions.append("action_button_reload")
 				
-			if focus.item.current_ammo < focus.item.max_ammo:
-				InfoPanel.add_action("[ M1 ] Shoot","action_button_click",     0)
-				focused_actions.append("action_button_click")
+			#if focus.item.current_ammo < focus.item.max_ammo:
+				#InfoPanel.add_action("[ M1 ] Shoot","action_button_click",     0)
+				#focused_actions.append("action_button_click")
 
 # Do an action witht the focused UI Item and available actions. Called from Input_Manager
 func do_action(action):
@@ -826,7 +826,7 @@ func reload_from_inv(num,ammo_id):
 	var numInInv = player.inventory.num_of_item(ammo_id)
 	if numInInv == null or numInInv <= 0:
 		return 0
-	print("Game.reload_from_inv(): There are " + str(numInInv) + " in player inventory.")
+	# print("Game.reload_from_inv(): There are " + str(numInInv) + " in player inventory.")
 	if num > numInInv:
 		removedItem = player.inventory.remove_all_items_by_id(ammo_id)
 		if removedItem == null:
