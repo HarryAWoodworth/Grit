@@ -56,12 +56,12 @@ func shoot():
 	var tick_count = 0
 	if !equipment.empty():
 		if equipment.both_hands != null and equipment.both_hands.type == "ranged" and equipment.both_hands.current_ammo > 0:
-			print("Player.shoot(): Shooting both hand weapon")
-			Combat_Manager.shoot(get_global_mouse_position(), equipment.both_hands)
-			equipment.both_hands.current_ammo -= 1
-			# CAUSES ERROR?
-			tick_count = 2
-			#tick_count = equipment.both_hands.speed
+				print("Player.shoot(): Shooting both hand weapon")
+				Combat_Manager.shoot(get_global_mouse_position(), equipment.both_hands.innacuracy_angle)
+				equipment.both_hands.current_ammo -= 1
+				# CAUSES ERROR?
+				tick_count = equipment.both_hands.speed
+				print("TICK COUNT: " + str(tick_count))
 		#else:
 		#	if equipment.right_hand != null and equipment.right_hand.type == "ranged" and equipment.right_hand.current_ammo > 0:
 		#		print("Player.shoot(): Shooting right hand weapon")

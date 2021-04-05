@@ -94,6 +94,9 @@ func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_siz
 	effect = effect_
 	scrap = scrap_
 
+func get_speed():
+	return speed
+
 func print_item():
 	print("UID: " + uid)
 	print("ID: " + id)

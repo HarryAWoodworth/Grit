@@ -8,8 +8,7 @@ func _ready():
 func init():
 	pass
 
-func shoot(mouse_position: Vector2, weapon):
-	var innacuracy_angle = weapon.innacuracy_angle
+func shoot(mouse_position: Vector2, innacuracy_angle):
 	# Add bullet to scene
 	var b = Bullet.instance()
 	add_child(b)
