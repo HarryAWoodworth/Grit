@@ -55,6 +55,7 @@
 			"weight": 0.3125,
 			"rarity": 1,
 			"type": "melee",
+			"speed": 2,
 			"effect": {
 				"Remove Spores": "?EFFfungus_leech > RMEfungus_leech |4",
 				"Remove Shrapnel": "?EFFshrapnel > RMEshrapnel |8",
