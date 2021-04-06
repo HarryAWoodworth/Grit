@@ -2,25 +2,27 @@
 # <<< A0.1 >>> -----------------------------------------------------------------
 
 ## TODO:
-# [ ] Aiming animation
-# [ ] Shooting bullet takes turn
+# [1] Player Armor 
+# [2] Equip Armor
+# [3] Display Armor item and actions
 
 ## BUGS:
 
-## PLAYER INTERACTION
-# [4] Burstfire turn action
-#	{?} What if each bullet is 1 small action and kept the aim state? (Would be like shooting moving targets coming at you)
-# [2] Melee Weapons
-# [3] Melee Combat, turn action
-# [5] Player armor equipment
-# [11] Action effects that can set on the scheduler and activate once the ticker hits it
+## INTERACTION UI
+# [4] Add Weight to UI somewhere (Info box)
+# [5] Hovering mouse over actor within range displays tile actions
 
-## PLAYER UI
-# [6] Equip/Display Player Armor
-# [7] Display Armor item and actions
-# [8] Hovering mouse over tile within range displays tile actions
-# [9] Add Weight to UI somewhere (Info box)
+## PLAYER EQUIPMENT
+# [6] Melee Weapons
+# [7] Melee Combat, turn action
+
+## EFFECTS
+# [8] Effects class
+# [9] Effect Manager
 # [10] Display player effects (Effect class with bbcode?, Effect manager?)
+# [11] Monsters have effects
+# [12] Display Monster effects
+# [13] Action effects that can set on the scheduler and activate once the ticker hits it
 
 ## ENVIRONMENT INTERACTION
 # [ ] Doors
@@ -30,26 +32,17 @@
 # [ ] Monster corpses
 # [ ] Morning -> Noon -> Evening Cycle
 
-## PLAYER AND MONSTER EFFECTS
-# [ ] Effect types
-# [ ] Effect checks
-# [ ] Effect Manager?
-
 ## MONSTERS
 # [ ] Check that pathfinding still works
 # [ ] Different AI's? (check out bookmarked rougelike AI article)
+	# [?] AI Tags? (Like Brogue)
 # [ ] Monster manager from json file
-# [ ] Monster can have effects
-# [ ] Info box shows monster's current action and effects
+# [ ] Info box shows monster's current action
 # [ ] Different Monster actions with different speeds
 
 ## SETTINGS
 # [ ] Set screen side of UI (switch ground and inv too [swap position?])
-# [ ] Hide/Show UI
-
-## GAME STATE
-# [ ] Save Game
-# [ ] Load Game
+# [ ] Hide/Show/Shrink UI
 
 ## STEALTH SYSTEM
 # [ ] Sound ring when actions are done (based on action/container/door?)
@@ -69,6 +62,10 @@
 ## MAP GENERATION
 # [ ] Prefabs
 
+## GAME STATE
+# [ ] Save Game
+# [ ] Load Game
+
 ## AUDIO
 # [ ] Ambient music
 # [ ] Monster sound effects
@@ -80,6 +77,7 @@
 # [ ] Tune bullet look
 # [ ] Fancy color/fonts in logs
 # [ ] Fancy color/font in inventory
+# [ ] Aiming animation (Mouse Detection draw(), change to ray cast so it hits things, or just draw something over mouse position)
 
 # <<< A0.2 >>> -----------------------------------------------------------------
 
@@ -426,8 +424,7 @@ func build_chunk():
 # Call next_turn on the Ticker and incrememnt the ticks if it returns true.
 func run_until_player_turn():
 	player.has_turn = false
-	while(ticker.do_next_turn()):
-		ticker.ticks = ticker.ticks + 1
+	while(!ticker.do_next_turn()):
 		print("Game.run_until_player_turn(): Tick " + str(ticker.ticks))
 	player.has_turn = true
 
