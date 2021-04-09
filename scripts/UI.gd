@@ -9,9 +9,6 @@ onready var ArmorSlot4 = $PlayerInfo/Armor/ArmorSlot4
 onready var ArmorSlot5 = $PlayerInfo/Armor/ArmorSlot5
 onready var ArmorSlot6 = $PlayerInfo/Armor/ArmorSlot6
 onready var ArmorSlot7 = $PlayerInfo/Armor/ArmorSlot7
-onready var ArmorSlot8 = $PlayerInfo/Armor/ArmorSlot8
-onready var ArmorSlot9 = $PlayerInfo/Armor/ArmorSlot9
-
 
 var game
 
@@ -45,9 +42,3 @@ func _on_ArmorSlot6_mouse_entered():
 func _on_ArmorSlot7_mouse_entered():
 	if ArmorSlot7.equipped:
 		game.show_armor_info_ui(ArmorSlot7)
-func _on_ArmorSlot8_mouse_entered():
-	if ArmorSlot8.equipped:
-		game.show_armor_info_ui(ArmorSlot8)
-func _on_ArmorSlot9_mouse_entered():
-	if ArmorSlot9.equipped:
-		game.show_armor_info_ui(ArmorSlot9)

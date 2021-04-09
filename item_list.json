@@ -63,5 +63,21 @@
 			"reusable": true,
 		},
 		// ARMOR
+		{
+			"id": "leather_gloves",
+			"item_name": "Leather Gloves",
+			"description": "Gloves made of faded leather.",
+			"weight": 0.01,
+			"rarity": 1,
+			"type": "armor",
+			"armor_rating": 5,
+			"material": [
+				"flammable",
+				"carrodable"
+			],
+			"prevents": [
+				"wet",
+			],
+		},
 	]
 }
