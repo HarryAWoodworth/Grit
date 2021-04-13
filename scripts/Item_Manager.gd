@@ -58,8 +58,13 @@ func init(uid_counter_=0):
 			item.reusable = false
 		if !("scrap" in item):
 			item.scrap = null
+		if !("armor_rating" in item):
+			item.armor_rating = null
+		if !("material_effects" in item):
+			item.material_effects = null
+		
 		# Init item
-		item_inst.init_item(item.id,item.item_name,item.name_specialized,item.description,item.weight,item.rarity,item.hand_size,item.type,item.damage_range,item.innacuracy_angle,item.ammo_type,item.max_ammo,item.speed,item.stacks,item.effect,item.scrap)
+		item_inst.init_item(item.id,item.item_name,item.name_specialized,item.description,item.weight,item.rarity,item.hand_size,item.type,item.damage_range,item.innacuracy_angle,item.ammo_type,item.max_ammo,item.speed,item.stacks,item.effect,item.scrap,item.armor_rating,item.material_effects)
 		# Add to item dictionary
 		item_dictionary[item_inst.id] = item_inst
 
