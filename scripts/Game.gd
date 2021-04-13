@@ -385,6 +385,8 @@ func build_chunk():
 	add_item("7.62×39mm",0,1)
 	add_item("hunting_knife",1,0)
 	
+	add_item("leather_gloves",3,3)
+	
 	add_item("ak_47",0,1,"debug")
 	add_item("7.62×39mm",0,2)
 	add_item("7.62×39mm",0,2)

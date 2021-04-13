@@ -62,11 +62,13 @@ func init(uid_counter_=0):
 			item.armor_rating = null
 		if !("armor_slot" in item):
 			item.armor_slot = null
-		if !("material_effects" in item):
-			item.material_effects = null
+		if !("weaknesses" in item):
+			item.weaknesses = null
+		if !("prevents" in item):
+			item.prevents = null
 		
 		# Init item
-		item_inst.init_item(item.id,item.item_name,item.name_specialized,item.description,item.weight,item.rarity,item.hand_size,item.type,item.damage_range,item.innacuracy_angle,item.ammo_type,item.max_ammo,item.speed,item.stacks,item.effect,item.scrap,item.armor_rating,item.armor_slot,item.material_effects)
+		item_inst.init_item(item.id,item.item_name,item.name_specialized,item.description,item.weight,item.rarity,item.hand_size,item.type,item.damage_range,item.innacuracy_angle,item.ammo_type,item.max_ammo,item.speed,item.stacks,item.effect,item.scrap,item.armor_rating,item.armor_slot,item.weaknesses,item.prevents)
 		# Add to item dictionary
 		item_dictionary[item_inst.id] = item_inst
 
