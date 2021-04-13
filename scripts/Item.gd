@@ -47,6 +47,7 @@ var scrap #String
 
 ##### ARMOR
 var armor_rating #int
+var armor_slot #string
 var material_effects #string[] with optionaly a nested string[]
 
 # Init this item based on another item (cloning it)
@@ -73,6 +74,7 @@ func init_clone(item, uid_):
 	effect = item.effect
 	scrap = item.scrap
 	armor_rating = item.armor_rating
+	armor_slot = item.armor_slot
 	material_effects = item.material_effects
 	
 	# Create a unique ID for non-stacking items
@@ -81,7 +83,7 @@ func init_clone(item, uid_):
 
 # All items will have these fields
 # (Stacks determined by item type)
-func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_,damage_range_,innacuracy_angle_,ammo_type_,max_ammo_,speed_,stacks_,effect_,scrap_,armor_rating_,material_effects_):
+func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_size_,type_,damage_range_,innacuracy_angle_,ammo_type_,max_ammo_,speed_,stacks_,effect_,scrap_,armor_rating_,armor_slot_,material_effects_):
 	id = id_
 	item_name = name_
 	name_specialized = name_specialized_
@@ -100,6 +102,7 @@ func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_siz
 	effect = effect_
 	scrap = scrap_
 	armor_rating = armor_rating_
+	armor_slot = armor_slot
 	material_effects = material_effects_
 
 func get_speed():
@@ -129,4 +132,5 @@ func print_item():
 		print("Current Ammo: " + str(current_ammo))
 	if type == "armor":
 		print("Armor Rating: " + str(armor_rating))
+		print("Armor Slot: " + armor_slot)
 		print("Material Effects: " + str(material_effects))
