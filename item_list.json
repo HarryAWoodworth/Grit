@@ -72,12 +72,12 @@
 			"type": "armor",
 			"armor_rating": 5,
 			"armor_slot": "hands",
-			"material_effects": [
+			"weaknesses": [
 				"flammable",
 				"carrodable",
-				"prevents": [
+			],
+			"prevents": [
 					"wet"
-				],
 			],
 		},
 	]
