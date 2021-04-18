@@ -82,12 +82,12 @@ func new_uid():
 
 # Based on weight, calculate the ranged accuracy dropoff of the item if it is thrown
 # The bigger the item, the more innacurate it is.
-func calculate_innacuracy_angle_with_weight(weight):
+func calculate_innacuracy_angle_with_weight(_weight):
 	# TODO: Weight -> Ranged Accuracy Dropoff algorithm
 	return 0
 
 # Based on weight calculate the damage the item will do, the heavier it is, the
 # more damage it will do
-func calculate_dmg_with_weight(weight):
+func calculate_dmg_with_weight(_weight):
 	# TODO: Weight -> Damage Range algorithm
 	return Vector2(0,0)

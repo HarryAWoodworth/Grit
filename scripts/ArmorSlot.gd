@@ -5,6 +5,9 @@ onready var Text = $RichTextLabel
 # The item equipped in the slot
 var item = null
 
+# There is probably a better way of identifying this focus but oh well
+var armorslot = true
+
 # Does the slot have an item equipped?
 var equipped = false
 

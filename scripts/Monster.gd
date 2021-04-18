@@ -85,7 +85,7 @@ func tick():
 #		draw_line(Vector2(), (hit_pos - position).rotated(-rotation), laser_color)
 #		draw_circle((hit_pos - position).rotated(-rotation), 5, laser_color)
 
-func take_dmg(num, crit=false):
+func take_dmg(num, _crit=false):
 	#var dmg_taken = (num - armor)
 	health = health - num
 	#fct_manager.show_value(num, crit)

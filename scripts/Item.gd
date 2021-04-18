@@ -104,7 +104,7 @@ func init_item(id_,name_,name_specialized_,description_,weight_,rarity_,hand_siz
 	effect = effect_
 	scrap = scrap_
 	armor_rating = armor_rating_
-	armor_slot = armor_slot
+	armor_slot = armor_slot_
 	weaknesses = weaknesses_
 	prevents = prevents_
 

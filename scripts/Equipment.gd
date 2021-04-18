@@ -1,8 +1,18 @@
 extends Node
 
-var right_hand
-var left_hand
-var both_hands
+# Hands
+var right_hand = null
+var left_hand = null
+var both_hands = null
+
+# Armor
+var head = null
+var face = null
+var torso = null
+var jacket = null
+var hands = null
+var legs = null
+var feet = null
 
 # Game and player ref
 var game
@@ -11,61 +21,149 @@ var player
 func init(game_, player_):
 	game = game_
 	player = player_
-	right_hand = null
-	left_hand = null
 
 # Add item to hands (first empty hand, or default swap right)
 func hold_item(item):
-	#print("HOLD ITEM EQUIPMENT.gd: " + item.item_name)
-	if item.hand_size == 1:
-		if both_hands != null:
-			#print("Swapping both hands, putting item in right hand")
-			empty_hand("both")
-			right_hand = item
-		elif right_hand == null:
-			#print("Putting item in right hand")
-			right_hand = item
-		elif left_hand == null:
-			#print("Putting item in left hand")
-			left_hand = item
-		else:
-			#print("Swapping item in right hand")
-			# Always swap right hand if both hands are full
-			empty_hand("right")
-			right_hand = item
-	else:
-		#print("Putting in both hands")
-		if both_hands != null:
-			empty_hand("both")
-		else:
-			#print("Emptying both hands first")
-			if right_hand != null:
+	# Equip item to hands
+	if item.type != "armor":
+		#print("HOLD ITEM EQUIPMENT.gd: " + item.item_name)
+		if item.hand_size == 1:
+			if both_hands != null:
+				#print("Swapping both hands, putting item in right hand")
+				empty_hand("both")
+				right_hand = item
+			elif right_hand == null:
+				#print("Putting item in right hand")
+				right_hand = item
+			elif left_hand == null:
+				#print("Putting item in left hand")
+				left_hand = item
+			else:
+				#print("Swapping item in right hand")
+				# Always swap right hand if both hands are full
 				empty_hand("right")
-			if left_hand != null:
-				empty_hand("left")
-		both_hands = item
+				right_hand = item
+		else:
+			#print("Putting in both hands")
+			if both_hands != null:
+				empty_hand("both")
+			else:
+				#print("Emptying both hands first")
+				if right_hand != null:
+					empty_hand("right")
+				if left_hand != null:
+					empty_hand("left")
+			both_hands = item
+	# Equip armor item
+	else:
+		match item.armor_slot:
+			"head":
+				if head != null:
+					player.inventory.add_item_no_weight_change(head)
+				head = item
+			"face":
+				if face != null:
+					player.inventory.add_item_no_weight_change(face)
+				face = item
+			"torso":
+				if torso != null:
+					player.inventory.add_item_no_weight_change(torso)
+				torso = item
+			"jacket":
+				if jacket != null:
+					player.inventory.add_item_no_weight_change(jacket)
+				jacket = item
+			"hands":
+				if hands != null:
+					player.inventory.add_item_no_weight_change(hands)
+				hands = item
+			"legs":
+				if legs != null:
+					player.inventory.add_item_no_weight_change(legs)
+				legs = item
+			"feet":
+				if feet != null:
+					player.inventory.add_item_no_weight_change(feet)
+				feet = item
 	game.update_equipment_ui()
 
 func unequip_item(item, drop=false):
 	if item == null:
 		print("Equipment.gd.drop_item(): Trying to drop/unequip a null item!")
-	elif both_hands != null and both_hands == item:
-		if !drop:
-			empty_hand("both_hands")
-		else:
-			empty_hand_drop("both_hands")
-	elif right_hand != null and right_hand == item:
-		if !drop:
-			empty_hand("right")
-		else:
-			empty_hand_drop("right")
-	elif left_hand != null and left_hand == item:
-		if !drop:
-			empty_hand("left")
-		else:
-			empty_hand_drop("left")
+	if item.type != "armor":
+		if both_hands != null and both_hands == item:
+			if !drop:
+				empty_hand("both_hands")
+			else:
+				empty_hand_drop("both_hands")
+		elif right_hand != null and right_hand == item:
+			if !drop:
+				empty_hand("right")
+			else:
+				empty_hand_drop("right")
+		elif left_hand != null and left_hand == item:
+			if !drop:
+				empty_hand("left")
+			else:
+				empty_hand_drop("left")
 	else:
-		print("Equipment.gd.drop_item(): Failed to drop/unequip item with id: " + item.id + ", not present in equipment!")
+		match item.armor_slot:
+			"head":
+				if head != null:
+					if !drop:
+						player.inventory.add_item_no_weight_change(head)
+					else:
+						player.inventory.reduce_weight(head.weight)
+						game.item_drop(head)
+					head = null
+			"face":
+				if face != null:
+					if !drop:
+						player.inventory.add_item_no_weight_change(face)
+					else:
+						player.inventory.reduce_weight(face.weight)
+						game.item_drop(face)
+					face = null
+			"torso":
+				if torso != null:
+					if !drop:
+						player.inventory.add_item_no_weight_change(torso)
+					else:
+						player.inventory.reduce_weight(torso.weight)
+						game.item_drop(torso)
+					torso = null
+			"jacket":
+				if jacket != null:
+					if !drop:
+						player.inventory.add_item_no_weight_change(jacket)
+					else:
+						player.inventory.reduce_weight(jacket.weight)
+						game.item_drop(jacket)
+					jacket = null
+			"hands":
+				if hands != null:
+					if !drop:
+						player.inventory.add_item_no_weight_change(hands)
+					else:
+						player.inventory.reduce_weight(hands.weight)
+						game.item_drop(hands)
+					hands = null
+			"legs":
+				if legs != null:
+					if !drop:
+						player.inventory.add_item_no_weight_change(legs)
+					else:
+						player.inventory.reduce_weight(legs.weight)
+						game.item_drop(legs)
+					legs = null
+			"feet":
+				if feet != null:
+					if !drop:
+						player.inventory.add_item_no_weight_change(feet)
+					else:
+						player.inventory.reduce_weight(feet.weight)
+						game.item_drop(feet)
+					feet = null
 
 # Empty input hand to inventory, or both hands
 func empty_hand(hand):
@@ -127,7 +225,6 @@ func reload():
 	if empty():
 		return
 	# Reload all weapons in hands
-	var reloaded = false
 	var toReload
 	if both_hands != null and both_hands.max_ammo != null:
 		# game.reload_from_inv removes bullets from inventory and returns number of bullets removed

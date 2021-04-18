@@ -1,5 +1,6 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
+[ext_resource path="res://scripts/Armor.gd" type="Script" id=1]
 [ext_resource path="res://util/AI_Manager.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=4]
 [ext_resource path="res://assets/light.png" type="Texture" id=5]
@@ -38,6 +39,7 @@ script = ExtResource( 4 )
 position = Vector2( 3.8147e-06, 3.8147e-06 )
 frames = SubResource( 1 )
 animation = "Idle"
+frame = 3
 speed_scale = 1.25
 playing = true
 centered = false
@@ -89,3 +91,6 @@ script = ExtResource( 7 )
 
 [node name="Combat_Manager" type="Node" parent="."]
 script = ExtResource( 8 )
+
+[node name="Armor" type="Node" parent="."]
+script = ExtResource( 1 )

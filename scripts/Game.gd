@@ -501,7 +501,7 @@ func get_item_from_manager(item_name):
 	return item_inst
 
 # TODO
-func add_item_to_lootable(id,lootable):
+func add_item_to_lootable(id,_lootable):
 	var item_inst = Item.instance()
 	item_inst.init_clone(item_manager.item_dictionary.get(id))
 	#lootable.add_item(item_inst)
@@ -626,7 +626,7 @@ func addActionsInfoPanel(ui):
 				focused_actions.append("action_button_use_" + str(index_action_use_key))
 				index_action_use_key+=1
 	
-	# If the focus is from an inventory...
+	# If the focus is from an inventory (player or position)...
 	if "onGround" in focus:
 		# Add Equip action
 		InfoPanel.add_action("[ " + InputMap.get_action_list("action_button_equip")[0].as_text() + " ] Equip","action_button_equip",     0)
@@ -684,7 +684,8 @@ func do_action(action):
 			"action_button_equip":
 				if "onGround" in focus:
 					if focus.onGround:
-						player.equipment.hold_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1))
+						var temp_item = map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1)
+						player.equipment.hold_item(temp_item)
 						InfoPanel.clear()
 					else:
 						player.equipment.hold_item(player.inventory.remove_item(focus.item))
@@ -841,4 +842,4 @@ func reload_from_inv(num,ammo_id):
 
 # Add item to position player is at
 func item_drop(item):
-	map[player.curr_tile.x][player.curr_tile.y].add_item(item)	
+	map[player.curr_tile.x][player.curr_tile.y].add_item(item)

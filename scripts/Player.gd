@@ -13,6 +13,7 @@ var has_turn = false
 onready var sprite = $AnimatedSprite
 onready var inventory = $Inventory
 onready var equipment = $Equipment
+onready var armor = $Armor
 onready var Combat_Manager = $Combat_Manager
 onready var Center_Of_Player = $Center_Of_Player
 var health: int
