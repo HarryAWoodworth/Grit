@@ -36,7 +36,20 @@ func reveal():
 	HandUse.show()
 	Ammo.show()
 	equipped = true
+	show()
 
+func update_item(item, tex):
+		hide()
+		Icon.texture = tex
+		HandUse.text = "LR"
+		#Name.bbcode_text = item.name_specialized
+		set_item(item)
+		set_slot("both-1")
+		if item.type == "ranged":
+			Ammo.text = str(item.current_ammo) + "/" + str(item.max_ammo)
+		else:
+			Ammo.text = ""
+		reveal()
 
 # Deletes the Item
 func remove_item():

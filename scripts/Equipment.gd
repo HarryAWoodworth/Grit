@@ -32,17 +32,21 @@ func hold_item(item):
 				#print("Swapping both hands, putting item in right hand")
 				empty_hand("both")
 				right_hand = item
+				game.update_equipment_ui("right")
 			elif right_hand == null:
 				#print("Putting item in right hand")
 				right_hand = item
+				game.update_equipment_ui("right")
 			elif left_hand == null:
 				#print("Putting item in left hand")
 				left_hand = item
+				game.update_equipment_ui("left")
 			else:
 				#print("Swapping item in right hand")
 				# Always swap right hand if both hands are full
 				empty_hand("right")
 				right_hand = item
+				game.update_equipment_ui("right")
 		else:
 			#print("Putting in both hands")
 			if both_hands != null:
@@ -54,6 +58,7 @@ func hold_item(item):
 				if left_hand != null:
 					empty_hand("left")
 			both_hands = item
+			game.update_equipment_ui("both")
 	# Equip armor item
 	else:
 		match item.armor_slot:
@@ -85,7 +90,7 @@ func hold_item(item):
 				if feet != null:
 					player.inventory.add_item_no_weight_change(feet)
 				feet = item
-	game.update_equipment_ui()
+		game.update_equipment_ui(item.armor_slot)
 
 func unequip_item(item, drop=false):
 	if item == null:

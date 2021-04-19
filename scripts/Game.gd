@@ -746,53 +746,28 @@ func update_invslot_count(id,num,onGround=false):
 	# Update its num
 	invslot.change_count(num)
 
-func update_equipment_ui():
-	var both_item = player.equipment.both_hands
-	if both_item != null:
+func update_equipment_ui(slotStr):
+	if slotStr == "both":
+		var both_item = player.equipment.both_hands
 		EquippedWeapon2.hide()
-		EquippedWeapon1.hide()
-		EquippedWeapon1.Icon.texture = load_big_tex(both_item)
-		EquippedWeapon1.HandUse.text = "LR"
-		#EquippedWeapon1.Name.bbcode_text = both_item.name_specialized
-		EquippedWeapon1.set_item(both_item)
-		EquippedWeapon1.set_slot("both-1")
-		EquippedWeapon1.reveal()
-		if both_item.type == "ranged":
-			EquippedWeapon1.Ammo.text = str(both_item.current_ammo) + "/" + str(both_item.max_ammo)
-		else:
-			EquippedWeapon1.Ammo.text = ""
-		EquippedWeapon1.show()
-		#print("From UPDATE_UI")
-		#EquippedWeapon1.toString()
-	else:
+		EquippedWeapon1.update_item(both_item, load_big_tex(both_item))
+	elif slotStr == "right":
 		var right_item = player.equipment.right_hand
+		EquippedWeapon1.update_item(right_item, load_big_tex(right_item))
+	elif slotStr == "left":
 		var left_item = player.equipment.left_hand
-		EquippedWeapon1.hide()
-		EquippedWeapon2.hide()
-		if right_item != null:
-			EquippedWeapon1.Icon.texture = load_big_tex(right_item)
-			EquippedWeapon1.HandUse.text = "R"
-			#EquippedWeapon1.Name.bbcode_text = right_item.name_specialized
-			EquippedWeapon1.set_item(right_item)
-			EquippedWeapon1.set_slot("right")
-			EquippedWeapon1.reveal()
-			if right_item.type == "ranged":
-				EquippedWeapon1.Ammo.text = str(right_item.current_ammo) + "/" + str(right_item.max_ammo)
-			else:
-				EquippedWeapon1.Ammo.text = ""
-			EquippedWeapon1.show()
-		if left_item != null:
-			EquippedWeapon2.Icon.texture = load_big_tex(left_item)
-			EquippedWeapon2.HandUse.text = "L"
-			#EquippedWeapon2.Name.bbcode_text = left_item.name_specialized
-			EquippedWeapon2.set_item(left_item)
-			EquippedWeapon1.set_slot("left")
-			EquippedWeapon1.reveal()
-			if left_item.type == "ranged":
-				EquippedWeapon2.Ammo.text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
-			else:
-				EquippedWeapon2.Ammo.text = ""
-			EquippedWeapon2.show()
+		EquippedWeapon2.update_item(left_item,load_big_tex(left_item))
+		EquippedWeapon2.Icon.texture = load_big_tex(left_item)
+		EquippedWeapon2.HandUse.text = "L"
+		#EquippedWeapon2.Name.bbcode_text = left_item.name_specialized
+		EquippedWeapon2.set_item(left_item)
+		EquippedWeapon1.set_slot("left")
+		EquippedWeapon1.reveal()
+		if left_item.type == "ranged":
+			EquippedWeapon2.Ammo.text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
+		else:
+			EquippedWeapon2.Ammo.text = ""
+		EquippedWeapon2.show()
 
 # Update the Equipment ammo UI using a slot string and a ref to the updated item
 func update_equipment_ui_ammo(slot, updatedItem):
