@@ -92,9 +92,12 @@ func hold_item(item):
 				feet = item
 		game.update_equipment_ui(item.armor_slot)
 
+# 
 func unequip_item(item, drop=false):
 	if item == null:
 		print("Equipment.gd.drop_item(): Trying to drop/unequip a null item!")
+	# Based on what hands are full, find which hand has the item and empty it
+	# If drop is true, drop to ground, else put in player inventory
 	if item.type != "armor":
 		if both_hands != null and both_hands == item:
 			if !drop:
@@ -111,10 +114,11 @@ func unequip_item(item, drop=false):
 				empty_hand("left")
 			else:
 				empty_hand_drop("left")
+	# Drop item to player inventory or ground position
 	else:
 		match item.armor_slot:
 			"head":
-				if head != null:
+				if head == item:
 					if !drop:
 						player.inventory.add_item_no_weight_change(head)
 					else:
@@ -122,7 +126,7 @@ func unequip_item(item, drop=false):
 						game.item_drop(head)
 					head = null
 			"face":
-				if face != null:
+				if face == item:
 					if !drop:
 						player.inventory.add_item_no_weight_change(face)
 					else:
@@ -130,7 +134,7 @@ func unequip_item(item, drop=false):
 						game.item_drop(face)
 					face = null
 			"torso":
-				if torso != null:
+				if torso == item:
 					if !drop:
 						player.inventory.add_item_no_weight_change(torso)
 					else:
@@ -138,7 +142,7 @@ func unequip_item(item, drop=false):
 						game.item_drop(torso)
 					torso = null
 			"jacket":
-				if jacket != null:
+				if jacket == item:
 					if !drop:
 						player.inventory.add_item_no_weight_change(jacket)
 					else:
@@ -146,7 +150,7 @@ func unequip_item(item, drop=false):
 						game.item_drop(jacket)
 					jacket = null
 			"hands":
-				if hands != null:
+				if hands == item:
 					if !drop:
 						player.inventory.add_item_no_weight_change(hands)
 					else:
@@ -154,7 +158,7 @@ func unequip_item(item, drop=false):
 						game.item_drop(hands)
 					hands = null
 			"legs":
-				if legs != null:
+				if legs == item:
 					if !drop:
 						player.inventory.add_item_no_weight_change(legs)
 					else:
@@ -162,7 +166,7 @@ func unequip_item(item, drop=false):
 						game.item_drop(legs)
 					legs = null
 			"feet":
-				if feet != null:
+				if feet == item:
 					if !drop:
 						player.inventory.add_item_no_weight_change(feet)
 					else:
@@ -170,7 +174,7 @@ func unequip_item(item, drop=false):
 						game.item_drop(feet)
 					feet = null
 
-# Empty input hand to inventory, or both hands
+# Empty input hand to player inventory
 func empty_hand(hand):
 	if hand == "right":
 		if right_hand == null:
@@ -191,7 +195,8 @@ func empty_hand(hand):
 			print("Equipment.gd.empty_hand(): Trying to unequip item from empty both hands")
 		player.inventory.add_item_no_weight_change(both_hands)
 		both_hands = null
-	
+
+# Empty input hand to player ground position, change player inventory weight
 func empty_hand_drop(hand):
 	if hand == "right":
 		if right_hand == null:

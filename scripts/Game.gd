@@ -185,13 +185,13 @@ onready var HealthBar = $UI/PlayerInfo/HealthIndicator/HealthRect
 onready var EquippedWeapon1 = $UI/PlayerInfo/EquippedWeapon
 onready var EquippedWeapon2 = $UI/PlayerInfo/EquippedWeapon2
 # Armor slots
-onready var HeadArmor = null
-onready var FaceArmor = null
-onready var TorsoArmor = null
-onready var JacketArmor = null
-onready var HandArmor = null
-onready var LegArmor = null
-onready var FeetArmor = null
+onready var HeadArmor = $UI/PlayerInfo/Armor/ArmorSlot
+onready var FaceArmor = $UI/PlayerInfo/Armor/ArmorSlot2
+onready var TorsoArmor = $UI/PlayerInfo/Armor/ArmorSlot3
+onready var JacketArmor = $UI/PlayerInfo/Armor/ArmorSlot4
+onready var HandArmor = $UI/PlayerInfo/Armor/ArmorSlot5
+onready var LegArmor = $UI/PlayerInfo/Armor/ArmorSlot6
+onready var FeetArmor = $UI/PlayerInfo/Armor/ArmorSlot7
 
 onready var Action_Parser = $Action_Parser
 
@@ -685,12 +685,13 @@ func do_action(action):
 	if focus != null and focused_actions.has(action):
 		#print("Game.do_action(): Has action " + action)
 		match action:
-			# Equip weapon from ground or inventory
 			"action_button_use":
 				if "type" in focus.item and focus.item.type == "ranged":
 					aiming = !aiming
 					#print("Game.do_action(): Aiming?:" + str(aiming))
-			"action_button_equip":
+			# Equip weapon from ground or inventory
+			"action_button_equip": # G
+				# Equip item to player equipment from inventory or ground
 				if "onGround" in focus:
 					if focus.onGround:
 						var temp_item = map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id, 1)
@@ -699,20 +700,28 @@ func do_action(action):
 					else:
 						player.equipment.hold_item(player.inventory.remove_item(focus.item))
 						InfoPanel.clear()
-				# Unequip item
+				# Unequip item from player equipment to player inventory
 				elif "equipped" in focus:
 					player.equipment.unequip_item(focus.item)
 					focus.clear()
-			"action_button_move_inv":
-				# Drop or pick up items
+			"action_button_move_inv": # C
+				# Swap items between player inventory & ground
 				if "onGround" in focus:
 					var temp_num = focus.num
 					if focus.onGround:
 						player.inventory.add_item(map[player.curr_tile.x][player.curr_tile.y].loot_item(focus.item.id,temp_num),temp_num)
 					else:
 						map[player.curr_tile.x][player.curr_tile.y].add_item(player.inventory.remove_item(focus.item,temp_num),temp_num)
-				# Drop item to ground
+				# Drop item to ground from player equipment
 				elif "equipped" in focus:
+					
+					
+					
+					
+					
+					
+					
+					
 					player.equipment.unequip_item(focus.item, true)
 					focus.clear()
 			"action_button_move_inv_spec":
@@ -805,6 +814,7 @@ func update_equipment_ui(slotStr):
 		"feet":
 			slotItem = player.equipment.feet
 			slot = FeetArmor
+	print("Game update_equipment_ui(): SlotStr: " + slotStr)
 	if slotItem == null:
 		slot.clear()
 	else:
@@ -831,7 +841,6 @@ func display_actor_data(actor):
 func player_health_update_ui(ratio):
 	HealthBar.rect_size.y = ratio * health_bar_max
 	HealthBar.rect_position.y = health_bar_max - HealthBar.rect_size.y
-	
 
 # ACTION HELPERS ---------------------------------------------------------------
 

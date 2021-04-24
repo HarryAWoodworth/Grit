@@ -19,11 +19,12 @@ func equip(item_):
 	item = item_
 	setText(item.name_specialized)
 	equipped = true
+	show()
 
 # Set item to null and clear text
 func clear():
+	hide()
 	item = null
-	setText("")
 	equipped = false
 
 # Return the item and clear the slot
@@ -31,3 +32,9 @@ func unequip():
 	var temp = item
 	clear()
 	return temp
+
+# Update the slot with a new item and return the old
+func update_item(newItem):
+	var old = unequip()
+	equip(newItem)
+	return old
