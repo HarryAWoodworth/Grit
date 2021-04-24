@@ -2,7 +2,6 @@
 # <<< A0.1 >>> -----------------------------------------------------------------
 
 ## TODO:
-# [1] Player Armor 
 # [2] Equip Armor
 # [3] Display Armor item and actions
 
@@ -10,7 +9,7 @@
 
 ## INTERACTION UI
 # [4] Add Weight to UI somewhere (Info box)
-# [5] Hovering mouse over actor within range displays tile actions
+
 
 ## PLAYER EQUIPMENT
 # [6] Melee Weapons
@@ -27,10 +26,10 @@
 ## ENVIRONMENT INTERACTION
 # [ ] Doors
 # [ ] Containers
-# [ ] Loot Tables
 # [ ] Player can loot container
 # [ ] Monster corpses
 # [ ] Morning -> Noon -> Evening Cycle
+# [ ] Hovering mouse over actor within range displays tile actions
 
 ## MONSTERS
 # [ ] Check that pathfinding still works
@@ -58,6 +57,9 @@
 # [ ] Books?
 # [ ] Cooking Items
 # [ ] Cooking Recipes
+
+## LOOT TABLES
+# [ ] Loot Tables
 
 ## MAP GENERATION
 # [ ] Prefabs
@@ -179,8 +181,18 @@ onready var Mouse_Detection = $Mouse_Detection
 onready var Input_Manager = $Input_Manager
 onready var UI = $UI
 onready var HealthBar = $UI/PlayerInfo/HealthIndicator/HealthRect
+# Weapon slots
 onready var EquippedWeapon1 = $UI/PlayerInfo/EquippedWeapon
 onready var EquippedWeapon2 = $UI/PlayerInfo/EquippedWeapon2
+# Armor slots
+onready var HeadArmor = null
+onready var FaceArmor = null
+onready var TorsoArmor = null
+onready var JacketArmor = null
+onready var HandArmor = null
+onready var LegArmor = null
+onready var FeetArmor = null
+
 onready var Action_Parser = $Action_Parser
 
 
@@ -590,9 +602,6 @@ func show_equipment_info_ui(equipslot):
 	else:
 		print("Game.show_equipment_info_ui(): ERROR: Equipslot item null.")
 
-func show_armor_info_ui(armorslot):
-	pass
-
 # Bring the added ui class into "focus", so it's item has actions attached to it
 func addActionsInfoPanel(ui):
 	# Set focus and clear actions, grab the focused item
@@ -747,27 +756,59 @@ func update_invslot_count(id,num,onGround=false):
 	invslot.change_count(num)
 
 func update_equipment_ui(slotStr):
-	if slotStr == "both":
-		var both_item = player.equipment.both_hands
-		EquippedWeapon2.hide()
-		EquippedWeapon1.update_item(both_item, load_big_tex(both_item))
-	elif slotStr == "right":
-		var right_item = player.equipment.right_hand
-		EquippedWeapon1.update_item(right_item, load_big_tex(right_item))
-	elif slotStr == "left":
-		var left_item = player.equipment.left_hand
-		EquippedWeapon2.update_item(left_item,load_big_tex(left_item))
-		EquippedWeapon2.Icon.texture = load_big_tex(left_item)
-		EquippedWeapon2.HandUse.text = "L"
-		#EquippedWeapon2.Name.bbcode_text = left_item.name_specialized
-		EquippedWeapon2.set_item(left_item)
-		EquippedWeapon1.set_slot("left")
-		EquippedWeapon1.reveal()
-		if left_item.type == "ranged":
-			EquippedWeapon2.Ammo.text = str(left_item.current_ammo) + "/" + str(left_item.max_ammo)
-		else:
-			EquippedWeapon2.Ammo.text = ""
-		EquippedWeapon2.show()
+	var slotItem
+	var slot
+	match slotStr:
+	# Update Hands
+		"both":
+			slotItem = player.equipment.both_hands
+			if slotItem == null:
+				EquippedWeapon2.clear()
+				EquippedWeapon1.clear()
+			else:
+				EquippedWeapon2.clear()
+				EquippedWeapon1.update_item(slotStr, slotItem, load_big_tex(slotItem))
+				return
+		"right":
+			slotItem = player.equipment.right_hand
+			if slotItem == null:
+				EquippedWeapon1.clear()
+			else:
+				EquippedWeapon1.update_item(slotStr, slotItem,load_big_tex(slotItem))
+			return
+		"left":
+			slotItem = player.equipment.left_hand
+			if slotItem == null:
+				EquippedWeapon2.clear()
+			else:
+				EquippedWeapon2.update_item(slotStr, slotItem,load_big_tex(slotItem))
+			return
+	# Update Armor
+		"head":
+			slotItem = player.equipment.head
+			slot = HeadArmor
+		"face":
+			slotItem = player.equipment.face
+			slot = FaceArmor
+		"torso":
+			slotItem = player.equipment.torso
+			slot = TorsoArmor
+		"jacket":
+			slotItem = player.equipment.jacket
+			slot = JacketArmor
+		"hands":
+			slotItem = player.equipment.hands
+			slot = HandArmor
+		"legs":
+			slotItem = player.equipment.legs
+			slot = LegArmor
+		"feet":
+			slotItem = player.equipment.feet
+			slot = FeetArmor
+	if slotItem == null:
+		slot.clear()
+	else:
+		slot.update_item(slotItem)
 
 # Update the Equipment ammo UI using a slot string and a ref to the updated item
 func update_equipment_ui_ammo(slot, updatedItem):

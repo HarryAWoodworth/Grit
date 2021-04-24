@@ -38,15 +38,21 @@ func reveal():
 	equipped = true
 	show()
 
-func update_item(item, tex):
+func update_item(slotStr, newItem, tex):
 		hide()
 		Icon.texture = tex
-		HandUse.text = "LR"
-		#Name.bbcode_text = item.name_specialized
-		set_item(item)
-		set_slot("both-1")
-		if item.type == "ranged":
-			Ammo.text = str(item.current_ammo) + "/" + str(item.max_ammo)
+		match slotStr:
+			"left":
+				HandUse.text = "L"
+			"right":
+				HandUse.text = "R"
+			"both":
+				HandUse.text = "LR"
+		#Name.bbcode_text = newItem.name_specialized
+		set_item(newItem)
+		#set_slot("both-1")
+		if newItem.type == "ranged":
+			Ammo.text = str(newItem.current_ammo) + "/" + str(newItem.max_ammo)
 		else:
 			Ammo.text = ""
 		reveal()
