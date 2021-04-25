@@ -15,3 +15,11 @@ func shadow():
 func handle_hit():
 	pass
 	#print("Wall hit!")
+
+# Change the occluder based on adjacent walls
+func occluder_set():
+	var polygon_vector: PoolVector2Array
+	if hasUpperLeftNeighbor:
+		polygon_vector.append(Vector2(0,0))
+	el
+	light_occluder.occluder.polygon = polygon_vector

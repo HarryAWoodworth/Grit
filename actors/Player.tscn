@@ -39,7 +39,7 @@ script = ExtResource( 4 )
 position = Vector2( 3.8147e-06, 3.8147e-06 )
 frames = SubResource( 1 )
 animation = "Idle"
-frame = 3
+frame = 1
 speed_scale = 1.25
 playing = true
 centered = false
@@ -73,7 +73,6 @@ shape = SubResource( 4 )
 [node name="Center_Of_Player" type="Position2D" parent="."]
 
 [node name="Light2D" type="Light2D" parent="."]
-visible = false
 position = Vector2( 64, 64 )
 texture = ExtResource( 5 )
 offset = Vector2( 16, 0 )
