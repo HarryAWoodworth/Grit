@@ -171,7 +171,6 @@ enum Shadow { Shadow }
 
 onready var ticker = $Ticker
 onready var tile_map = $TileMap
-onready var shadow_map = $ShadowMap
 onready var textlog = $UI/TextLog
 onready var item_manager = $Item_Manager
 onready var GroundScroller = $UI/GroundScroller
@@ -213,6 +212,8 @@ var player = null
 #var anim_finished = true
 # List of actor unique_id 's 
 var actor_list = []
+# List of walls
+var wall_list = []
 # Map of Pos nodes
 var map = []
 # Increasing number for actor unique id's
@@ -342,41 +343,43 @@ func build_chunk():
 
 	# Extra walls for testing
 	add_wall(6, 4)
-	add_wall(8, 4)
-	add_wall(6, 5)
-	add_wall(8, 5)
-	add_wall(6, 6)
-	add_wall(8, 6)
-	add_wall(6, 7)
-	add_wall(8, 7)
-	add_wall(6, 8)
-	add_wall(8, 8)
-	add_wall(5, 8)
-	add_wall(4, 8)
-	add_wall(3, 8)
-	add_wall(9, 8)
-	add_wall(10, 8)
-	add_wall(11, 8)
-	add_wall(5, 3)
-	add_wall(6, 3)
-	add_wall(6, 2)
+	add_wall(7, 4)
+	add_wall(7, 5)
+	#add_wall(8, 5)
+	#add_wall(6, 6)
+	#add_wall(8, 6)
+	#add_wall(6, 7)
+	#add_wall(8, 7)
+	#add_wall(6, 8)
+	#add_wall(8, 8)
+	#add_wall(5, 8)
+	#add_wall(4, 8)
+	#add_wall(3, 8)
+	#add_wall(9, 8)
+	#add_wall(10, 8)
+	#add_wall(11, 8)
+	#add_wall(5, 3)
+	#add_wall(6, 3)
+	#add_wall(6, 2)
 
-	add_wall(6, 4)
-	add_wall(8, 4)
-	add_wall(10, 4)
-	add_wall(12, 4)
-	add_wall(14, 4)
-	add_wall(6, 6)
-	add_wall(8, 6)
-	add_wall(10, 6)
-	add_wall(12, 6)
-	add_wall(14, 6)
-	add_wall(6, 8)
-	add_wall(8, 8)
-	add_wall(10, 8)
-	add_wall(12, 8)
-	add_wall(14, 8)
-
+	#add_wall(6, 4)
+	#add_wall(8, 4)
+	#add_wall(10, 4)
+	#add_wall(12, 4)
+	#add_wall(14, 4)
+	#add_wall(6, 6)
+	#add_wall(8, 6)
+	#add_wall(10, 6)
+	#add_wall(12, 6)
+	#add_wall(14, 6)
+	#add_wall(6, 8)
+	#add_wall(8, 8)
+	#add_wall(10, 8)
+	#add_wall(12, 8)
+	#add_wall(14, 8)
+	
+	for wall in wall_list:
+		wall.occluder_set(TILE_SIZE, get_surrounding_empty(wall.curr_tile.x,wall.curr_tile.y))
 
 	# Place Player
 	var player_inst = Player.instance()
@@ -480,6 +483,8 @@ func add_wall(x,y,identifier="...",title="...",description="...",hidden=false,bl
 	add_child(wall)
 	wall.init(self,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
 	#wall.sprite.texture = texture
+	# Add wall to wall list
+	wall_list.append(wall)
 	# Add wall to map pos
 	map[x][y].add_actor(wall)
 
