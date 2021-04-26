@@ -2,29 +2,30 @@
 # <<< A0.1 >>> -----------------------------------------------------------------
 
 ## TODO:
-# [2] Equip Armor
-# [3] Display Armor item and actions
 
 ## BUGS:
 
 ## INTERACTION UI
-# [4] Add Weight to UI somewhere (Info box)
-
+# [ ] Add Weight to UI somewhere (Info box)
 
 ## PLAYER EQUIPMENT
-# [6] Melee Weapons
-# [7] Melee Combat, turn action
+# [ ] Melee Weapons
+# [ ] Melee Combat, turn action
 
 ## EFFECTS
-# [8] Effects class
-# [9] Effect Manager
-# [10] Display player effects (Effect class with bbcode?, Effect manager?)
-# [11] Monsters have effects
-# [12] Display Monster effects
-# [13] Action effects that can set on the scheduler and activate once the ticker hits it
+# [ ] Effects class
+# [ ] Effect Manager
+# [ ] Display player effects (Effect class with bbcode?, Effect manager?)
+# [ ] Monsters have effects
+# [ ] Display Monster effects
+# [ ] Action effects that can set on the scheduler and activate once the ticker hits it
 
 ## ENVIRONMENT INTERACTION
-# [ ] Doors
+# [1] Doors
+	# [ ] Door class
+		# [ ] Locked, Opened, Closed states?
+	# [ ] Sprite change when open, can see through
+	# [ ] Hovering mouse over actor within range displays tile actions
 # [ ] Containers
 # [ ] Player can loot container
 # [ ] Monster corpses
