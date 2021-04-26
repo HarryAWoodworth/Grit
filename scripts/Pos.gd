@@ -89,6 +89,12 @@ func remove_item(item, num):
 				rarest_item_id = ""
 				hide()
 
+# Return true if position has a wall in it
+func has_wall():
+	if actors.empty():
+		return false
+	return actors[0].identifier == "WALL"
+
 func loot_item(id, num):
 	#print("Looting " + str(num) + " " + id + "(s): " + str(items[id]))
 	# Get the item from Pos items dict

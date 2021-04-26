@@ -20,14 +20,13 @@ func handle_hit():
 	#print("Wall hit!")
 
 # Change the occluder based on adjacent walls
-func occluder_set(tilesize, freespaces):
-	print("Wall.occluder_set")
+func occluder_set():
+	var tilesize = game.TILE_SIZE
 	var polygon_vector = PoolVector2Array([])
-	var has_left_neighbor = !freespaces.has(Vector2(-1,0))
-	var has_lower_neighbor = !freespaces.has(Vector2(0,1))
-	var has_right_neighbor = !freespaces.has(Vector2(1,0))
-	var has_top_neighbor = !freespaces.has(Vector2(0,-1))
-	print("Wall: left=" + str(has_left_neighbor) + " right=" + str(has_right_neighbor) + " top=" + str(has_top_neighbor) + "bottom=" + str(has_lower_neighbor))
+	var has_left_neighbor = game.map[curr_tile.x-1][curr_tile.y].has_wall()
+	var has_lower_neighbor = game.map[curr_tile.x][curr_tile.y+1].has_wall()
+	var has_right_neighbor = game.map[curr_tile.x+1][curr_tile.y].has_wall()
+	var has_top_neighbor = game.map[curr_tile.x][curr_tile.y-1].has_wall()
 	
 	# Upper left indented point
 	polygon_vector.append(Vector2(VISIBLE_THICKNESS,VISIBLE_THICKNESS))

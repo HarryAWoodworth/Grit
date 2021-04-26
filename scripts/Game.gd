@@ -2,6 +2,7 @@
 # <<< A0.1 >>> -----------------------------------------------------------------
 
 ## TODO:
+# [ ] Game.player_has_key()
 
 ## BUGS:
 
@@ -22,8 +23,6 @@
 
 ## ENVIRONMENT INTERACTION
 # [1] Doors
-	# [ ] Door class
-		# [ ] Locked, Opened, Closed states?
 	# [ ] Sprite change when open, can see through
 	# [ ] Hovering mouse over actor within range displays tile actions
 # [ ] Containers
@@ -204,6 +203,7 @@ var Pos = preload("res://scenes/Position.tscn")
 var Monster = preload("res://actors/Monster.tscn")
 var Player = preload("res://actors/Player.tscn")
 var Wall = preload("res://actors/Wall.tscn")
+var Door = preload("res://actors/Door.tscn")
 var Item = preload("res://actors/Item.tscn")
 var InventorySlot = preload("res://scenes/InventorySlot.tscn")
 
@@ -215,6 +215,8 @@ var player = null
 var actor_list = []
 # List of walls
 var wall_list = []
+# List of doors
+var door_list = []
 # Map of Pos nodes
 var map = []
 # Increasing number for actor unique id's
@@ -256,21 +258,36 @@ func _ready():
 # Actor Movement ------------------------------------------------------------------------
 
 # Checks if an actor can move into a coordinate
-func can_move(x, y):
+func can_move(x, y, actor_x=0, actor_y=0) -> bool:
+	print("Game.can_move: actor: " + str(actor_x) + "," + str(actor_y))
+	print("Game.can_move: pos: " + str(x) + "," + str(y))
+	var y_diff = y-actor_y
+	var x_diff = x-actor_x
+	print("Game.can_move: Diff: " + str(x_diff) + "," + str(y_diff))
 	# Return false if coordinates are off the map
+	# TODO: Remove when game done and map is surrounded by forest or whatever
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
 		return false
 	# Check if thwwre is an actor that blocks movement in that path
 	var actors = map[x][y].actors
 	if actors.empty():
 		return true
+	var top_actor = actors[0]
+	if top_actor.identifier == "DOOR" and !top_actor.open:
+		if y_diff < 0:
+			return actors[0].try_door("fromBottom")
+		elif y_diff > 0:
+			return actors[0].try_door("fromTop")
+		elif x_diff < 0:
+			return actors[0].try_door("fromRight")
+		else:
+			return actors[0].try_door("fromLeft")
 	else:
 		return !actors[0].blocks_other_actors
 
 # Move an actor to a coordinate
-func move_actor(actor, x ,y):
-	#print("Moving to " + str(x) + "," + str(y))
-	if can_move(x,y):
+func move_actor(actor, x ,y) -> bool:
+	if can_move(x,y,actor.curr_tile.x,actor.curr_tile.y):
 		# Remove the actor from its previous position
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
 		# Update actor's current tile
@@ -279,7 +296,6 @@ func move_actor(actor, x ,y):
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.append(actor)
 		# Update the actor's node
 		actor.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
-		#print("Actor's new position: " + str(actor.position))
 		return true
 	return false
 
@@ -345,7 +361,7 @@ func build_chunk():
 	# Extra walls for testing
 	add_wall(6, 4)
 	add_wall(6, 5)
-
+	add_door(7, 8)
 	add_wall(8, 5)
 	add_wall(6, 6)
 	add_wall(8, 6)
@@ -379,13 +395,18 @@ func build_chunk():
 	add_wall(12, 8)
 	add_wall(14, 8)
 
+	# Set wall occluders
 	for wall in wall_list:
-		wall.occluder_set(TILE_SIZE, get_surrounding_empty(wall.curr_tile.x,wall.curr_tile.y))
+		wall.occluder_set()
+
+	# Turn doors
+	for door in door_list:
+		door.rotation_set(get_surrounding_empty(door.curr_tile.x,door.curr_tile.y))
 
 	# Place Player
 	var player_inst = Player.instance()
 	add_child(player_inst)
-	player_inst.init(self,0,0,"player","Basilisk","...",false,true,false)
+	player_inst.init(self,7,10,"player","Basilisk","...",false,true,false)
 	player_inst.init_player()
 	actor_list.append(player_inst)
 	map[0][0].actors.push_front(player_inst)
@@ -479,7 +500,7 @@ func set_tile(x, y, type):
 func set_texture(texture, node):
 	node.sprite.set_texture(texture)
 
-func add_wall(x,y,identifier="...",title="...",description="...",hidden=false,blocks_other_actors=true,blocks_light=true):
+func add_wall(x,y,identifier="WALL",title="...",description="...",hidden=false,blocks_other_actors=true,blocks_light=true):
 	var wall = Wall.instance()
 	add_child(wall)
 	wall.init(self,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
@@ -488,6 +509,14 @@ func add_wall(x,y,identifier="...",title="...",description="...",hidden=false,bl
 	wall_list.append(wall)
 	# Add wall to map pos
 	map[x][y].add_actor(wall)
+
+func add_door(x,y,open=false,locked=false,key="nokey",identifier="DOOR",title="...",description="...",hidden=false,blocks_other_actors=true,blocks_light=true):
+	var door = Door.instance()
+	add_child(door)
+	door.init(self,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
+	door.init_door(open,locked,key)
+	door_list.append(door)
+	map[x][y].add_actor(door)
 
 # init(game,x,y,identifier,title,description,hidden,blocks_other_actors,blocks_light)
 func add_character(x,y,health=10,ai="none",identifier="...",title="...",description="...",hidden=false,blocks_other_actors=true,blocks_light=false):
@@ -874,3 +903,8 @@ func reload_from_inv(num,ammo_id):
 # Add item to position player is at
 func item_drop(item):
 	map[player.curr_tile.x][player.curr_tile.y].add_item(item)
+	
+# Check if player has the right key
+# TODO
+func player_has_key(key) -> bool:
+	return true
