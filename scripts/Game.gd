@@ -259,11 +259,11 @@ func _ready():
 
 # Checks if an actor can move into a coordinate
 func can_move(x, y, actor_x=0, actor_y=0) -> bool:
-	print("Game.can_move: actor: " + str(actor_x) + "," + str(actor_y))
-	print("Game.can_move: pos: " + str(x) + "," + str(y))
+	#print("Game.can_move: actor: " + str(actor_x) + "," + str(actor_y))
+
 	var y_diff = y-actor_y
 	var x_diff = x-actor_x
-	print("Game.can_move: Diff: " + str(x_diff) + "," + str(y_diff))
+
 	# Return false if coordinates are off the map
 	# TODO: Remove when game done and map is surrounded by forest or whatever
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
@@ -287,6 +287,7 @@ func can_move(x, y, actor_x=0, actor_y=0) -> bool:
 
 # Move an actor to a coordinate
 func move_actor(actor, x ,y) -> bool:
+	#print("Game.move_actor: Identifier: " + actor.identifier)
 	if can_move(x,y,actor.curr_tile.x,actor.curr_tile.y):
 		# Remove the actor from its previous position
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
@@ -361,9 +362,7 @@ func build_chunk():
 	# Extra walls for testing
 	add_wall(6, 4)
 	add_wall(6, 5)
-	add_door(7, 8)
 	add_wall(8, 5)
-	
 	add_wall(8, 6)
 	add_wall(6, 7)
 	add_wall(8, 7)
@@ -377,13 +376,12 @@ func build_chunk():
 	add_wall(5, 3)
 	add_wall(6, 3)
 	add_wall(6, 2)
-
+	add_wall(6, 10)
 	add_wall(6, 4)
 	add_wall(8, 4)
 	add_wall(10, 4)
 	add_wall(12, 4)
 	add_wall(14, 4)
-
 	add_wall(8, 6)
 	add_wall(10, 6)
 	add_wall(12, 6)
@@ -393,6 +391,11 @@ func build_chunk():
 	add_wall(10, 8)
 	add_wall(12, 8)
 	add_wall(14, 8)
+	
+	# Doors for testing
+	# DOORS NEED TO BE AFTER WALLS OR THEY WILL OPEN THEMSELVES
+	add_door(7, 8)
+	add_door(6, 9)
 
 	# Set wall occluders
 	for wall in wall_list:
@@ -400,7 +403,7 @@ func build_chunk():
 
 	# Turn doors
 	for door in door_list:
-		door.rotation_set(get_surrounding_empty(door.curr_tile.x,door.curr_tile.y))
+		door.rotation_set()
 
 	# Place Player
 	var player_inst = Player.instance()
@@ -462,8 +465,10 @@ func build_chunk():
 # Call next_turn on the Ticker and incrememnt the ticks if it returns true.
 func run_until_player_turn():
 	player.has_turn = false
+	# Loop through all turns until Player
 	while(!ticker.do_next_turn()):
-		print("Game.run_until_player_turn(): Tick " + str(ticker.ticks))
+		pass
+		#print("Game.run_until_player_turn(): Tick " + str(ticker.ticks))
 	player.has_turn = true
 
 # Util -------------------------------------------------------------------------

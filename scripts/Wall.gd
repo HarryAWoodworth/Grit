@@ -53,7 +53,6 @@ func occluder_set():
 	if has_top_neighbor:
 		polygon_vector.append(Vector2(tilesize-VISIBLE_THICKNESS,0))
 		polygon_vector.append(Vector2(VISIBLE_THICKNESS,0))
-	print("WALL NEW POLYGON: " + str(polygon_vector))
 	
 	var occluderr = OccluderPolygon2D.new()
 	occluderr.set_polygon(polygon_vector)

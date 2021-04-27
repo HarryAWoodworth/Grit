@@ -12,10 +12,13 @@ func init_door(open_: bool=false, locked_: bool=false, key_:String="nokey"):
 		blocks_other_actors = false
 	locked = locked_
 	key = key_
+	# Move door to tile
+	# Cant set position in base scene because it needs to be centered
 	position.x += 64
 	position.y += 64
 
 func open(direction: String):
+	print("DOOR OPENING")
 	open = true
 	blocks_other_actors = false
 	match direction:
@@ -25,6 +28,14 @@ func open(direction: String):
 			position.y += game.TILE_SIZE/2
 		"fromBottom":
 			rotation_degrees += 90
+			position.x += game.TILE_SIZE/2
+			position.y -= game.TILE_SIZE/2
+		"fromRight":
+			rotation_degrees += 90
+			position.x -= game.TILE_SIZE/2
+			position.y -= game.TILE_SIZE/2
+		"fromLeft":
+			rotation_degrees -= 90
 			position.x += game.TILE_SIZE/2
 			position.y -= game.TILE_SIZE/2
 	
@@ -54,14 +65,20 @@ func lock(key_:String) -> bool:
 	return false
 
 # Set the rotation based on what is next to it
-func rotation_set(freespaces):
-	if !freespaces.has(Vector2(0,1)):
+func rotation_set():
+	# Top Wall (Default)
+	if game.map[curr_tile.x][curr_tile.y-1].has_wall():
+		return
+	# Lower Wall, flip
+	elif game.map[curr_tile.x][curr_tile.y+1].has_wall():
 		self.flip_v = true
-	elif !freespaces.has(Vector2(1,0)):
+		return
+	# Right Wall, turn 90
+	elif game.map[curr_tile.x+1][curr_tile.y].has_wall():
 		self.rotation_degrees = 90
-	elif !freespaces.has(Vector2(-1,0)):
+	# Left Wall, turn 270
+	elif game.map[curr_tile.x-1][curr_tile.y].has_wall():
 		self.rotation_degrees = 270
-	pass
 
 func try_door(direction) -> bool:
 	if locked:
