@@ -363,13 +363,12 @@ func build_chunk():
 	add_wall(6, 5)
 	add_door(7, 8)
 	add_wall(8, 5)
-	add_wall(6, 6)
+	
 	add_wall(8, 6)
 	add_wall(6, 7)
 	add_wall(8, 7)
 	add_wall(6, 8)
 	add_wall(8, 8)
-	add_wall(5, 8)
 	add_wall(4, 8)
 	add_wall(3, 8)
 	add_wall(9, 8)
@@ -384,7 +383,7 @@ func build_chunk():
 	add_wall(10, 4)
 	add_wall(12, 4)
 	add_wall(14, 4)
-	add_wall(6, 6)
+
 	add_wall(8, 6)
 	add_wall(10, 6)
 	add_wall(12, 6)
