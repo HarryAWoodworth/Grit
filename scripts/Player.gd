@@ -5,6 +5,7 @@ const DEFAULT_PLAYER_MAX_HEALTH = 50
 const DEFAULT_PLAYER_STARTING_LEVEL = 0
 const DEFAULT_PLAYER_ARMOR = 0
 const DEFAULT_PLAYER_DETECT_RADIUS = 8
+const TWEEN_TIME = 0.25
 
 # Game State -------------------------------------------------------------------
 var has_turn = false
@@ -15,7 +16,7 @@ onready var inventory = $Inventory
 onready var equipment = $Equipment
 onready var armor = $Armor
 onready var Combat_Manager = $Combat_Manager
-onready var Center_Of_Player = $Center_Of_Player
+onready var tween = $Tween
 var health: int
 var max_health: int
 var speed: int
@@ -41,7 +42,6 @@ func init_player():
 	inventory.init(current_weight,max_weight,game)
 	Combat_Manager.init()
 	equipment.init(game,self)
-	Center_Of_Player.position = Vector2(game.TILE_SIZE/2,game.TILE_SIZE/2)
 
 # Tick -------------------------------------------------------------------------
 
@@ -106,3 +106,7 @@ func remove_effect(effect):
 	
 func has_effect(effect):
 	return effects.has(effect)
+	
+func tween_animate(new_position):
+	tween.interpolate_property(self, "position",position, new_position, TWEEN_TIME,Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tween.start()

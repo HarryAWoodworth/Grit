@@ -2,13 +2,14 @@ extends "res://scripts/Actor.gd"
 
 onready var light_occluder = $LightOccluder2D
 
-var open: bool
+var opened: bool
 var locked: bool
 var key: String
+var rotated = false
 
-func init_door(open_: bool=false, locked_: bool=false, key_:String="nokey"):
-	open = open_
-	if open:
+func init_door(opened_: bool=false, locked_: bool=false, key_:String="nokey"):
+	opened = opened_
+	if opened:
 		blocks_other_actors = false
 	locked = locked_
 	key = key_
@@ -18,8 +19,7 @@ func init_door(open_: bool=false, locked_: bool=false, key_:String="nokey"):
 	position.y += 64
 
 func open(direction: String):
-	print("DOOR OPENING")
-	open = true
+	opened = true
 	blocks_other_actors = false
 	match direction:
 		"fromTop":
@@ -51,7 +51,7 @@ func open(direction: String):
 #	light_occluder.set_occluder_polygon(occluderr)
 
 func close():
-	open = false
+	opened = false
 	blocks_other_actors = true
 	rotation_degrees += 90
 	# Show occluder
@@ -66,13 +66,13 @@ func lock(key_:String) -> bool:
 
 # Set the rotation based on what is next to it
 func rotation_set():
+	rotated = true
 	# Top Wall (Default)
 	if game.map[curr_tile.x][curr_tile.y-1].has_wall():
 		return
 	# Lower Wall, flip
 	elif game.map[curr_tile.x][curr_tile.y+1].has_wall():
-		self.flip_v = true
-		return
+		self.rotation_degrees = 180
 	# Right Wall, turn 90
 	elif game.map[curr_tile.x+1][curr_tile.y].has_wall():
 		self.rotation_degrees = 90
@@ -84,7 +84,7 @@ func try_door(direction) -> bool:
 	if locked:
 		if game.player_has_key(key):
 			locked = false
-	if !open:
+	if !opened:
 		open(direction)
 		return true
 	return true

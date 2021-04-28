@@ -5,6 +5,7 @@
 # [ ] Game.player_has_key()
 
 ## BUGS:
+# [ ] Ammo count does not decerememnt
 
 ## INTERACTION UI
 # [ ] Add Weight to UI somewhere (Info box)
@@ -22,14 +23,11 @@
 # [ ] Action effects that can set on the scheduler and activate once the ticker hits it
 
 ## ENVIRONMENT INTERACTION
-# [1] Doors
-	# [ ] Sprite change when open, can see through
-	# [ ] Hovering mouse over actor within range displays tile actions
-# [ ] Containers
-# [ ] Player can loot container
-# [ ] Monster corpses
-# [ ] Morning -> Noon -> Evening Cycle
 # [ ] Hovering mouse over actor within range displays tile actions
+	# [ ] Close Doors
+# [ ] Containers
+	# [ ] Player can loot container
+	# [ ] Monster corpses
 
 ## MONSTERS
 # [ ] Check that pathfinding still works
@@ -38,6 +36,7 @@
 # [ ] Monster manager from json file
 # [ ] Info box shows monster's current action
 # [ ] Different Monster actions with different speeds
+# [ ] A monster than when you look at it long enough teleports next to you
 
 ## SETTINGS
 # [ ] Set screen side of UI (switch ground and inv too [swap position?])
@@ -80,6 +79,7 @@
 # [ ] Fancy color/fonts in logs
 # [ ] Fancy color/font in inventory
 # [ ] Aiming animation (Mouse Detection draw(), change to ray cast so it hits things, or just draw something over mouse position)
+# [?] Morning -> Noon -> Evening Cycle
 
 # <<< A0.2 >>> -----------------------------------------------------------------
 
@@ -261,9 +261,6 @@ func _ready():
 func can_move(x, y, actor_x=0, actor_y=0) -> bool:
 	#print("Game.can_move: actor: " + str(actor_x) + "," + str(actor_y))
 
-	var y_diff = y-actor_y
-	var x_diff = x-actor_x
-
 	# Return false if coordinates are off the map
 	# TODO: Remove when game done and map is surrounded by forest or whatever
 	if x < 0 or x >= CHUNK_DIMENSION or y < 0 or y >= CHUNK_DIMENSION:
@@ -273,30 +270,46 @@ func can_move(x, y, actor_x=0, actor_y=0) -> bool:
 	if actors.empty():
 		return true
 	var top_actor = actors[0]
-	if top_actor.identifier == "DOOR" and !top_actor.open:
-		if y_diff < 0:
-			return actors[0].try_door("fromBottom")
-		elif y_diff > 0:
-			return actors[0].try_door("fromTop")
-		elif x_diff < 0:
-			return actors[0].try_door("fromRight")
-		else:
-			return actors[0].try_door("fromLeft")
+	if top_actor.identifier == "DOOR" and (!top_actor.locked or top_actor.opened):
+		return true
 	else:
 		return !actors[0].blocks_other_actors
 
 # Move an actor to a coordinate
 func move_actor(actor, x ,y) -> bool:
+	var y_diff = y-actor.curr_tile.y
+	var x_diff = x-actor.curr_tile.x
 	#print("Game.move_actor: Identifier: " + actor.identifier)
 	if can_move(x,y,actor.curr_tile.x,actor.curr_tile.y):
+		var actors = map[x][y].actors
+		if !actors.empty():
+			var top_actor = actors[0]
+			if top_actor.identifier == "DOOR" and !top_actor.opened:
+				# Door is Horizontal
+				if !top_actor.rotated:
+					if y_diff < 0:
+						return actors[0].try_door("fromBottom")
+					else:
+						return actors[0].try_door("fromTop")
+				# Door is Vertical
+				else:
+					if x_diff < 0:
+						return actors[0].try_door("fromLeft")
+					else:
+						return actors[0].try_door("fromLeft")
+						
+		
 		# Remove the actor from its previous position
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
 		# Update actor's current tile
 		actor.curr_tile = Vector2(x,y)
 		# Add it to its new position
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.append(actor)
-		# Update the actor's node
-		actor.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
+		if "tween" in actor:
+			actor.tween_animate(Vector2(x * TILE_SIZE, y * TILE_SIZE))
+		else:
+			# Update the actor's node
+			actor.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
 		return true
 	return false
 

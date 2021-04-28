@@ -15,6 +15,8 @@ func _process(_delta):
 	update()
 
 func _draw():
+	# Turn flashlight
+	game.player.light.rotation = (get_global_mouse_position() - game.player.light.global_position).angle() + 0.8
 	# TODO maybe just remove node if not aiming?
 	if game.aiming:
 		var mouse_position = get_global_mouse_position()
