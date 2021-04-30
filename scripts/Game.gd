@@ -258,7 +258,7 @@ func _ready():
 # Actor Movement ------------------------------------------------------------------------
 
 # Checks if an actor can move into a coordinate
-func can_move(x, y, actor_x=0, actor_y=0) -> bool:
+func can_move(x, y) -> bool:
 	#print("Game.can_move: actor: " + str(actor_x) + "," + str(actor_y))
 
 	# Return false if coordinates are off the map
@@ -278,24 +278,29 @@ func can_move(x, y, actor_x=0, actor_y=0) -> bool:
 # Move an actor to a coordinate
 func move_actor(actor, x ,y) -> bool:
 	var y_diff = y-actor.curr_tile.y
+	print("Game.move_actor: Y_Diff: " + str(y_diff))
 	var x_diff = x-actor.curr_tile.x
 	#print("Game.move_actor: Identifier: " + actor.identifier)
-	if can_move(x,y,actor.curr_tile.x,actor.curr_tile.y):
+	if can_move(x,y):
 		var actors = map[x][y].actors
 		if !actors.empty():
 			var top_actor = actors[0]
 			if top_actor.identifier == "DOOR" and !top_actor.opened:
 				# Door is Horizontal
-				if !top_actor.rotated:
+				if top_actor.rotated:
 					if y_diff < 0:
+						print("Game.move_actor: FromBottom")
 						return actors[0].try_door("fromBottom")
 					else:
+						print("Game.move_actor: FromTop")
 						return actors[0].try_door("fromTop")
 				# Door is Vertical
 				else:
 					if x_diff < 0:
-						return actors[0].try_door("fromLeft")
+						print("Game.move_actor: FromRight")
+						return actors[0].try_door("fromRight")
 					else:
+						print("Game.move_actor: FromLeft")
 						return actors[0].try_door("fromLeft")
 						
 		
@@ -377,7 +382,6 @@ func build_chunk():
 	add_wall(6, 5)
 	add_wall(8, 5)
 	add_wall(8, 6)
-	add_wall(6, 7)
 	add_wall(8, 7)
 	add_wall(6, 8)
 	add_wall(8, 8)

@@ -29,7 +29,7 @@ radius = 64.0
 extents = Vector2( 64, 64 )
 
 [sub_resource type="StreamTexture" id=5]
-load_path = "res://.import/light_big.png-ce0f7fa0b58037860becced71039a641.stex"
+load_path = "res://.import/light.png-87539b10c4b4cebc046b6b91ffea6f69.stex"
 
 [node name="Player" type="KinematicBody2D"]
 input_pickable = true
@@ -41,7 +41,7 @@ script = ExtResource( 4 )
 position = Vector2( 3.8147e-06, 3.8147e-06 )
 frames = SubResource( 1 )
 animation = "Idle"
-frame = 2
+frame = 1
 speed_scale = 1.25
 playing = true
 centered = false

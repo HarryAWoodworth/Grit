@@ -66,19 +66,21 @@ func lock(key_:String) -> bool:
 
 # Set the rotation based on what is next to it
 func rotation_set():
-	rotated = true
 	# Top Wall (Default)
 	if game.map[curr_tile.x][curr_tile.y-1].has_wall():
 		return
 	# Lower Wall, flip
 	elif game.map[curr_tile.x][curr_tile.y+1].has_wall():
 		self.rotation_degrees = 180
+		rotated = true
 	# Right Wall, turn 90
 	elif game.map[curr_tile.x+1][curr_tile.y].has_wall():
 		self.rotation_degrees = 90
+		rotated = true
 	# Left Wall, turn 270
 	elif game.map[curr_tile.x-1][curr_tile.y].has_wall():
 		self.rotation_degrees = 270
+		rotated = true
 
 func try_door(direction) -> bool:
 	if locked:
