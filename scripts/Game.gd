@@ -1,64 +1,64 @@
 
-# <<< A0.1 >>> -----------------------------------------------------------------
-
 ## TODO:
-# [ ] Game.player_has_key()
 
 ## BUGS:
-# [ ] Ammo count does not decerememnt
+# [ ] Ammo count does not decrememnt
 
-## INTERACTION UI
-# [ ] Add Weight to UI somewhere (Info box)
+### <<< Alpha 1 >>> ------------------------------------------------------------
+
+## SETTINGS
+# [ ] Hide/Show/Shrink UI unless button pressed, then shrink player vision
+
+# [ ] Check that pathfinding still works
+# [ ] Different AI's? (check out bookmarked rougelike AI article)
+	# [?] AI Tags? (Like Brogue)
+# [ ] Monster manager from json file
+# [ ] Different Monster actions with different speeds
+# [ ] A monster than when you look at it long enough teleports next to you
+
+## MONSTERS
+
+# TICK HOST:
+# Ambient Noise: Weak Sobbing
+# When looking at it: Gurgling
+# When Walking: Insect Clicks
+# Special:
+#  : If it hears you, it moves near you in the darkness
+#  : If it hits you, it gives you ticks that suck your blood
+
+# HIVE LADY
+# Ambient Noise: Soft Wheezing
+# When looking at it: Loud Buzzing, Pained Gasping
+# Special:
+# : If you look at it, it damages you
 
 ## PLAYER EQUIPMENT
 # [ ] Melee Weapons
 # [ ] Melee Combat, turn action
 
-## EFFECTS
-# [ ] Effects class
-# [ ] Effect Manager
-# [ ] Display player effects (Effect class with bbcode?, Effect manager?)
-# [ ] Monsters have effects
-# [ ] Display Monster effects
-# [ ] Action effects that can set on the scheduler and activate once the ticker hits it
 
-## ENVIRONMENT INTERACTION
-# [ ] Hovering mouse over actor within range displays tile actions
-	# [ ] Close Doors
-# [ ] Containers
-	# [ ] Player can loot container
-	# [ ] Monster corpses
-
-## MONSTERS
-# [ ] Check that pathfinding still works
-# [ ] Different AI's? (check out bookmarked rougelike AI article)
-	# [?] AI Tags? (Like Brogue)
-# [ ] Monster manager from json file
-# [ ] Info box shows monster's current action
-# [ ] Different Monster actions with different speeds
-# [ ] A monster than when you look at it long enough teleports next to you
-
-## SETTINGS
-# [ ] Set screen side of UI (switch ground and inv too [swap position?])
-# [ ] Hide/Show/Shrink UI
 
 ## STEALTH SYSTEM
 # [ ] Sound ring when actions are done (based on action/container/door?)
 # [ ] Player can throw an item to make noise as a distraction
 # [ ] Monsters move towards noises
 
-## ITEMS & CRAFTING
-# [ ] Food Items
-# [ ] Weapons
-# [ ] Crafting
-# [ ] Item Recipes
-# [ ] Crafting Blueprints (change recipes to need fewer items)
-# [ ] Books?
-# [ ] Cooking Items
-# [ ] Cooking Recipes
+## ENVIRONMENT INTERACTION
+# [ ] Hovering mouse over actor within range displays tile actions
+	# [ ] Close Doors
+	# [ ] Unlock Doors
+		# [ ] Game.player_has_key()
+# [ ] Containers
+	# [ ] Player can loot container
+	# [?] Monster 
+	# [ ] Loot Tables
 
-## LOOT TABLES
-# [ ] Loot Tables
+
+## ITEMS & CRAFTING
+# [ ] Weapons
+	# [ ] Melee
+	# [ ] Ranged
+	# [ ] Ammo
 
 ## MAP GENERATION
 # [ ] Prefabs
@@ -76,10 +76,43 @@
 
 ## VISUAL
 # [ ] Tune bullet look
-# [ ] Fancy color/fonts in logs
+# [ ] Aiming animation (Mouse Detection draw(), Just draw something over mouse position)
+
+### <<< A2 >>> -----------------------------------------------------------------
+
+## EFFECTS
+# [ ] Effects class
+# [ ] Effect Manager
+# [ ] Display player effects (Effect class with bbcode?, Effect manager?)
+# [ ] Monsters have effects
+# [ ] Display Monster effects
+# [ ] Action effects that can set on the scheduler and activate once the ticker hits it
+
+## INTERACTION UI
+# [ ] Add Weight to UI somewhere (Info box)
+
+## ITEMS & CRAFTING
+# [ ] Food Items
+# [ ] Weapons
+# [ ] Crafting
+# [ ] Item Recipes
+# [ ] Crafting Blueprints (change recipes to need fewer items)
+# [ ] Books?
+# [ ] Cooking Items
+# [ ] Cooking Recipes
+
+## MAP GENERATION
+# [ ] Prefabs
+
+## VISUAL
+# [ ] Tune bullet look
+# [?] Fancy color/fonts in logs
 # [ ] Fancy color/font in inventory
 # [ ] Aiming animation (Mouse Detection draw(), change to ray cast so it hits things, or just draw something over mouse position)
 # [?] Morning -> Noon -> Evening Cycle
+
+## SETTINGS
+# [ ] Set screen side of UI (switch ground and inv too [swap position?])
 
 # <<< A0.2 >>> -----------------------------------------------------------------
 
@@ -283,33 +316,34 @@ func move_actor(actor, x ,y) -> bool:
 	#print("Game.move_actor: Identifier: " + actor.identifier)
 	if can_move(x,y):
 		var actors = map[x][y].actors
+		# Open door if there
 		if !actors.empty():
 			var top_actor = actors[0]
 			if top_actor.identifier == "DOOR" and !top_actor.opened:
 				# Door is Horizontal
 				if top_actor.rotated:
 					if y_diff < 0:
-						print("Game.move_actor: FromBottom")
-						return actors[0].try_door("fromBottom")
+						if !actors[0].try_door("fromBottom"):
+							# Locked so don't move
+							return false
 					else:
-						print("Game.move_actor: FromTop")
-						return actors[0].try_door("fromTop")
+						if !actors[0].try_door("fromTop"):
+							return false
 				# Door is Vertical
 				else:
 					if x_diff < 0:
-						print("Game.move_actor: FromRight")
-						return actors[0].try_door("fromRight")
+						if !actors[0].try_door("fromRight"):
+							return false
 					else:
-						print("Game.move_actor: FromLeft")
-						return actors[0].try_door("fromLeft")
-						
-		
+						if !actors[0].try_door("fromLeft"):
+							return false
 		# Remove the actor from its previous position
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.erase(actor)
 		# Update actor's current tile
 		actor.curr_tile = Vector2(x,y)
 		# Add it to its new position
 		map[actor.curr_tile.x][actor.curr_tile.y].actors.append(actor)
+		print("Game.move_actor: Moved to " + str(actor.curr_tile))
 		if "tween" in actor:
 			actor.tween_animate(Vector2(x * TILE_SIZE, y * TILE_SIZE))
 		else:
@@ -318,8 +352,7 @@ func move_actor(actor, x ,y) -> bool:
 		return true
 	return false
 
-# Move actor using a difference vector
-
+# Helper to move actor using a difference vector
 func move_actor_vect(actor, vect):
 	return move_actor(actor, actor.curr_tile.x + vect.x, actor.curr_tile.y + vect.y)
 
@@ -344,6 +377,18 @@ func get_surrounding_empty(x,y):
 		free_spaces.append(Vector2(1,-1))
 	return free_spaces
 
+func get_surrounding_non_wall_tiles_no_diagonals(x,y):
+	var free_spaces = []
+	if map[x+1][y]:
+		free_spaces.append(Vector2(1,0))
+	if map[x-1][y]:
+		free_spaces.append(Vector2(-1,0))
+	if map[x][y+1]:
+		free_spaces.append(Vector2(0,1))
+	if map[x][y-1]:
+		free_spaces.append(Vector2(0,-1))
+	return free_spaces
+
 # Update -----------------------------------------------------------------------
 
 # Call update on all actors in actor_list in order
@@ -365,52 +410,24 @@ func build_chunk():
 	for x in range(CHUNK_DIMENSION):
 		map.append([])
 		for y in range(CHUNK_DIMENSION):
-			# Instance/Init a PositionClass node
 			pos = Pos.instance()
 			add_child(pos)
+			# Random Floor Tile
 			var floor_tile_num = randi()%4
 			pos.init_pos(self, floor_tile_num, Vector2(x,y))
-			
 			map[x].append(pos)
 			# Set the tile map
 			tile_map.set_cell(x, y, map[x][y].tile)
-			# Add sight node
-			# add_sight_node(x, y)
+			# Perimeter walls
+			if (x == 1 and (y > 0 and y < CHUNK_DIMENSION-2)) or (y == 1 and (x > 0 and x < CHUNK_DIMENSION-2)) or (x == CHUNK_DIMENSION-2 and (y < CHUNK_DIMENSION-1 and y > 0)) or (y == CHUNK_DIMENSION-2 and (x < CHUNK_DIMENSION-1 and x > 0)):
+				add_wall(x,y)
 
 	# Extra walls for testing
-	add_wall(6, 4)
-	add_wall(6, 5)
-	add_wall(8, 5)
-	add_wall(8, 6)
-	add_wall(8, 7)
-	add_wall(6, 8)
-	add_wall(8, 8)
-	add_wall(4, 8)
-	add_wall(3, 8)
-	add_wall(9, 8)
-	add_wall(10, 8)
-	add_wall(11, 8)
-	add_wall(5, 3)
-	add_wall(6, 3)
-	add_wall(6, 2)
-	add_wall(6, 10)
-	add_wall(6, 4)
-	add_wall(8, 4)
-	add_wall(10, 4)
-	add_wall(12, 4)
-	add_wall(14, 4)
-	add_wall(8, 6)
-	add_wall(10, 6)
-	add_wall(12, 6)
-	add_wall(14, 6)
-	add_wall(6, 8)
-	add_wall(8, 8)
-	add_wall(10, 8)
-	add_wall(12, 8)
-	add_wall(14, 8)
-	
 	# Doors for testing
 	# DOORS NEED TO BE AFTER WALLS OR THEY WILL OPEN THEMSELVES
+	add_wall(6, 10)
+	add_wall(6, 8)
+	add_wall(8, 8)
 	add_door(7, 8)
 	add_door(6, 9)
 
@@ -927,5 +944,5 @@ func item_drop(item):
 	
 # Check if player has the right key
 # TODO
-func player_has_key(key) -> bool:
+func player_has_key(_key) -> bool:
 	return true

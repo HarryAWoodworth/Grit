@@ -21,6 +21,12 @@ func init_pos(game_, tile_, curr_tile_):
 	showing = false
 	position = Vector2(curr_tile.x * game.TILE_SIZE, curr_tile.y * game.TILE_SIZE)
 
+func top_actor():
+	if actors.empty():
+		return null
+	else:
+		return actors[0]
+
 func add_actor(actor):
 	if actor.blocks_light:
 		actors.push_front(actor)
